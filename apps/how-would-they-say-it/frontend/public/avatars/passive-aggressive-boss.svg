@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <circle cx="50" cy="50" r="50" fill="#EDE9FE"/>
+  <!-- Auburn bob hair SIDES drawn first (behind face) -->
+  <ellipse cx="27" cy="64" rx="9" ry="23" fill="#7A2020"/>
+  <ellipse cx="73" cy="64" rx="9" ry="23" fill="#7A2020"/>
+  <!-- Purple blazer -->
+  <ellipse cx="50" cy="112" rx="52" ry="34" fill="#4C1D95"/>
+  <!-- White blouse collar -->
+  <path d="M 44 78 L 50 90 L 56 78" fill="white" stroke="none"/>
+  <!-- Neck -->
+  <rect x="44" y="65" width="12" height="15" rx="4" fill="#C8956A"/>
+  <!-- Head / face -->
+  <ellipse cx="50" cy="50" rx="22" ry="24" fill="#C8956A"/>
+  <!-- Auburn bob crown -->
+  <ellipse cx="50" cy="28" rx="22" ry="11" fill="#7A2020"/>
+  <!-- Left brow: neutral/flat -->
+  <path d="M 39 42 Q 43 41 47 42.5" stroke="#5C2020" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <!-- Right brow: arched higher (raised — passive aggressive skepticism) -->
+  <path d="M 53 40.5 Q 57 38.5 61 42" stroke="#5C2020" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="43" cy="48" r="2.7" fill="#2C1810"/>
+  <circle cx="57" cy="48" r="2.7" fill="#2C1810"/>
+  <!-- Thin knowing smirk (asymmetrical — left corner slightly lower) -->
+  <path d="M 44 57.5 Q 49 61 56 57" stroke="#8B5E3C" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+</svg>

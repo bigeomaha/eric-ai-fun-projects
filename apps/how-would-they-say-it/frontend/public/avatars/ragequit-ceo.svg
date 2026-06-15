@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <circle cx="50" cy="50" r="50" fill="#FEE2E2"/>
+  <!-- Suit body (dark red) -->
+  <ellipse cx="50" cy="112" rx="52" ry="34" fill="#7F1D1D"/>
+  <!-- White shirt, open collar (loosened) -->
+  <path d="M 41 78 L 50 91 L 59 78" fill="white" stroke="none"/>
+  <!-- Tie askew / loosened -->
+  <path d="M 49 78 L 47 88" stroke="#DC2626" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Neck -->
+  <rect x="44" y="65" width="12" height="15" rx="4" fill="#C8956A"/>
+  <!-- Head / face -->
+  <ellipse cx="50" cy="50" rx="22" ry="24" fill="#C8956A"/>
+  <!-- Dark hair crown (intense) -->
+  <ellipse cx="50" cy="28" rx="22" ry="10" fill="#1C1510"/>
+  <!-- Furrowed angry brows (angled in toward nose) -->
+  <path d="M 38 41 Q 43 38.5 47 41.5" stroke="#1C1510" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M 53 41.5 Q 57 38.5 62 41" stroke="#1C1510" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Eyes (intense stare) -->
+  <circle cx="43" cy="49" r="2.8" fill="#2C1810"/>
+  <circle cx="57" cy="49" r="2.8" fill="#2C1810"/>
+  <!-- Stress line on forehead -->
+  <path d="M 47 36 Q 50 34 53 36" stroke="#A87050" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Tight stressed mouth (barely open) -->
+  <path d="M 44 57.5 Q 50 56 56 57.5" stroke="#8B5E3C" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <circle cx="50" cy="50" r="50" fill="#F3F4F6"/>
+  <!-- Cardigan / casual top (charcoal) -->
+  <ellipse cx="50" cy="112" rx="52" ry="34" fill="#374151"/>
+  <!-- Collar area -->
+  <path d="M 44 78 L 50 88 L 56 78" fill="#4B5563" stroke="none"/>
+  <!-- Neck -->
+  <rect x="44" y="65" width="12" height="15" rx="4" fill="#C8956A"/>
+  <!-- Head / face -->
+  <ellipse cx="50" cy="50" rx="22" ry="24" fill="#C8956A"/>
+  <!-- Hair pulled back tight (dark brown base) -->
+  <ellipse cx="50" cy="29" rx="22" ry="9" fill="#5C3317"/>
+  <!-- Hair bun on top -->
+  <ellipse cx="50" cy="20" rx="11" ry="9" fill="#5C3317"/>
+  <!-- Bun highlight -->
+  <ellipse cx="47" cy="18" rx="4" ry="2.5" fill="#6B3D1E" opacity="0.5"/>
+  <!-- Flat barely-there eyebrows (don't care) -->
+  <path d="M 39 43 Q 43 42.5 47 43" stroke="#6B4A3A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M 53 43 Q 57 42.5 61 43" stroke="#6B4A3A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- Half-closed exhausted eyes (thin horizontal slits) -->
+  <ellipse cx="43" cy="49" rx="3.2" ry="1.6" fill="#2C1810"/>
+  <ellipse cx="57" cy="49" rx="3.2" ry="1.6" fill="#2C1810"/>
+  <!-- Heavy eyelid lines (droopy) -->
+  <path d="M 39.5 47.5 Q 43 48.5 46.5 47.5" stroke="#A87A5A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M 53.5 47.5 Q 57 48.5 60.5 47.5" stroke="#A87A5A" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- Deadpan flat mouth -->
+  <line x1="44" y1="58" x2="56" y2="58" stroke="#8B5E3C" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Under-eye bags (subtle) -->
+  <path d="M 40 52 Q 43 53 46 52" stroke="#A87A5A" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <path d="M 54 52 Q 57 53 60 52" stroke="#A87A5A" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+</svg>

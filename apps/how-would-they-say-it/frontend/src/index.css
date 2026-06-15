@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Global base scale ───────────────────────────────────────────────────── */
+html {
+  font-size: 115%; /* +15% — scales all rem/em values (persona-prose, etc.) */
+}
+
+@layer base {
+  body {
+    background-color: #EDE8DC;
+    /* Subtle paper/canvas grain — tiling SVG fractal noise */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    background-size: 300px 300px;
+    color: #1C1510;
+    -webkit-font-smoothing: antialiased;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #E0D9CC; }
+  ::-webkit-scrollbar-thumb { background: #C4B99A; border-radius: 9999px; }
+}
+
+@layer utilities {
+  /* Persona modal markdown prose — paper theme */
+  .persona-prose h1 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1C1510;
+    margin-bottom: 0.25rem;
+    font-family: Georgia, serif;
+  }
+  .persona-prose h2 {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #7A6A52;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-family: system-ui, sans-serif;
+  }
+  .persona-prose p {
+    font-size: 0.875rem;
+    color: #3A2E1E;
+    line-height: 1.75;
+    margin-bottom: 0.75rem;
+  }
+  .persona-prose ul {
+    list-style: none;
+    margin-bottom: 0.75rem;
+    padding: 0;
+  }
+  .persona-prose li {
+    font-size: 0.875rem;
+    color: #3A2E1E;
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.6;
+    margin-bottom: 0.25rem;
+  }
+  .persona-prose li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #A8957A;
+  }
+  .persona-prose strong {
+    color: #1C1510;
+    font-weight: 600;
+  }
+  .persona-prose em {
+    color: #7A6A52;
+    font-style: italic;
+  }
+  .persona-prose blockquote {
+    border-left: 2px solid #C4B99A;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: #7A6A52;
+    font-style: italic;
+  }
+  .persona-prose hr {
+    border: none;
+    border-top: 0.5px solid #D6CDB8;
+    margin: 1rem 0;
+  }
+}

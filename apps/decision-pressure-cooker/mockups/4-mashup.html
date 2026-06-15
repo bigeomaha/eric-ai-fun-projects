@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Pressure Cooker — Mashup Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #09090b;
+    color: #e4e4e7;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ─────────────────────────────────────────────────────────── */
+  .header {
+    text-align: center;
+    padding: 32px 24px 0;
+  }
+  .header .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #71717a;
+    border: 1px solid #27272a;
+    border-radius: 20px;
+    padding: 5px 14px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .header .chip .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #dc2626;
+    box-shadow: 0 0 6px rgba(220,38,38,0.5);
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fafafa;
+    letter-spacing: -0.5px;
+  }
+  .header h1 span {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .question-bar {
+    margin-top: 16px;
+    padding: 14px 24px;
+    background: #111113;
+    border: 1px solid #1c1c1f;
+    border-radius: 10px;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .question-bar .label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #52525b;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .question-bar .text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #d4d4d8;
+    font-weight: 400;
+  }
+
+  /* ── Main Layout ────────────────────────────────────────────────────── */
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 0;
+    max-width: 1240px;
+    margin: 28px auto 0;
+    padding: 0 32px;
+    min-height: 500px;
+  }
+
+  /* ── Radar Area (left) ───────────────────────────────────────────────── */
+  .gauge-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 16px 20px;
+  }
+
+  .radar-container {
+    position: relative;
+    width: 460px;
+    height: 430px;
+  }
+  .radar-svg {
+    width: 100%;
+    height: 100%;
+  }
+  /* Grid rings */
+  .radar-grid {
+    fill: none;
+    stroke: #1c1c1f;
+    stroke-width: 0.5;
+  }
+  .radar-grid-mid {
+    fill: none;
+    stroke: #151517;
+    stroke-width: 0.5;
+    stroke-dasharray: 3 3;
+  }
+  /* Axis lines */
+  .radar-axis {
+    stroke: #1c1c1f;
+    stroke-width: 0.5;
+  }
+  /* Confidence polygon */
+  .radar-polygon {
+    fill: rgba(220, 38, 38, 0.06);
+    stroke: rgba(220, 38, 38, 0.4);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.15));
+  }
+  /* Data points on polygon vertices */
+  .radar-point {
+    r: 5;
+    stroke-width: 2;
+    stroke: #09090b;
+    cursor: pointer;
+    transition: r 0.2s ease;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+  .radar-point:hover { r: 7; }
+  .radar-point.red { fill: #ef4444; color: rgba(239,68,68,0.6); }
+  .radar-point.green { fill: #22c55e; color: rgba(34,197,94,0.6); }
+  .radar-point.amber { fill: #f59e0b; color: rgba(245,158,11,0.6); }
+  .radar-point.blue { fill: #3b82f6; color: rgba(59,130,246,0.6); }
+  .radar-point.purple { fill: #a855f7; color: rgba(168,85,247,0.6); }
+  /* Axis labels */
+  .radar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .radar-label-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+  }
+  /* Center text */
+  .radar-center-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    fill: #fafafa;
+    letter-spacing: -1px;
+  }
+  .radar-center-pct {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    fill: #52525b;
+    font-weight: 900;
+  }
+  .radar-center-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    fill: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    gap: 6px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #71717a;
+    cursor: pointer;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .legend-item:hover { background: rgba(255,255,255,0.03); border-color: #27272a; }
+  .legend-item.active { background: rgba(255,255,255,0.05); border-color: #3f3f46; color: #d4d4d8; }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ── Detail Panel (right) ───────────────────────────────────────────── */
+  .detail-panel {
+    background: #111113;
+    border-left: 1px solid #1c1c1f;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 12px 12px 0;
+    overflow: hidden;
+  }
+
+  /* War-room style crisp card inside the detail panel */
+  .detail-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .detail-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+  .detail-card.red::before { background: #ef4444; }
+  .detail-card.green::before { background: #22c55e; }
+  .detail-card.amber::before { background: #f59e0b; }
+  .detail-card.blue::before { background: #3b82f6; }
+  .detail-card.purple::before { background: #a855f7; }
+
+  .detail-header {
+    padding: 24px 24px 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .detail-agent-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .detail-emoji {
+    font-size: 24px;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .detail-card.red .detail-emoji { background: rgba(239,68,68,0.1); }
+  .detail-card.green .detail-emoji { background: rgba(34,197,94,0.1); }
+  .detail-card.amber .detail-emoji { background: rgba(245,158,11,0.1); }
+  .detail-card.blue .detail-emoji { background: rgba(59,130,246,0.1); }
+  .detail-card.purple .detail-emoji { background: rgba(168,85,247,0.1); }
+
+  .detail-name { font-weight: 700; font-size: 15px; }
+  .detail-card.red .detail-name { color: #ef4444; }
+  .detail-card.green .detail-name { color: #22c55e; }
+  .detail-card.amber .detail-name { color: #f59e0b; }
+  .detail-card.blue .detail-name { color: #3b82f6; }
+  .detail-card.purple .detail-name { color: #a855f7; }
+
+  .detail-conf-num {
+    font-size: 11px;
+    color: #52525b;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+  .detail-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+  .detail-card.red .detail-badge { color: #ef4444; border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.06); }
+  .detail-card.green .detail-badge { color: #22c55e; border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.06); }
+  .detail-card.amber .detail-badge { color: #f59e0b; border-color: rgba(245,158,11,0.25); background: rgba(245,158,11,0.06); }
+  .detail-card.blue .detail-badge { color: #3b82f6; border-color: rgba(59,130,246,0.25); background: rgba(59,130,246,0.06); }
+  .detail-card.purple .detail-badge { color: #a855f7; border-color: rgba(168,85,247,0.25); background: rgba(168,85,247,0.06); }
+
+  .detail-angle {
+    padding: 16px 24px 0 20px;
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.65;
+    margin-top: 4px;
+  }
+
+  /* Confidence bar (war-room style) */
+  .detail-conf-bar {
+    margin: 16px 24px 0 20px;
+    height: 3px;
+    background: #1c1c1f;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .detail-conf-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .detail-card.red .detail-conf-fill { background: #ef4444; }
+  .detail-card.green .detail-conf-fill { background: #22c55e; }
+  .detail-card.amber .detail-conf-fill { background: #f59e0b; }
+  .detail-card.blue .detail-conf-fill { background: #3b82f6; }
+  .detail-card.purple .detail-conf-fill { background: #a855f7; }
+
+  .detail-points {
+    list-style: none;
+    padding: 16px 24px 0 20px;
+    flex: 1;
+  }
+  .detail-points li {
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.6;
+    padding: 9px 0;
+    padding-left: 16px;
+    position: relative;
+    border-bottom: 1px solid #18181b;
+  }
+  .detail-points li:last-child { border-bottom: none; }
+  .detail-points li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0; top: 15px;
+  }
+  .detail-card.red .detail-points li::before { background: #ef4444; }
+  .detail-card.green .detail-points li::before { background: #22c55e; }
+  .detail-card.amber .detail-points li::before { background: #f59e0b; }
+  .detail-card.blue .detail-points li::before { background: #3b82f6; }
+  .detail-card.purple .detail-points li::before { background: #a855f7; }
+
+  .detail-verdict {
+    margin: 0 24px 0 20px;
+    padding: 14px 0;
+    border-top: 1px solid #1c1c1f;
+  }
+  .detail-verdict .text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #71717a;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .detail-risk {
+    padding: 12px 24px 20px 20px;
+    background: #0d0d0f;
+    border-top: 1px solid #18181b;
+  }
+  .detail-risk .label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .detail-card.red .detail-risk .label { color: #ef4444; }
+  .detail-card.green .detail-risk .label { color: #22c55e; }
+  .detail-card.amber .detail-risk .label { color: #f59e0b; }
+  .detail-card.blue .detail-risk .label { color: #3b82f6; }
+  .detail-card.purple .detail-risk .label { color: #a855f7; }
+  .detail-risk .value {
+    font-size: 12px;
+    color: #71717a;
+    line-height: 1.5;
+  }
+
+  /* ── Synthesis Panel (bottom) ───────────────────────────────────────── */
+  .synthesis {
+    max-width: 1240px;
+    margin: 28px auto 40px;
+    padding: 0 32px;
+  }
+  .synthesis-inner {
+    background: #111113;
+    border: 1px solid #1c1c1f;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .synth-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid #1c1c1f;
+  }
+  .synth-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .synth-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 16px rgba(220,38,38,0.2);
+  }
+  .synth-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #dc2626;
+    font-weight: 700;
+  }
+  .synth-subtitle {
+    font-size: 11px;
+    color: #3f3f46;
+    margin-top: 2px;
+  }
+
+  /* Semicircle gauge in synthesis header (war-room element) */
+  .synth-gauge {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .synth-gauge svg { width: 100px; height: 56px; }
+  .sg-track {
+    fill: none;
+    stroke: #1c1c1f;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+  .sg-fill {
+    fill: none;
+    stroke: url(#sgGrad);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 126;
+    stroke-dashoffset: 24;
+  }
+  .sg-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    fill: #fafafa;
+  }
+  .sg-sub {
+    font-size: 7px;
+    fill: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .synth-gauge-text {
+    text-align: right;
+  }
+  .synth-gauge-text .pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fafafa;
+  }
+  .synth-gauge-text .pct span { font-size: 12px; color: #52525b; }
+  .synth-gauge-text .conv {
+    font-size: 10px;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* Synthesis body grid */
+  .synth-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+  }
+  .synth-col {
+    padding: 24px 28px;
+    border-right: 1px solid #1c1c1f;
+  }
+  .synth-col:last-child { border-right: none; }
+
+  .synth-col h4 {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #3f3f46;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .synth-recommendation {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fafafa;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+  .synth-rationale {
+    font-size: 12px;
+    color: #71717a;
+    line-height: 1.7;
+  }
+
+  .synth-tradeoffs {
+    list-style: none;
+  }
+  .synth-tradeoffs li {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+    padding: 7px 0;
+    padding-left: 14px;
+    position: relative;
+    border-bottom: 1px solid #18181b;
+  }
+  .synth-tradeoffs li:last-child { border-bottom: none; }
+  .synth-tradeoffs li::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #dc2626;
+    position: absolute;
+    left: 0; top: 13px;
+  }
+
+  .synth-flip {
+    background: rgba(239,68,68,0.04);
+    border: 1px solid rgba(239,68,68,0.12);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .synth-flip .flip-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ef4444;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .synth-flip p {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+  }
+
+  .synth-dominant {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #52525b;
+    padding-top: 14px;
+    border-top: 1px solid #18181b;
+  }
+  .synth-dominant .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ef4444;
+  }
+  .synth-dominant strong {
+    color: #71717a;
+    font-weight: 600;
+  }
+
+  /* ── Footer ─────────────────────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 0 0 32px;
+    font-size: 11px;
+    color: #27272a;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="chip">
+    <span class="dot"></span>
+    Decision Pressure Cooker
+  </div>
+  <h1>Decision <span>Pressure Cooker</span></h1>
+</div>
+<div class="question-bar" style="margin-top: 16px;">
+  <span class="label">Analyzing</span>
+  <span class="text">"Should I leave my stable corporate job to start my own company?"</span>
+</div>
+
+<!-- Main: Radar + Detail Card -->
+<div class="main">
+  <!-- Radar Chart -->
+  <div class="gauge-area">
+    <div class="radar-container">
+      <svg class="radar-svg" viewBox="-20 0 440 400">
+        <!-- Grid rings (pentagons at 25%, 50%, 75%, 100%) -->
+        <polygon class="radar-grid" points="200,162.5 235.7,188.4 222.1,230.3 177.9,230.3 164.3,188.4" />
+        <polygon class="radar-grid-mid" points="200,125 271.3,176.8 244.1,260.7 155.9,260.7 128.7,176.8" />
+        <polygon class="radar-grid" points="200,87.5 307,165.2 266.1,291 133.9,291 93,165.2" />
+        <polygon class="radar-grid" points="200,50 342.7,153.6 288.2,321.4 111.8,321.4 57.3,153.6" />
+
+        <!-- Axis lines from center to each vertex -->
+        <line class="radar-axis" x1="200" y1="200" x2="200" y2="50" />
+        <line class="radar-axis" x1="200" y1="200" x2="342.7" y2="153.6" />
+        <line class="radar-axis" x1="200" y1="200" x2="288.2" y2="321.4" />
+        <line class="radar-axis" x1="200" y1="200" x2="111.8" y2="321.4" />
+        <line class="radar-axis" x1="200" y1="200" x2="57.3" y2="153.6" />
+
+        <!-- Confidence polygon (filled area) -->
+        <!-- DA:82% Opt:74% Pess:78% Prag:82% Wild:78% -->
+        <polygon class="radar-polygon"
+                 points="200,77 305.6,165.7 268.8,294.7 127.7,299.5 88.7,163.8" />
+
+        <!-- Data points at each vertex -->
+        <circle class="radar-point red" cx="200" cy="77" />
+        <circle class="radar-point green" cx="305.6" cy="165.7" />
+        <circle class="radar-point amber" cx="268.8" cy="294.7" />
+        <circle class="radar-point blue" cx="127.7" cy="299.5" />
+        <circle class="radar-point purple" cx="88.7" cy="163.8" />
+
+        <!-- Axis labels -->
+        <!-- Devil's Advocate (top) -->
+        <text class="radar-label" x="200" y="30" text-anchor="middle" fill="#ef4444">Devil's Advocate</text>
+        <text class="radar-label-pct" x="200" y="42" text-anchor="middle" fill="#71717a">82%</text>
+
+        <!-- Optimist (top-right) -->
+        <text class="radar-label" x="362" y="150" text-anchor="start" fill="#22c55e">Optimist</text>
+        <text class="radar-label-pct" x="362" y="162" text-anchor="start" fill="#71717a">74%</text>
+
+        <!-- Pessimist (bottom-right) -->
+        <text class="radar-label" x="300" y="345" text-anchor="start" fill="#f59e0b">Pessimist</text>
+        <text class="radar-label-pct" x="300" y="357" text-anchor="start" fill="#71717a">78%</text>
+
+        <!-- Pragmatist (bottom-left) -->
+        <text class="radar-label" x="100" y="345" text-anchor="end" fill="#3b82f6">Pragmatist</text>
+        <text class="radar-label-pct" x="100" y="357" text-anchor="end" fill="#71717a">82%</text>
+
+        <!-- Wildcard (top-left) -->
+        <text class="radar-label" x="38" y="150" text-anchor="end" fill="#a855f7">Wildcard</text>
+        <text class="radar-label-pct" x="38" y="162" text-anchor="end" fill="#71717a">78%</text>
+
+        <!-- Center: synthesis confidence -->
+        <text class="radar-center-number" x="193" y="205" text-anchor="middle">81</text>
+        <text class="radar-center-pct" x="218" y="205" text-anchor="start">%</text>
+        <text class="radar-center-label" x="200" y="222" text-anchor="middle">Proceed with caution</text>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#ef4444;"></div>
+        Devil's Advocate
+      </div>
+      <div class="legend-item active">
+        <div class="legend-dot" style="background:#22c55e;"></div>
+        Optimist
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#f59e0b;"></div>
+        Pessimist
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#3b82f6;"></div>
+        Pragmatist
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#a855f7;"></div>
+        Wildcard
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Panel — War-room crisp card style -->
+  <div class="detail-panel">
+    <div class="detail-card green">
+      <div class="detail-header">
+        <div class="detail-agent-info">
+          <div class="detail-emoji">&#x1F680;</div>
+          <div>
+            <div class="detail-name">Optimist</div>
+            <div class="detail-conf-num">Confidence: 74%</div>
+          </div>
+        </div>
+        <span class="detail-badge">74%</span>
+      </div>
+
+      <div class="detail-angle">
+        Corporate stability is often a gilded cage — the real risk is spending 10 years building someone else's compounding returns instead of your own.
+      </div>
+
+      <div class="detail-conf-bar">
+        <div class="detail-conf-fill" style="width: 74%;"></div>
+      </div>
+
+      <ul class="detail-points">
+        <li>Higher pay in a new role triggers a cascade: better savings rate, stronger professional network, faster promotions</li>
+        <li>New environments create identity-level momentum — you shed limiting social scripts from your current context</li>
+        <li>Asymmetric bet: worst case you return to employment with founder experience on your resume</li>
+        <li>The first-year salary bump is just the visible tip of a much larger opportunity iceberg</li>
+      </ul>
+
+      <div class="detail-verdict">
+        <div class="text">"The visible tip of the salary bump is the smaller iceberg."</div>
+      </div>
+
+      <div class="detail-risk">
+        <div class="label">Key Risk</div>
+        <div class="value">Overestimating your risk tolerance before it has actually been tested under pressure.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Synthesis -->
+<div class="synthesis" id="synth">
+  <div class="synthesis-inner">
+    <div class="synth-header">
+      <div class="synth-header-left">
+        <div class="synth-icon">&#x1F9E0;</div>
+        <div>
+          <div class="synth-title">Final Verdict</div>
+          <div class="synth-subtitle">Synthesized from all 5 perspectives</div>
+        </div>
+      </div>
+      <div class="synth-gauge">
+        <svg viewBox="0 0 100 56">
+          <defs>
+            <linearGradient id="sgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#991b1b" />
+              <stop offset="60%" stop-color="#dc2626" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+          </defs>
+          <path class="sg-track" d="M 10 50 A 40 40 0 0 1 90 50" />
+          <path class="sg-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+        </svg>
+        <div class="synth-gauge-text">
+          <div class="pct">81<span>%</span></div>
+          <div class="conv">Moderate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="synth-body">
+      <div class="synth-col">
+        <h4>Recommendation</h4>
+        <div class="synth-recommendation">
+          Proceed — but only after completing a 90-day validation sprint while still employed.
+        </div>
+        <div class="synth-rationale">
+          The entrepreneurial path has merit, but every agent flagged unvalidated assumptions. De-risk by treating the next quarter as a proof-of-concept while keeping your salary as runway.
+        </div>
+        <div class="synth-dominant">
+          <span class="dot"></span>
+          Dominant voice: <strong>&nbsp;Devil's Advocate</strong>
+        </div>
+      </div>
+
+      <div class="synth-col">
+        <h4>Trade-offs to Accept</h4>
+        <ul class="synth-tradeoffs">
+          <li>Accept a slower timeline for significantly lower financial risk</li>
+          <li>Moonlighting creates real dual cognitive load you must actively manage</li>
+          <li>Your current employer may notice reduced engagement during the sprint</li>
+        </ul>
+      </div>
+
+      <div class="synth-col">
+        <h4>Watch Out</h4>
+        <div class="synth-flip">
+          <div class="flip-label">Flip Condition</div>
+          <p>If you cannot secure a single paying customer or letter of intent within 90 days of part-time effort, treat that as a strong signal that the market isn't ready — or the idea needs more work before you bet your career on it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Decision Pressure Cooker · Multi-Agent AI · Provider-Agnostic</div>
+
+</body>
+</html>

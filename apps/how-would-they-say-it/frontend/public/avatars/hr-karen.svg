@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <circle cx="50" cy="50" r="50" fill="#DBEAFE"/>
+  <!-- Blazer (dark blue) -->
+  <ellipse cx="50" cy="112" rx="52" ry="34" fill="#1E3A8A"/>
+  <!-- White blouse collar -->
+  <path d="M 44 78 L 50 91 L 56 78" fill="white" stroke="none"/>
+  <!-- Neck -->
+  <rect x="44" y="65" width="12" height="15" rx="4" fill="#C8956A"/>
+  <!-- Head / face -->
+  <ellipse cx="50" cy="50" rx="22" ry="24" fill="#C8956A"/>
+  <!-- Brown hair crown -->
+  <ellipse cx="50" cy="28" rx="22" ry="10" fill="#6B3A2A"/>
+  <!-- Glasses frames (blue) -->
+  <rect x="36" y="44.5" width="12" height="8.5" rx="2.5" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+  <rect x="52" y="44.5" width="12" height="8.5" rx="2.5" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+  <!-- Bridge of glasses -->
+  <line x1="48" y1="48.5" x2="52" y2="48.5" stroke="#2563EB" stroke-width="1.5"/>
+  <!-- Temple arms -->
+  <line x1="36" y1="48.5" x2="33" y2="47.5" stroke="#2563EB" stroke-width="1.5"/>
+  <line x1="64" y1="48.5" x2="67" y2="47.5" stroke="#2563EB" stroke-width="1.5"/>
+  <!-- Eyes (behind glasses) -->
+  <circle cx="42" cy="48.5" r="2.2" fill="#2C1810"/>
+  <circle cx="58" cy="48.5" r="2.2" fill="#2C1810"/>
+  <!-- Neutral professional eyebrows -->
+  <path d="M 38 43 Q 42 41.5 46 43" stroke="#5C3020" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M 54 43 Q 58 41.5 62 43" stroke="#5C3020" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <!-- Professional pleasant mouth -->
+  <path d="M 45 58 Q 50 62 55 58" stroke="#8B5E3C" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>

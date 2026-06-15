@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background -->
+  <circle cx="50" cy="50" r="50" fill="#D1FAE5"/>
+  <!-- Dark suit (formal) -->
+  <ellipse cx="50" cy="112" rx="52" ry="34" fill="#064E3B"/>
+  <!-- White shirt collar -->
+  <path d="M 44 78 L 50 91 L 56 78" fill="white" stroke="none"/>
+  <!-- Teal tie -->
+  <line x1="50" y1="78" x2="50" y2="91" stroke="#059669" stroke-width="2.8" stroke-linecap="round"/>
+  <!-- Neck -->
+  <rect x="44" y="65" width="12" height="15" rx="4" fill="#C8956A"/>
+  <!-- Head / face (slightly older, longer face) -->
+  <ellipse cx="50" cy="50" rx="21" ry="25" fill="#C8956A"/>
+  <!-- Silver hair crown (distinguished) -->
+  <ellipse cx="50" cy="27" rx="21" ry="10" fill="#B0B8C0"/>
+  <!-- Silver temples detail -->
+  <ellipse cx="29" cy="42" rx="6" ry="10" fill="#B0B8C0"/>
+  <ellipse cx="71" cy="42" rx="6" ry="10" fill="#B0B8C0"/>
+  <!-- Face overlay to keep center clean -->
+  <ellipse cx="50" cy="50" rx="18" ry="24" fill="#C8956A"/>
+  <!-- Stern set eyebrows (slightly furrowed) -->
+  <path d="M 38.5 43 Q 43 41 47 43" stroke="#7A6A5A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M 53 43 Q 57 41 61.5 43" stroke="#7A6A5A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <!-- Eyes (piercing, steady) -->
+  <circle cx="43" cy="48.5" r="2.8" fill="#2C1810"/>
+  <circle cx="57" cy="48.5" r="2.8" fill="#2C1810"/>
+  <!-- Slight crow's feet (age lines) -->
+  <path d="M 61 46 Q 63.5 48.5 62 51" stroke="#A87A5A" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <path d="M 39 46 Q 36.5 48.5 38 51" stroke="#A87A5A" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+  <!-- Flat / slightly frowning stern mouth -->
+  <path d="M 44 58 Q 50 57.5 56 58" stroke="#8B5E3C" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,29 @@
+{
+  "name": "ai-projects",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:dpc && npm run build:debate && npm run build:hwtsi",
+    "build:dpc": "cd apps/decision-pressure-cooker/frontend && npm ci && npm run build",
+    "build:debate": "cd apps/debate-engine/frontend && npm ci && npm run build",
+    "build:hwtsi": "cd apps/how-would-they-say-it/frontend && npm ci && npm run build",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.47.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "supertest": "^7.2.2",
+    "vitest": "^3.1.0"
+  }
+}

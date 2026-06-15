@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback & Overlays — UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+
+      --success-bg: rgba(92,122,82,0.10);
+      --warning-bg: rgba(184,134,11,0.10);
+      --danger-bg:  rgba(139,58,58,0.10);
+      --info-bg:    rgba(91,127,166,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar nav ───────────────────────────────────────────── */
+    .sidebar {
+      width: 220px;
+      min-height: 100vh;
+      background: var(--primary);
+      color: var(--surface);
+      position: sticky;
+      top: 0;
+      padding: 32px 0;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-section {
+      padding: 16px 20px 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 0.85rem;
+      color: rgba(253,248,240,0.72);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a:hover { background: rgba(255,255,255,0.07); color: var(--surface); }
+    .sidebar a.active { color: var(--surface); background: rgba(255,255,255,0.12); }
+    .sidebar a i { font-size: 1.1rem; }
+
+    /* ── Main content ──────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      padding: 48px;
+      max-width: 900px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .page-subtitle {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    /* ── Section headings ─────────────────────────────────────── */
+    .section {
+      margin-bottom: 56px;
+      scroll-margin-top: 32px;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+    }
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .variant-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin: 20px 0 10px;
+    }
+
+    /* ── Demo stage ────────────────────────────────────────────── */
+    .demo-stage {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .demo-stage.dark-bg {
+      background: var(--primary);
+    }
+    .demo-stage.grey-bg {
+      background: var(--bg);
+    }
+
+    /* ── Row / column layout helpers ──────────────────────────── */
+    .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+    .col { display: flex; flex-direction: column; gap: 12px; }
+
+    /* ════════════════════════════════════════════════════════════
+       DIALOG / MODAL
+    ════════════════════════════════════════════════════════════ */
+
+    /* Simulated dialog within the stage */
+    .dialog-backdrop {
+      background: rgba(28,21,16,0.45);
+      border-radius: 6px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+    }
+
+    .dialog {
+      background: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 24px 48px rgba(28,21,16,0.24), 0 4px 16px rgba(28,21,16,0.12);
+      width: 100%;
+      max-width: 420px;
+      overflow: hidden;
+    }
+    .dialog-header {
+      padding: 20px 24px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .dialog-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .dialog-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--muted);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      font-size: 1.1rem;
+    }
+    .dialog-close:hover { background: rgba(28,21,16,0.07); }
+    .dialog-body {
+      padding: 0 24px 20px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .dialog-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+    .dialog-actions {
+      padding: 12px 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Dialog — destructive variant header */
+    .dialog-header-destructive {
+      background: var(--danger-bg);
+      padding: 20px 24px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dialog-header-destructive .dialog-title { color: var(--danger); }
+    .dialog-icon-destructive {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(139,58,58,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--danger);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Dialog — form dialog */
+    .dialog-body .form-field {
+      margin-bottom: 16px;
+    }
+    .dialog-body label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 5px;
+      letter-spacing: 0.03em;
+    }
+    .dialog-body input[type="text"],
+    .dialog-body input[type="email"],
+    .dialog-body textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      background: var(--surface);
+      color: var(--primary);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .dialog-body input:focus,
+    .dialog-body textarea:focus {
+      border-color: var(--muted);
+    }
+    .dialog-body textarea { resize: vertical; min-height: 72px; }
+
+    /* ── Shared button styles ──────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .btn-filled {
+      background: var(--primary);
+      color: var(--surface);
+    }
+    .btn-filled:hover { background: #2e2318; box-shadow: 0 2px 8px rgba(28,21,16,0.25); }
+    .btn-outlined {
+      background: transparent;
+      color: var(--primary);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outlined:hover { background: rgba(28,21,16,0.05); }
+    .btn-text {
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 10px;
+    }
+    .btn-text:hover { background: rgba(28,21,16,0.05); color: var(--primary); }
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover { background: #7a3030; box-shadow: 0 2px 8px rgba(139,58,58,0.3); }
+    .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+
+    /* ════════════════════════════════════════════════════════════
+       SNACKBAR / TOAST
+    ════════════════════════════════════════════════════════════ */
+    .snackbar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .snackbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #2a2118;
+      color: var(--surface);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      box-shadow: 0 4px 16px rgba(28,21,16,0.3);
+      max-width: 400px;
+      position: relative;
+    }
+    .snackbar-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .snackbar-text { flex: 1; line-height: 1.4; }
+    .snackbar-action {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px 6px;
+      border-radius: 3px;
+      transition: background 0.15s;
+      font-family: inherit;
+      flex-shrink: 0;
+    }
+    .snackbar-action:hover { background: rgba(255,255,255,0.08); color: var(--surface); }
+    .snackbar-close {
+      background: none;
+      border: none;
+      color: rgba(253,248,240,0.5);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 2px;
+      border-radius: 50%;
+      display: flex;
+      flex-shrink: 0;
+    }
+    .snackbar-close:hover { color: var(--surface); }
+
+    /* Colored snackbars */
+    .snackbar-success { background: #2d3d28; }
+    .snackbar-success .snackbar-icon { color: #7ab56e; }
+    .snackbar-warning { background: #3d3010; }
+    .snackbar-warning .snackbar-icon { color: #d4a017; }
+    .snackbar-danger  { background: #3a1e1e; }
+    .snackbar-danger  .snackbar-icon  { color: #c06060; }
+    .snackbar-info    { background: #1e2d3a; }
+    .snackbar-info    .snackbar-icon  { color: #7aaed4; }
+
+    /* Toast — lighter surface style */
+    .toast {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--surface);
+      color: var(--primary);
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      box-shadow: 0 4px 20px rgba(28,21,16,0.16);
+      border: 1px solid var(--border);
+      max-width: 320px;
+      position: relative;
+    }
+    .toast-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .toast-body { flex: 1; }
+    .toast-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 2px; }
+    .toast-msg { font-size: 0.80rem; color: var(--muted); line-height: 1.4; }
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--subtle);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+    .toast-close:hover { color: var(--primary); }
+    .toast-success .toast-icon { color: var(--success); }
+    .toast-warning .toast-icon { color: var(--warning); }
+    .toast-danger  .toast-icon { color: var(--danger);  }
+    .toast-info    .toast-icon { color: var(--info);    }
+
+    /* ════════════════════════════════════════════════════════════
+       ALERT
+    ════════════════════════════════════════════════════════════ */
+    .alert-stack { display: flex; flex-direction: column; gap: 12px; }
+
+    .alert {
+      display: flex;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 6px;
+      font-size: 0.86rem;
+      border: 1px solid transparent;
+      align-items: flex-start;
+    }
+    .alert-icon { font-size: 1.15rem; flex-shrink: 0; margin-top: 1px; }
+    .alert-body { flex: 1; }
+    .alert-title { font-weight: 600; margin-bottom: 3px; font-size: 0.88rem; }
+    .alert-msg { color: inherit; opacity: 0.8; line-height: 1.5; }
+    .alert-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+    .alert-close:hover { opacity: 1; }
+
+    .alert-success {
+      background: var(--success-bg);
+      border-color: rgba(92,122,82,0.25);
+      color: var(--success);
+    }
+    .alert-warning {
+      background: var(--warning-bg);
+      border-color: rgba(184,134,11,0.25);
+      color: var(--warning);
+    }
+    .alert-danger {
+      background: var(--danger-bg);
+      border-color: rgba(139,58,58,0.25);
+      color: var(--danger);
+    }
+    .alert-info {
+      background: var(--info-bg);
+      border-color: rgba(91,127,166,0.25);
+      color: var(--info);
+    }
+    .alert-neutral {
+      background: rgba(196,185,154,0.2);
+      border-color: var(--border);
+      color: var(--primary);
+    }
+
+    /* Alert with action link */
+    .alert-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.80rem;
+      font-weight: 600;
+      color: inherit;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* Banner alert (full-width) */
+    .alert-banner {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-top: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       PROGRESS BAR
+    ════════════════════════════════════════════════════════════ */
+    .progress-group { display: flex; flex-direction: column; gap: 18px; }
+
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .progress-info .progress-name { font-weight: 500; color: var(--primary); }
+
+    .progress-track {
+      height: 6px;
+      background: rgba(196,185,154,0.35);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--primary);
+      transition: width 0.6s ease;
+    }
+    .progress-fill-success { background: var(--success); }
+    .progress-fill-warning { background: var(--warning); }
+    .progress-fill-danger  { background: var(--danger);  }
+    .progress-fill-info    { background: var(--info);    }
+
+    /* Thick progress bar */
+    .progress-track-lg { height: 10px; }
+
+    /* Striped / animated */
+    .progress-fill-striped {
+      background-image: linear-gradient(
+        45deg,
+        rgba(255,255,255,0.18) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255,255,255,0.18) 50%,
+        rgba(255,255,255,0.18) 75%,
+        transparent 75%
+      );
+      background-size: 18px 18px;
+      animation: progress-stripe 0.7s linear infinite;
+    }
+    @keyframes progress-stripe {
+      from { background-position: 0 0; }
+      to   { background-position: 18px 0; }
+    }
+
+    /* Indeterminate / loading bar */
+    .progress-track-indeterminate { overflow: hidden; position: relative; }
+    .progress-fill-indeterminate {
+      width: 40%;
+      border-radius: 99px;
+      background: var(--primary);
+      position: absolute;
+      top: 0; bottom: 0;
+      animation: indeterminate 1.4s ease-in-out infinite;
+    }
+    @keyframes indeterminate {
+      0%   { left: -40%; }
+      60%  { left: 100%; }
+      100% { left: 100%; }
+    }
+
+    /* Multi-segment progress */
+    .progress-fill-multi {
+      display: flex;
+      height: 100%;
+    }
+    .progress-segment { height: 100%; }
+
+    /* Step progress */
+    .step-progress {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .step-dot.done {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--surface);
+    }
+    .step-dot.current {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(28,21,16,0.1);
+    }
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--border);
+    }
+    .step-connector.done { background: var(--primary); }
+    .step-labels {
+      display: flex;
+      margin-top: 8px;
+    }
+    .step-label-item {
+      flex: 1;
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .step-label-item:first-child { text-align: left; }
+    .step-label-item:last-child  { text-align: right; }
+    .step-label-item.done    { color: var(--primary); font-weight: 500; }
+    .step-label-item.current { color: var(--primary); font-weight: 600; }
+
+    /* ════════════════════════════════════════════════════════════
+       SPINNER
+    ════════════════════════════════════════════════════════════ */
+    .spinner-row { display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+
+    /* Circular spinner via border */
+    .spinner {
+      border-radius: 50%;
+      border-style: solid;
+      border-color: var(--border);
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+    .spinner-border-primary { border-top-color: var(--primary); }
+    .spinner-border-success { border-top-color: var(--success); }
+    .spinner-border-warning { border-top-color: var(--warning); }
+    .spinner-border-danger  { border-top-color: var(--danger);  }
+    .spinner-border-info    { border-top-color: var(--info);    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Sizes */
+    .spinner-xs { width: 16px; height: 16px; border-width: 2px; }
+    .spinner-sm { width: 24px; height: 24px; border-width: 2.5px; }
+    .spinner-md { width: 36px; height: 36px; border-width: 3px; }
+    .spinner-lg { width: 52px; height: 52px; border-width: 4px; }
+    .spinner-xl { width: 72px; height: 72px; border-width: 5px; }
+
+    /* Spinner with label */
+    .spinner-labeled {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .spinner-label { font-size: 0.8rem; color: var(--muted); }
+
+    /* Dot-pulse spinner */
+    .dots-spinner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: dot-pulse 1.2s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot-pulse {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40%            { transform: scale(1.0); opacity: 1.0; }
+    }
+
+    /* Spinner overlay (full-page loading) */
+    .spinner-overlay-demo {
+      position: relative;
+      height: 140px;
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .spinner-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(253,248,240,0.82);
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      z-index: 10;
+    }
+    .spinner-overlay-text { font-size: 0.82rem; color: var(--muted); }
+    /* faux content behind overlay */
+    .overlay-content {
+      padding: 20px;
+    }
+    .overlay-content-line {
+      height: 10px;
+      background: var(--bg);
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    /* Button-embedded spinner */
+    .btn-loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      background: var(--primary);
+      color: var(--surface);
+      border: none;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SKELETON
+    ════════════════════════════════════════════════════════════ */
+
+    /* Base shimmer animation */
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        rgba(196,185,154,0.25) 25%,
+        rgba(196,185,154,0.50) 50%,
+        rgba(196,185,154,0.25) 75%
+      );
+      background-size: 600px 100%;
+      animation: shimmer 1.6s ease-in-out infinite;
+      border-radius: 4px;
+    }
+    .skeleton-circle { border-radius: 50%; }
+    .skeleton-text   { height: 12px; margin-bottom: 8px; }
+    .skeleton-text-sm { height: 10px; }
+    .skeleton-text-lg { height: 16px; }
+
+    /* Article / post skeleton */
+    .skeleton-article {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-width: 500px;
+    }
+    .skeleton-hero-img {
+      width: 100%;
+      height: 160px;
+      border-radius: 8px 8px 0 0;
+    }
+    .skeleton-article-body { padding: 16px; }
+
+    /* Card skeleton */
+    .skeleton-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      width: 240px;
+    }
+    .skeleton-card-img { width: 100%; height: 120px; border-radius: 0; }
+    .skeleton-card-body { padding: 14px; }
+
+    /* Profile / user row skeleton */
+    .skeleton-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+    .skeleton-avatar { width: 40px; height: 40px; flex-shrink: 0; }
+    .skeleton-profile-text { flex: 1; }
+
+    /* Table skeleton */
+    .skeleton-table { width: 100%; border-collapse: collapse; }
+    .skeleton-table th, .skeleton-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .skeleton-table td:first-child { display: flex; align-items: center; gap: 10px; }
+
+    /* Grid of cards skeleton */
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .skeleton-grid-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    /* Stat card skeleton */
+    .skeleton-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ Sidebar ══════════════════════════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">UI/UX Templates</div>
+
+    <div class="sidebar-section">Categories</div>
+    <a href="../primitives.html"><i class="mdi mdi-shape-outline"></i> Primitives</a>
+    <a href="../forms.html"><i class="mdi mdi-form-textbox"></i> Form Controls</a>
+    <a href="../layout.html"><i class="mdi mdi-view-dashboard-outline"></i> Layout</a>
+    <a href="feedback.html" class="active"><i class="mdi mdi-bell-outline"></i> Feedback</a>
+    <a href="navigation.html"><i class="mdi mdi-compass-outline"></i> Navigation</a>
+    <a href="data-display.html"><i class="mdi mdi-table-large"></i> Data Display</a>
+
+    <div class="sidebar-section">On This Page</div>
+    <a href="#dialog"><i class="mdi mdi-dock-window"></i> Dialog / Modal</a>
+    <a href="#snackbar"><i class="mdi mdi-message-outline"></i> Snackbar / Toast</a>
+    <a href="#alert"><i class="mdi mdi-alert-circle-outline"></i> Alert</a>
+    <a href="#progress"><i class="mdi mdi-progress-helper"></i> Progress Bar</a>
+    <a href="#spinner"><i class="mdi mdi-loading"></i> Spinner</a>
+    <a href="#skeleton"><i class="mdi mdi-card-outline"></i> Skeleton</a>
+
+    <div class="sidebar-section">Pages</div>
+    <a href="../../pages/landing.html"><i class="mdi mdi-home-outline"></i> Landing</a>
+    <a href="../../pages/dashboard.html"><i class="mdi mdi-view-grid-outline"></i> Dashboard</a>
+    <a href="../../pages/login.html"><i class="mdi mdi-login"></i> Login</a>
+  </nav>
+
+  <!-- ══ Main ═════════════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="page-title">Feedback &amp; Overlays</div>
+    <div class="page-subtitle">Dialog / Modal · Snackbar / Toast · Alert · Progress Bar · Spinner · Skeleton</div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         DIALOG / MODAL
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="dialog">
+      <div class="section-title">Dialog / Modal</div>
+      <div class="section-desc">Focused overlays that interrupt flow to collect input or confirm actions.</div>
+
+      <div class="variant-label">Standard confirmation</div>
+      <div class="demo-stage" data-template="feedback.dialog.standard-confirmation">
+        <div class="dialog-backdrop">
+          <div class="dialog">
+            <div class="dialog-header">
+              <span class="dialog-title">Discard changes?</span>
+              <button class="dialog-close"><i class="mdi mdi-close"></i></button>
+            </div>
+            <div class="dialog-body">
+              You have unsaved changes. Leaving this page will discard everything you've typed.
+            </div>
+            <hr class="dialog-divider">
+            <div class="dialog-actions">
+              <button class="btn btn-text">Keep editing</button>
+              <button class="btn btn-filled">Discard</button>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.dialog.standard-confirmation">
+
+      <div class="variant-label">Destructive action</div>
+      <div class="demo-stage" data-template="feedback.dialog.destructive-action">
+        <div class="dialog-backdrop">
+          <div class="dialog">
+            <div class="dialog-header-destructive">
+              <div class="dialog-icon-destructive"><i class="mdi mdi-trash-can-outline"></i></div>
+              <span class="dialog-title">Delete project?</span>
+            </div>
+            <div class="dialog-body" style="padding-top:16px;">
+              <strong style="color:var(--primary)">This action cannot be undone.</strong>
+              Deleting <em>Q4 Campaign</em> will permanently remove all associated assets, team members, and history.
+            </div>
+            <hr class="dialog-divider">
+            <div class="dialog-actions">
+              <button class="btn btn-outlined">Cancel</button>
+              <button class="btn btn-danger">Delete project</button>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.dialog.destructive-action">
+
+      <div class="variant-label">Form dialog</div>
+      <div class="demo-stage" data-template="feedback.dialog.form-dialog">
+        <div class="dialog-backdrop">
+          <div class="dialog">
+            <div class="dialog-header">
+              <span class="dialog-title">Invite team member</span>
+              <button class="dialog-close"><i class="mdi mdi-close"></i></button>
+            </div>
+            <div class="dialog-body" style="padding-top:4px;">
+              <div class="form-field">
+                <label>Full name</label>
+                <input type="text" value="Jordan Lee" placeholder="Full name">
+              </div>
+              <div class="form-field">
+                <label>Email address</label>
+                <input type="email" value="jordan@example.com" placeholder="Email address">
+              </div>
+              <div class="form-field" style="margin-bottom:0;">
+                <label>Role</label>
+                <input type="text" value="Editor" placeholder="Role">
+              </div>
+            </div>
+            <hr class="dialog-divider">
+            <div class="dialog-actions">
+              <button class="btn btn-text">Cancel</button>
+              <button class="btn btn-filled"><i class="mdi mdi-send-outline"></i> Send invite</button>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.dialog.form-dialog">
+
+      <div class="variant-label">Info / detail dialog</div>
+      <div class="demo-stage" data-template="feedback.dialog.info-detail-dialog">
+        <div class="dialog-backdrop">
+          <div class="dialog" style="max-width:480px;">
+            <div class="dialog-header">
+              <span class="dialog-title">Keyboard shortcuts</span>
+              <button class="dialog-close"><i class="mdi mdi-close"></i></button>
+            </div>
+            <div class="dialog-body" style="padding-top:4px;">
+              <table style="width:100%;font-size:0.82rem;border-collapse:collapse;">
+                <tr><td style="padding:6px 0;color:var(--muted);border-bottom:1px solid var(--border);">New document</td><td style="padding:6px 0;text-align:right;border-bottom:1px solid var(--border);"><kbd style="background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ N</kbd></td></tr>
+                <tr><td style="padding:6px 0;color:var(--muted);border-bottom:1px solid var(--border);">Save</td><td style="padding:6px 0;text-align:right;border-bottom:1px solid var(--border);"><kbd style="background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ S</kbd></td></tr>
+                <tr><td style="padding:6px 0;color:var(--muted);border-bottom:1px solid var(--border);">Search</td><td style="padding:6px 0;text-align:right;border-bottom:1px solid var(--border);"><kbd style="background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ K</kbd></td></tr>
+                <tr><td style="padding:6px 0;color:var(--muted);">Undo</td><td style="padding:6px 0;text-align:right;"><kbd style="background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:1px 6px;font-size:0.75rem;">⌘ Z</kbd></td></tr>
+              </table>
+            </div>
+            <hr class="dialog-divider">
+            <div class="dialog-actions">
+              <button class="btn btn-outlined">Close</button>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.dialog.info-detail-dialog">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SNACKBAR / TOAST
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="snackbar">
+      <div class="section-title">Snackbar / Toast</div>
+      <div class="section-desc">Brief, non-blocking messages that auto-dismiss after a few seconds.</div>
+
+      <div class="variant-label">Snackbar — dark surface</div>
+      <div class="demo-stage dark-bg" data-template="feedback.snackbar.snackbar-dark-surface">
+        <div class="snackbar-stack">
+          <!-- Default -->
+          <div class="snackbar">
+            <span class="snackbar-text">Changes saved successfully.</span>
+            <button class="snackbar-action">Undo</button>
+            <button class="snackbar-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- With icon -->
+          <div class="snackbar">
+            <i class="mdi mdi-wifi-off snackbar-icon" style="color:var(--subtle)"></i>
+            <span class="snackbar-text">You're offline. Some features may be unavailable.</span>
+            <button class="snackbar-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- Success -->
+          <div class="snackbar snackbar-success">
+            <i class="mdi mdi-check-circle-outline snackbar-icon"></i>
+            <span class="snackbar-text">Invite sent to jordan@example.com</span>
+            <button class="snackbar-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- Warning -->
+          <div class="snackbar snackbar-warning">
+            <i class="mdi mdi-alert-outline snackbar-icon"></i>
+            <span class="snackbar-text">Storage is 90% full — consider upgrading your plan.</span>
+            <button class="snackbar-action">Upgrade</button>
+          </div>
+          <!-- Danger -->
+          <div class="snackbar snackbar-danger">
+            <i class="mdi mdi-close-circle-outline snackbar-icon"></i>
+            <span class="snackbar-text">Failed to save. Please try again.</span>
+            <button class="snackbar-action">Retry</button>
+          </div>
+        </div>
+      </div data-template="feedback.snackbar.snackbar-dark-surface">
+
+      <div class="variant-label">Toast — light surface (top-right corner style)</div>
+      <div class="demo-stage grey-bg" data-template="feedback.snackbar.toast-light-surface-top-right-corner-style">
+        <div class="snackbar-stack" style="align-items:flex-end;">
+          <!-- Success toast -->
+          <div class="toast toast-success">
+            <i class="mdi mdi-check-circle-outline toast-icon"></i>
+            <div class="toast-body">
+              <div class="toast-title">Project published</div>
+              <div class="toast-msg">Your project is now live and visible to the team.</div>
+            </div>
+            <button class="toast-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- Info toast -->
+          <div class="toast toast-info">
+            <i class="mdi mdi-information-outline toast-icon"></i>
+            <div class="toast-body">
+              <div class="toast-title">New version available</div>
+              <div class="toast-msg">Refresh the page to get the latest updates.</div>
+            </div>
+            <button class="toast-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- Warning toast -->
+          <div class="toast toast-warning">
+            <i class="mdi mdi-alert-outline toast-icon"></i>
+            <div class="toast-body">
+              <div class="toast-title">Session expiring</div>
+              <div class="toast-msg">You'll be signed out in 5 minutes due to inactivity.</div>
+            </div>
+            <button class="toast-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <!-- Error toast -->
+          <div class="toast toast-danger">
+            <i class="mdi mdi-close-circle-outline toast-icon"></i>
+            <div class="toast-body">
+              <div class="toast-title">Upload failed</div>
+              <div class="toast-msg">File exceeds the 10 MB limit. Try a smaller file.</div>
+            </div>
+            <button class="toast-close"><i class="mdi mdi-close"></i></button>
+          </div>
+        </div>
+      </div data-template="feedback.snackbar.toast-light-surface-top-right-corner-style">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ALERT
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="alert">
+      <div class="section-title">Alert</div>
+      <div class="section-desc">Persistent inline messages that communicate status, warnings, or errors in context.</div>
+
+      <div class="variant-label">Semantic variants</div>
+      <div class="demo-stage" data-template="feedback.alert.semantic-variants">
+        <div class="alert-stack">
+          <div class="alert alert-success">
+            <i class="mdi mdi-check-circle-outline alert-icon"></i>
+            <div class="alert-body">
+              <div class="alert-title">Payment received</div>
+              <div class="alert-msg">Your subscription has been renewed through June 2027.</div>
+            </div>
+            <button class="alert-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <div class="alert alert-info">
+            <i class="mdi mdi-information-outline alert-icon"></i>
+            <div class="alert-body">
+              <div class="alert-title">Maintenance scheduled</div>
+              <div class="alert-msg">The platform will be unavailable on Sat, Jun 7 from 2–4 AM UTC.</div>
+            </div>
+            <button class="alert-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <div class="alert alert-warning">
+            <i class="mdi mdi-alert-outline alert-icon"></i>
+            <div class="alert-body">
+              <div class="alert-title">Trial ending soon</div>
+              <div class="alert-msg">Your free trial expires in 3 days. Add a payment method to keep access.
+                <a class="alert-link">Upgrade now</a>
+              </div>
+            </div>
+            <button class="alert-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <div class="alert alert-danger">
+            <i class="mdi mdi-close-circle-outline alert-icon"></i>
+            <div class="alert-body">
+              <div class="alert-title">Action required</div>
+              <div class="alert-msg">Your API key has expired. Regenerate it to restore integrations.
+                <a class="alert-link">Regenerate key</a>
+              </div>
+            </div>
+            <button class="alert-close"><i class="mdi mdi-close"></i></button>
+          </div>
+          <div class="alert alert-neutral">
+            <i class="mdi mdi-information-outline alert-icon" style="color:var(--muted)"></i>
+            <div class="alert-body">
+              <div class="alert-msg" style="opacity:1;color:var(--muted)">This record is read-only. Contact an admin to make changes.</div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.alert.semantic-variants">
+
+      <div class="variant-label">Banner alert (full-width, no border-radius)</div>
+      <div class="demo-stage" style="padding:0;" data-template="feedback.alert.banner-alert-full-width-no-border-radius">
+        <div class="alert alert-warning alert-banner" style="border-radius:0; margin:0;">
+          <i class="mdi mdi-alert-outline alert-icon"></i>
+          <div class="alert-body">
+            <div class="alert-msg" style="opacity:1;">
+              <strong>Scheduled downtime:</strong> The service will be offline Saturday June 7, 2:00–4:00 AM UTC.
+            </div>
+          </div>
+          <button class="alert-close"><i class="mdi mdi-close"></i></button>
+        </div>
+      </div data-template="feedback.alert.banner-alert-full-width-no-border-radius">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PROGRESS BAR
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="progress">
+      <div class="section-title">Progress Bar</div>
+      <div class="section-desc">Linear indicators for determinate and indeterminate loading, upload, and step workflows.</div>
+
+      <div class="variant-label">Determinate — labeled</div>
+      <div class="demo-stage" data-template="feedback.progress.determinate-labeled">
+        <div class="progress-group">
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Uploading report.pdf</span>
+              <span>72%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:72%"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Training model</span>
+              <span>45%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-info" style="width:45%"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Disk usage</span>
+              <span>88%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-warning" style="width:88%"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Overdue tasks</span>
+              <span>23%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-danger" style="width:23%"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Budget spent</span>
+              <span>61%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-success" style="width:61%"></div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.progress.determinate-labeled">
+
+      <div class="variant-label">Thick + striped animated</div>
+      <div class="demo-stage" data-template="feedback.progress.thick-striped-animated">
+        <div class="progress-group">
+          <div class="progress-wrap">
+            <div class="progress-track progress-track-lg">
+              <div class="progress-fill progress-fill-striped" style="width:65%;background-color:var(--primary);"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track progress-track-lg">
+              <div class="progress-fill progress-fill-info progress-fill-striped" style="width:40%;background-color:var(--info);"></div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.progress.thick-striped-animated">
+
+      <div class="variant-label">Indeterminate (loading)</div>
+      <div class="demo-stage" data-template="feedback.progress.indeterminate-loading">
+        <div class="progress-group">
+          <div class="progress-wrap">
+            <div class="progress-track progress-track-indeterminate" style="height:4px;position:relative;">
+              <div class="progress-fill-indeterminate" style="background:var(--primary);height:4px;"></div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-track progress-track-indeterminate" style="height:4px;position:relative;">
+              <div class="progress-fill-indeterminate" style="background:var(--info);height:4px;animation-delay:0.3s;"></div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.progress.indeterminate-loading">
+
+      <div class="variant-label">Multi-segment (stacked)</div>
+      <div class="demo-stage" data-template="feedback.progress.multi-segment-stacked">
+        <div class="progress-group">
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <span class="progress-name">Sprint velocity breakdown</span>
+            </div>
+            <div class="progress-track progress-track-lg" style="overflow:hidden;">
+              <div class="progress-fill-multi">
+                <div class="progress-segment" style="width:48%;background:var(--success);border-radius:99px 0 0 99px;"></div>
+                <div class="progress-segment" style="width:27%;background:var(--info);"></div>
+                <div class="progress-segment" style="width:15%;background:var(--warning);"></div>
+                <div class="progress-segment" style="width:10%;background:var(--danger);border-radius:0 99px 99px 0;"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;margin-top:8px;">
+              <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)"><span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;"></span>Done 48%</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)"><span style="width:8px;height:8px;border-radius:50%;background:var(--info);display:inline-block;"></span>In review 27%</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)"><span style="width:8px;height:8px;border-radius:50%;background:var(--warning);display:inline-block;"></span>Blocked 15%</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)"><span style="width:8px;height:8px;border-radius:50%;background:var(--danger);display:inline-block;"></span>At risk 10%</span>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.progress.multi-segment-stacked">
+
+      <div class="variant-label">Step progress</div>
+      <div class="demo-stage" data-template="feedback.progress.step-progress">
+        <div style="max-width:480px;">
+          <div class="step-progress">
+            <div class="step-dot done"><i class="mdi mdi-check" style="font-size:0.85rem;"></i></div>
+            <div class="step-connector done"></div>
+            <div class="step-dot done"><i class="mdi mdi-check" style="font-size:0.85rem;"></i></div>
+            <div class="step-connector done"></div>
+            <div class="step-dot current">3</div>
+            <div class="step-connector"></div>
+            <div class="step-dot">4</div>
+          </div>
+          <div class="step-labels">
+            <span class="step-label-item done">Account</span>
+            <span class="step-label-item done">Profile</span>
+            <span class="step-label-item current">Billing</span>
+            <span class="step-label-item">Confirm</span>
+          </div>
+        </div>
+      </div data-template="feedback.progress.step-progress">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SPINNER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="spinner">
+      <div class="section-title">Spinner</div>
+      <div class="section-desc">Circular and animated loaders for async operations.</div>
+
+      <div class="variant-label">Sizes — border spinner</div>
+      <div class="demo-stage" data-template="feedback.spinner.sizes-border-spinner">
+        <div class="spinner-row">
+          <div class="spinner-labeled">
+            <div class="spinner spinner-xs spinner-border-primary"></div>
+            <span class="spinner-label">xs</span>
+          </div>
+          <div class="spinner-labeled">
+            <div class="spinner spinner-sm spinner-border-primary"></div>
+            <span class="spinner-label">sm</span>
+          </div>
+          <div class="spinner-labeled">
+            <div class="spinner spinner-md spinner-border-primary"></div>
+            <span class="spinner-label">md</span>
+          </div>
+          <div class="spinner-labeled">
+            <div class="spinner spinner-lg spinner-border-primary"></div>
+            <span class="spinner-label">lg</span>
+          </div>
+          <div class="spinner-labeled">
+            <div class="spinner spinner-xl spinner-border-primary"></div>
+            <span class="spinner-label">xl</span>
+          </div>
+        </div>
+      </div data-template="feedback.spinner.sizes-border-spinner">
+
+      <div class="variant-label">Semantic colors</div>
+      <div class="demo-stage" data-template="feedback.spinner.semantic-colors">
+        <div class="spinner-row">
+          <div class="spinner spinner-md spinner-border-primary"></div>
+          <div class="spinner spinner-md spinner-border-success"></div>
+          <div class="spinner spinner-md spinner-border-warning"></div>
+          <div class="spinner spinner-md spinner-border-danger"></div>
+          <div class="spinner spinner-md spinner-border-info"></div>
+        </div>
+      </div data-template="feedback.spinner.semantic-colors">
+
+      <div class="variant-label">Spinner on dark background</div>
+      <div class="demo-stage dark-bg" data-template="feedback.spinner.spinner-on-dark-background">
+        <div class="spinner-row">
+          <div class="spinner spinner-md" style="border-color:rgba(253,248,240,0.2);border-top-color:var(--surface);"></div>
+          <div class="spinner spinner-lg" style="border-color:rgba(253,248,240,0.2);border-top-color:var(--subtle);"></div>
+        </div>
+      </div data-template="feedback.spinner.spinner-on-dark-background">
+
+      <div class="variant-label">Dot pulse</div>
+      <div class="demo-stage" data-template="feedback.spinner.dot-pulse">
+        <div class="row" style="align-items:center;gap:32px;">
+          <div class="dots-spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="dots-spinner">
+            <div class="dot" style="background:var(--info);width:10px;height:10px;"></div>
+            <div class="dot" style="background:var(--info);width:10px;height:10px;"></div>
+            <div class="dot" style="background:var(--info);width:10px;height:10px;"></div>
+          </div>
+          <div class="dots-spinner">
+            <div class="dot" style="background:var(--success);width:6px;height:6px;"></div>
+            <div class="dot" style="background:var(--success);width:6px;height:6px;"></div>
+            <div class="dot" style="background:var(--success);width:6px;height:6px;"></div>
+          </div>
+        </div>
+      </div data-template="feedback.spinner.dot-pulse">
+
+      <div class="variant-label">Button loading state</div>
+      <div class="demo-stage" data-template="feedback.spinner.button-loading-state">
+        <div class="row">
+          <button class="btn-loading">
+            <div class="spinner spinner-xs" style="border-color:rgba(253,248,240,0.3);border-top-color:var(--surface);"></div>
+            Saving…
+          </button>
+          <button class="btn-loading" style="background:var(--info);">
+            <div class="spinner spinner-xs" style="border-color:rgba(253,248,240,0.3);border-top-color:var(--surface);"></div>
+            Processing…
+          </button>
+          <button class="btn-loading" style="background:var(--success);">
+            <div class="spinner spinner-xs" style="border-color:rgba(253,248,240,0.3);border-top-color:var(--surface);"></div>
+            Uploading…
+          </button>
+        </div>
+      </div data-template="feedback.spinner.button-loading-state">
+
+      <div class="variant-label">Content overlay</div>
+      <div class="demo-stage" style="padding:0;" data-template="feedback.spinner.content-overlay">
+        <div class="spinner-overlay-demo">
+          <div class="overlay-content">
+            <div class="overlay-content-line" style="width:60%;"></div>
+            <div class="overlay-content-line" style="width:85%;"></div>
+            <div class="overlay-content-line" style="width:40%;"></div>
+          </div>
+          <div class="spinner-overlay">
+            <div class="spinner spinner-lg spinner-border-primary"></div>
+            <span class="spinner-overlay-text">Loading data…</span>
+          </div>
+        </div>
+      </div data-template="feedback.spinner.content-overlay">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SKELETON
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="skeleton">
+      <div class="section-title">Skeleton</div>
+      <div class="section-desc">Shimmering placeholders that preview content shape while data loads.</div>
+
+      <div class="variant-label">Profile rows</div>
+      <div class="demo-stage" data-template="feedback.skeleton.profile-rows">
+        <div class="col">
+          <div class="skeleton-profile-row">
+            <div class="skeleton skeleton-circle skeleton-avatar"></div>
+            <div class="skeleton-profile-text">
+              <div class="skeleton skeleton-text" style="width:45%;"></div>
+              <div class="skeleton skeleton-text-sm skeleton-text" style="width:65%;margin-bottom:0;"></div>
+            </div>
+          </div>
+          <div class="skeleton-profile-row">
+            <div class="skeleton skeleton-circle skeleton-avatar"></div>
+            <div class="skeleton-profile-text">
+              <div class="skeleton skeleton-text" style="width:38%;"></div>
+              <div class="skeleton skeleton-text-sm skeleton-text" style="width:55%;margin-bottom:0;"></div>
+            </div>
+          </div>
+          <div class="skeleton-profile-row">
+            <div class="skeleton skeleton-circle skeleton-avatar"></div>
+            <div class="skeleton-profile-text">
+              <div class="skeleton skeleton-text" style="width:52%;"></div>
+              <div class="skeleton skeleton-text-sm skeleton-text" style="width:72%;margin-bottom:0;"></div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.skeleton.profile-rows">
+
+      <div class="variant-label">Card grid</div>
+      <div class="demo-stage" data-template="feedback.skeleton.card-grid">
+        <div class="skeleton-grid">
+          <div class="skeleton-grid-card">
+            <div class="skeleton" style="width:40px;height:40px;border-radius:8px;margin-bottom:12px;"></div>
+            <div class="skeleton skeleton-text skeleton-text-lg" style="width:70%;"></div>
+            <div class="skeleton skeleton-text" style="width:95%;"></div>
+            <div class="skeleton skeleton-text" style="width:80%;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:40%;margin-top:4px;margin-bottom:0;"></div>
+          </div>
+          <div class="skeleton-grid-card">
+            <div class="skeleton" style="width:40px;height:40px;border-radius:8px;margin-bottom:12px;"></div>
+            <div class="skeleton skeleton-text skeleton-text-lg" style="width:55%;"></div>
+            <div class="skeleton skeleton-text" style="width:100%;"></div>
+            <div class="skeleton skeleton-text" style="width:75%;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:35%;margin-top:4px;margin-bottom:0;"></div>
+          </div>
+          <div class="skeleton-grid-card">
+            <div class="skeleton" style="width:40px;height:40px;border-radius:8px;margin-bottom:12px;"></div>
+            <div class="skeleton skeleton-text skeleton-text-lg" style="width:62%;"></div>
+            <div class="skeleton skeleton-text" style="width:90%;"></div>
+            <div class="skeleton skeleton-text" style="width:68%;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:45%;margin-top:4px;margin-bottom:0;"></div>
+          </div>
+        </div>
+      </div data-template="feedback.skeleton.card-grid">
+
+      <div class="variant-label">Blog / article skeleton</div>
+      <div class="demo-stage" data-template="feedback.skeleton.blog-article-skeleton">
+        <div class="row">
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-card-img"></div>
+            <div class="skeleton-card-body">
+              <div class="skeleton skeleton-text-sm skeleton-text" style="width:40%;margin-bottom:10px;"></div>
+              <div class="skeleton skeleton-text skeleton-text-lg" style="width:88%;"></div>
+              <div class="skeleton skeleton-text skeleton-text-lg" style="width:70%;"></div>
+              <div class="skeleton skeleton-text" style="width:100%;margin-top:6px;"></div>
+              <div class="skeleton skeleton-text" style="width:80%;margin-bottom:0;"></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+                <div class="skeleton skeleton-circle" style="width:24px;height:24px;flex-shrink:0;"></div>
+                <div class="skeleton skeleton-text-sm skeleton-text" style="width:50%;margin-bottom:0;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-card-img"></div>
+            <div class="skeleton-card-body">
+              <div class="skeleton skeleton-text-sm skeleton-text" style="width:35%;margin-bottom:10px;"></div>
+              <div class="skeleton skeleton-text skeleton-text-lg" style="width:78%;"></div>
+              <div class="skeleton skeleton-text skeleton-text-lg" style="width:62%;"></div>
+              <div class="skeleton skeleton-text" style="width:100%;margin-top:6px;"></div>
+              <div class="skeleton skeleton-text" style="width:90%;margin-bottom:0;"></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+                <div class="skeleton skeleton-circle" style="width:24px;height:24px;flex-shrink:0;"></div>
+                <div class="skeleton skeleton-text-sm skeleton-text" style="width:45%;margin-bottom:0;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div data-template="feedback.skeleton.blog-article-skeleton">
+
+      <div class="variant-label">Table skeleton</div>
+      <div class="demo-stage" data-template="feedback.skeleton.table-skeleton">
+        <table class="skeleton-table">
+          <thead>
+            <tr>
+              <th style="font-size:0.75rem;font-weight:600;color:var(--muted);text-align:left;padding-bottom:8px;border-bottom:2px solid var(--border);">Name</th>
+              <th style="font-size:0.75rem;font-weight:600;color:var(--muted);text-align:left;padding-bottom:8px;border-bottom:2px solid var(--border);">Status</th>
+              <th style="font-size:0.75rem;font-weight:600;color:var(--muted);text-align:left;padding-bottom:8px;border-bottom:2px solid var(--border);">Last active</th>
+              <th style="font-size:0.75rem;font-weight:600;color:var(--muted);text-align:right;padding-bottom:8px;border-bottom:2px solid var(--border);">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="skeleton skeleton-circle" style="width:28px;height:28px;"></div><div class="skeleton skeleton-text" style="width:100px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:60px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:80px;margin-bottom:0;"></div></td>
+              <td style="text-align:right;"><div class="skeleton skeleton-text" style="width:48px;margin-left:auto;margin-bottom:0;"></div></td>
+            </tr>
+            <tr>
+              <td><div class="skeleton skeleton-circle" style="width:28px;height:28px;"></div><div class="skeleton skeleton-text" style="width:85px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:50px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:72px;margin-bottom:0;"></div></td>
+              <td style="text-align:right;"><div class="skeleton skeleton-text" style="width:48px;margin-left:auto;margin-bottom:0;"></div></td>
+            </tr>
+            <tr>
+              <td><div class="skeleton skeleton-circle" style="width:28px;height:28px;"></div><div class="skeleton skeleton-text" style="width:110px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:65px;margin-bottom:0;"></div></td>
+              <td><div class="skeleton skeleton-text" style="width:88px;margin-bottom:0;"></div></td>
+              <td style="text-align:right;"><div class="skeleton skeleton-text" style="width:48px;margin-left:auto;margin-bottom:0;"></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div data-template="feedback.skeleton.table-skeleton">
+
+      <div class="variant-label">Stat / KPI card skeleton</div>
+      <div class="demo-stage" data-template="feedback.skeleton.stat-kpi-card-skeleton">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+          <div class="skeleton-stat">
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:55%;margin-bottom:4px;"></div>
+            <div class="skeleton skeleton-text-lg skeleton-text" style="width:45%;margin-bottom:0;height:24px;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:70%;margin-bottom:0;"></div>
+          </div>
+          <div class="skeleton-stat">
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:60%;margin-bottom:4px;"></div>
+            <div class="skeleton skeleton-text-lg skeleton-text" style="width:40%;margin-bottom:0;height:24px;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:65%;margin-bottom:0;"></div>
+          </div>
+          <div class="skeleton-stat">
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:50%;margin-bottom:4px;"></div>
+            <div class="skeleton skeleton-text-lg skeleton-text" style="width:50%;margin-bottom:0;height:24px;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:75%;margin-bottom:0;"></div>
+          </div>
+          <div class="skeleton-stat">
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:58%;margin-bottom:4px;"></div>
+            <div class="skeleton skeleton-text-lg skeleton-text" style="width:42%;margin-bottom:0;height:24px;"></div>
+            <div class="skeleton skeleton-text-sm skeleton-text" style="width:68%;margin-bottom:0;"></div>
+          </div>
+        </div>
+      </div data-template="feedback.skeleton.stat-kpi-card-skeleton">
+    </section>
+
+  </main>
+</body>
+</html>

@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout — UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================== TOKENS ===================== */
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+    }
+
+    /* ===================== SIDEBAR NAV ===================== */
+    .sidebar {
+      width: 240px; min-height: 100vh; background: var(--primary);
+      position: fixed; top: 0; left: 0; bottom: 0;
+      overflow-y: auto; z-index: 100; padding-bottom: 32px;
+    }
+    .sidebar-brand {
+      padding: 22px 20px 18px; color: var(--surface);
+      font-size: 1rem; font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 8px;
+    }
+    .sidebar-brand small {
+      display: block; font-size: 0.65rem; font-weight: 400;
+      color: var(--subtle); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .nav-group-label {
+      padding: 16px 20px 4px; font-size: 0.62rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--subtle);
+    }
+    .sidebar a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 20px; color: rgba(253,248,240,0.65);
+      text-decoration: none; font-size: 0.8125rem; transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a:hover { background: rgba(255,255,255,0.07); color: var(--surface); }
+    .sidebar a.active { background: rgba(253,248,240,0.13); color: var(--surface); font-weight: 500; }
+    .sidebar a .mdi { font-size: 1.05rem; width: 20px; text-align: center; }
+    .anchor-links { padding: 4px 0 8px; border-top: 1px solid rgba(255,255,255,0.07); margin-top: 4px; }
+    .anchor-links a { padding: 6px 20px 6px 50px; font-size: 0.75rem; color: rgba(253,248,240,0.45); }
+    .anchor-links a:hover { color: rgba(253,248,240,0.75); }
+
+    /* ===================== LAYOUT ===================== */
+    .content { margin-left: 240px; flex: 1; padding: 40px 48px 60px; }
+    .page-header { margin-bottom: 36px; }
+    .page-title  { font-size: 1.875rem; font-weight: 700; margin-bottom: 6px; }
+    .page-subtitle { font-size: 0.875rem; color: var(--muted); }
+
+    /* ===================== SECTIONS ===================== */
+    .component-section {
+      background: var(--surface); border-radius: 8px;
+      padding: 32px; margin-bottom: 28px;
+      border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(28,21,16,0.06);
+    }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 28px;
+    }
+    .section-title { font-size: 1.25rem; font-weight: 700; }
+    .section-badge {
+      font-size: 0.7rem; font-family: monospace; background: var(--bg);
+      color: var(--muted); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border);
+    }
+    .subsection { margin-bottom: 36px; }
+    .subsection:last-child { margin-bottom: 0; }
+    .subsection-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+
+    /* ===================== SHARED BTN ===================== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 0 16px; height: 36px; border: none; border-radius: 4px;
+      font-family: 'Roboto', sans-serif; font-size: 0.8125rem; font-weight: 500;
+      letter-spacing: 0.08929em; text-transform: uppercase; cursor: pointer;
+      transition: box-shadow 0.2s; white-space: nowrap; text-decoration: none;
+    }
+    .btn-raised { box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12); }
+    .btn-outlined { background: transparent; border: 2px solid currentColor; }
+    .btn-text { background: transparent; }
+    .btn-primary { background: var(--primary); color: var(--surface); }
+    .btn-light   { background: var(--surface); color: var(--primary); }
+    .btn-muted   { background: var(--muted);   color: var(--surface); }
+    .btn-sm { height: 30px; font-size: 0.75rem; padding: 0 12px; }
+    .btn-lg { height: 48px; font-size: 0.9375rem; padding: 0 28px; }
+    .btn-round { border-radius: 50px; }
+    .btn .mdi { font-size: 1.1rem; }
+
+    /* ===================== CARDS ===================== */
+    .card {
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(28,21,16,0.10), 0 1px 3px rgba(28,21,16,0.06);
+      transition: box-shadow 0.25s, transform 0.2s;
+      border: 1px solid var(--border);
+    }
+    .card:hover {
+      box-shadow: 0 8px 24px rgba(28,21,16,0.14), 0 3px 8px rgba(28,21,16,0.08);
+      transform: translateY(-2px);
+    }
+    .card-media {
+      width: 100%;
+      background: var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-media-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--border) 0%, var(--muted) 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-media-placeholder .mdi { font-size: 3rem; color: rgba(253,248,240,0.5); }
+    .card-body   { padding: 16px; }
+    .card-footer { padding: 8px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+    .card-label  { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    .card-title  { font-size: 1.0625rem; font-weight: 700; margin-bottom: 6px; line-height: 1.35; }
+    .card-subtitle { font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+    .card-text   { font-size: 0.845rem; color: var(--muted); line-height: 1.55; }
+    .card-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 12px; font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    /* Full-bg card */
+    .card-full-bg {
+      position: relative; min-height: 220px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .card-full-bg .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,21,16,0.82) 0%, rgba(28,21,16,0.12) 60%);
+    }
+    .card-full-bg .card-body { position: relative; z-index: 1; color: #fff; }
+
+    /* Horizontal card */
+    .card-horizontal { display: flex; flex-direction: row; }
+    .card-horizontal .card-media { width: 140px; flex-shrink: 0; }
+    .card-horizontal .card-body { flex: 1; }
+
+    /* Stats/KPI card */
+    .card-stat { padding: 20px; }
+    .card-stat-icon {
+      width: 48px; height: 48px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 12px;
+    }
+    .card-stat-value { font-size: 1.875rem; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+    .card-stat-label { font-size: 0.78rem; color: var(--muted); }
+    .card-stat-delta { font-size: 0.75rem; font-weight: 600; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+
+    /* Profile card */
+    .card-profile { text-align: center; padding: 28px 20px 20px; }
+    .card-profile-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 700;
+      border: 3px solid var(--surface);
+      box-shadow: 0 2px 8px rgba(28,21,16,0.15);
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+      display: flex; align-items: center;
+      height: 64px; padding: 0 16px 0 20px;
+      border-radius: 8px; overflow: visible;
+      position: relative;
+    }
+    .navbar-brand { font-size: 1.0625rem; font-weight: 700; white-space: nowrap; margin-right: 8px; }
+    .navbar-spacer { flex: 1; }
+    .navbar-links { display: flex; gap: 4px; align-items: center; }
+    .navbar-link {
+      padding: 8px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.04em; cursor: pointer; text-decoration: none;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .navbar-actions { display: flex; gap: 4px; align-items: center; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.25rem; background: transparent; transition: background 0.15s;
+    }
+
+    /* Dark navbar */
+    .navbar-dark { background: var(--primary); color: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .navbar-dark .navbar-link { color: rgba(253,248,240,0.75); }
+    .navbar-dark .navbar-link:hover { background: rgba(255,255,255,0.1); color: var(--surface); }
+    .navbar-dark .navbar-link.active { color: var(--surface); background: rgba(255,255,255,0.12); }
+    .navbar-dark .icon-btn { color: rgba(253,248,240,0.8); }
+    .navbar-dark .icon-btn:hover { background: rgba(255,255,255,0.1); color: var(--surface); }
+
+    /* Light navbar */
+    .navbar-light { background: var(--surface); color: var(--primary); box-shadow: 0 1px 4px rgba(28,21,16,0.12); }
+    .navbar-light .navbar-link { color: var(--muted); }
+    .navbar-light .navbar-link:hover { background: var(--bg); color: var(--primary); }
+    .navbar-light .navbar-link.active { color: var(--primary); font-weight: 700; }
+    .navbar-light .icon-btn { color: var(--muted); }
+    .navbar-light .icon-btn:hover { background: var(--bg); color: var(--primary); }
+
+    /* Transparent navbar */
+    .navbar-transparent { background: rgba(253,248,240,0.12); backdrop-filter: blur(8px); color: var(--surface); border: 1px solid rgba(255,255,255,0.15); }
+    .navbar-transparent .navbar-link { color: rgba(255,255,255,0.8); }
+    .navbar-transparent .navbar-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .navbar-transparent .icon-btn { color: rgba(255,255,255,0.8); }
+    .navbar-transparent .icon-btn:hover { background: rgba(255,255,255,0.12); }
+
+    /* Avatar in navbar */
+    .nav-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      background: var(--muted); color: var(--surface);
+    }
+
+    /* Badge on icon */
+    .nav-badge-wrap { position: relative; }
+    .nav-badge {
+      position: absolute; top: 4px; right: 4px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--danger); border: 1.5px solid var(--primary);
+    }
+
+    /* ===================== SIDEBAR/DRAWER ===================== */
+    .drawer-demo { display: flex; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); height: 400px; }
+
+    .drawer {
+      background: var(--surface); border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; flex-shrink: 0;
+    }
+    .drawer-header {
+      padding: 20px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-header-title { font-size: 1rem; font-weight: 700; }
+    .drawer-header-sub   { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .drawer-group-label {
+      padding: 12px 16px 4px;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .drawer-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px; font-size: 0.8375rem;
+      cursor: pointer; transition: background 0.15s;
+      color: var(--primary); text-decoration: none;
+      position: relative;
+    }
+    .drawer-item:hover { background: var(--bg); }
+    .drawer-item.active {
+      background: rgba(28,21,16,0.07);
+      font-weight: 600; color: var(--primary);
+    }
+    .drawer-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 4px; bottom: 4px;
+      width: 3px; border-radius: 0 2px 2px 0;
+      background: var(--primary);
+    }
+    .drawer-item .mdi { font-size: 1.15rem; color: var(--muted); width: 22px; }
+    .drawer-item.active .mdi { color: var(--primary); }
+    .drawer-item-badge {
+      margin-left: auto;
+      background: var(--danger); color: #fff;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 10px;
+    }
+    .drawer-content {
+      flex: 1; background: var(--bg); padding: 20px;
+      overflow-y: auto; display: flex; align-items: center; justify-content: center;
+    }
+    .drawer-content-placeholder {
+      text-align: center; color: var(--muted);
+    }
+    .drawer-content-placeholder .mdi { font-size: 3rem; margin-bottom: 8px; display: block; }
+    .drawer-content-placeholder p { font-size: 0.85rem; }
+
+    /* Mini drawer (icons only) */
+    .drawer-mini { width: 64px; }
+    .drawer-mini .drawer-item { padding: 12px; justify-content: center; }
+    .drawer-mini .drawer-item span { display: none; }
+    .drawer-mini .drawer-item .mdi { width: auto; font-size: 1.3rem; }
+    .drawer-mini .drawer-item-badge { display: none; }
+    .drawer-mini .drawer-group-label { display: none; }
+    .drawer-mini .drawer-header { padding: 12px; text-align: center; }
+    .drawer-mini .drawer-header-title { display: none; }
+    .drawer-mini .drawer-header-sub { display: none; }
+
+    /* ===================== FOOTER ===================== */
+    .footer { background: var(--primary); color: var(--surface); border-radius: 8px; overflow: hidden; }
+    .footer-main { padding: 40px 32px; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; }
+    .footer-brand-name { font-size: 1.125rem; font-weight: 700; margin-bottom: 10px; }
+    .footer-brand-desc { font-size: 0.8rem; color: rgba(253,248,240,0.6); line-height: 1.6; margin-bottom: 16px; }
+    .footer-social { display: flex; gap: 8px; }
+    .footer-social a {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(253,248,240,0.7); font-size: 1rem; text-decoration: none;
+      transition: background 0.15s;
+    }
+    .footer-social a:hover { background: rgba(255,255,255,0.2); color: var(--surface); }
+    .footer-col-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(253,248,240,0.45); margin-bottom: 14px; }
+    .footer-col-links { display: flex; flex-direction: column; gap: 8px; }
+    .footer-col-links a { font-size: 0.82rem; color: rgba(253,248,240,0.7); text-decoration: none; transition: color 0.15s; }
+    .footer-col-links a:hover { color: var(--surface); }
+    .footer-bottom {
+      padding: 16px 32px; border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: rgba(253,248,240,0.45);
+    }
+    .footer-bottom-links { display: flex; gap: 20px; }
+    .footer-bottom-links a { color: rgba(253,248,240,0.45); text-decoration: none; }
+    .footer-bottom-links a:hover { color: rgba(253,248,240,0.7); }
+
+    /* Simple footer */
+    .footer-simple {
+      background: var(--primary); color: var(--surface);
+      border-radius: 8px; padding: 20px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.82rem; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-simple a { color: rgba(253,248,240,0.65); text-decoration: none; margin-left: 20px; }
+    .footer-simple a:hover { color: var(--surface); }
+
+    /* ===================== PAGE SECTION ===================== */
+    .page-section { border-radius: 8px; overflow: hidden; }
+
+    /* Hero */
+    .hero {
+      min-height: 340px; display: flex; align-items: center;
+      background: var(--primary); padding: 60px 48px; position: relative;
+    }
+    .hero-bg-pattern {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: radial-gradient(circle at 2px 2px, var(--surface) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 560px; }
+    .hero-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--subtle); margin-bottom: 14px; }
+    .hero-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--surface); line-height: 1.2; margin-bottom: 16px; }
+    .hero-subtitle { font-size: 1rem; color: rgba(253,248,240,0.7); line-height: 1.6; margin-bottom: 28px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* Feature grid section */
+    .features-section { background: var(--surface); padding: 48px; }
+    .features-header { text-align: center; max-width: 500px; margin: 0 auto 36px; }
+    .features-header h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 10px; }
+    .features-header p  { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-item { text-align: center; padding: 24px 16px; }
+    .feature-icon {
+      width: 56px; height: 56px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; margin: 0 auto 14px;
+    }
+    .feature-title { font-size: 0.9375rem; font-weight: 700; margin-bottom: 8px; }
+    .feature-text  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* CTA section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--muted) 0%, var(--primary) 100%);
+      padding: 48px; text-align: center;
+    }
+    .cta-section h2 { font-size: 1.75rem; font-weight: 700; color: var(--surface); margin-bottom: 10px; }
+    .cta-section p  { font-size: 0.9rem; color: rgba(253,248,240,0.75); margin-bottom: 24px; line-height: 1.6; }
+    .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* Content section */
+    .content-section { background: var(--bg); padding: 48px; }
+    .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .content-split-text h2 { font-size: 1.625rem; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+    .content-split-text p  { font-size: 0.875rem; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+    .content-image-placeholder {
+      border-radius: 8px; overflow: hidden;
+      background: linear-gradient(135deg, var(--border), var(--muted));
+      height: 260px; display: flex; align-items: center; justify-content: center;
+    }
+    .content-image-placeholder .mdi { font-size: 4rem; color: rgba(253,248,240,0.35); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR NAV ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      UI/UX Templates
+      <small>SMUI · MDI · Material Kit Pro</small>
+    </div>
+    <div class="nav-group-label">Components</div>
+    <a href="primitives.html"><i class="mdi mdi-shape-outline"></i> Primitives</a>
+    <a href="forms.html"><i class="mdi mdi-form-textbox"></i> Forms</a>
+    <a href="layout.html" class="active"><i class="mdi mdi-view-dashboard-outline"></i> Layout</a>
+    <a href="feedback.html"><i class="mdi mdi-bell-outline"></i> Feedback</a>
+    <a href="navigation.html"><i class="mdi mdi-compass-outline"></i> Navigation</a>
+    <a href="data-display.html"><i class="mdi mdi-table-large"></i> Data Display</a>
+
+    <div class="anchor-links">
+      <a href="#cards"><i class="mdi mdi-card-outline"></i> Card</a>
+      <a href="#navbar"><i class="mdi mdi-dock-top"></i> Navbar</a>
+      <a href="#sidebar"><i class="mdi mdi-page-layout-sidebar-left"></i> Sidebar</a>
+      <a href="#footer"><i class="mdi mdi-dock-bottom"></i> Footer</a>
+      <a href="#pagesection"><i class="mdi mdi-view-sequential-outline"></i> PageSection</a>
+    </div>
+
+    <div class="nav-group-label">Pages</div>
+    <a href="../pages/landing.html"><i class="mdi mdi-home-outline"></i> Landing</a>
+    <a href="../pages/dashboard.html"><i class="mdi mdi-view-grid-outline"></i> Dashboard</a>
+    <div class="nav-group-label">Ref</div>
+    <a href="../index.html"><i class="mdi mdi-format-list-checks"></i> All Templates</a>
+  </aside>
+
+  <!-- ===== CONTENT ===== -->
+  <main class="content">
+    <div class="page-header">
+      <h1 class="page-title">Layout</h1>
+      <p class="page-subtitle">Card · Navbar · Sidebar / Drawer · Footer · PageSection</p>
+    </div>
+
+    <!-- ========== CARDS ========== -->
+    <section class="component-section" id="cards">
+      <div class="section-header">
+        <h2 class="section-title">Card</h2>
+        <span class="section-badge">@smui/card</span>
+      </div>
+
+      <!-- Basic + Outlined -->
+      <div class="subsection" data-template="layout.cards.basic-variants">
+        <div class="subsection-label">Basic variants</div>
+        <div class="row">
+
+          <!-- Padded content card -->
+          <div class="card" style="width:260px;">
+            <div class="card-body">
+              <div class="card-title">Simple Content Card</div>
+              <div class="card-text">A basic padded card — the foundation. Use for text content, brief info, or any contained block.</div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-text btn-primary btn-sm">Action</button>
+              <button class="btn btn-text btn-primary btn-sm">Another</button>
+            </div>
+          </div>
+
+          <!-- Outlined card -->
+          <div class="card" style="width:260px;box-shadow:none;border:2px solid var(--border);">
+            <div class="card-body">
+              <div class="card-title">Outlined Card</div>
+              <div class="card-text">No shadow, border only. Good for secondary content or dense layouts where shadow adds too much noise.</div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-text btn-primary btn-sm">Dismiss</button>
+              <button class="btn btn-raised btn-primary btn-sm" style="margin-left:auto;">Accept</button>
+            </div>
+          </div>
+
+          <!-- Raised card -->
+          <div class="card" style="width:260px;box-shadow:0 8px 24px rgba(28,21,16,0.14);">
+            <div class="card-body">
+              <div class="card-title">Raised / Elevated</div>
+              <div class="card-text">Higher elevation — use to pull focus on a featured item or primary card in a group.</div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-raised btn-primary btn-sm" style="margin-left:auto;">
+                Get Started <i class="mdi mdi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="layout.cards.basic-variants">
+
+      <!-- Media cards -->
+      <div class="subsection" data-template="layout.cards.image-media-cards-material-kit-pro-style">
+        <div class="subsection-label">Image / media cards (Material Kit Pro style)</div>
+        <div class="row">
+
+          <!-- Blog card -->
+          <div class="card" style="width:280px;">
+            <div class="card-media" style="height:160px;">
+              <div class="card-media-placeholder"><i class="mdi mdi-image-outline"></i></div>
+            </div>
+            <div class="card-body">
+              <div class="card-label">Design</div>
+              <div class="card-title">5 Tips for Better UI Consistency</div>
+              <div class="card-text">Learn how small design decisions compound into a coherent, professional interface.</div>
+            </div>
+            <div class="card-footer" style="justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--muted);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:var(--surface);">EL</div>
+                <span style="font-size:0.75rem;color:var(--muted);">Eric Lacks</span>
+              </div>
+              <span style="font-size:0.72rem;color:var(--muted);"><i class="mdi mdi-clock-outline"></i> 4 min read</span>
+            </div>
+          </div>
+
+          <!-- Profile card -->
+          <div class="card" style="width:220px;">
+            <div style="height:80px;background:linear-gradient(135deg,var(--muted),var(--primary));"></div>
+            <div class="card-profile">
+              <div class="card-profile-avatar" style="background:var(--info);color:#fff;margin-top:-36px;">EL</div>
+              <div class="card-title" style="font-size:0.9375rem;">Eric Lacks</div>
+              <div class="card-subtitle">Product Designer</div>
+              <div class="card-text" style="font-size:0.78rem;margin-bottom:14px;">Building great products through thoughtful design and clear systems.</div>
+              <div style="display:flex;justify-content:center;gap:8px;">
+                <a style="width:32px;height:32px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;">
+                  <i class="mdi mdi-twitter"></i>
+                </a>
+                <a style="width:32px;height:32px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;">
+                  <i class="mdi mdi-github"></i>
+                </a>
+                <a style="width:32px;height:32px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;">
+                  <i class="mdi mdi-linkedin"></i>
+                </a>
+              </div>
+            </div>
+            <div class="card-footer" style="justify-content:center;">
+              <button class="btn btn-raised btn-primary btn-sm btn-round">Follow</button>
+            </div>
+          </div>
+
+          <!-- Full-bg card -->
+          <div class="card card-full-bg" style="width:260px;min-height:220px;background:linear-gradient(135deg,var(--muted) 0%,var(--primary) 100%);">
+            <div class="card-overlay"></div>
+            <div class="card-body">
+              <div class="card-label" style="color:rgba(253,248,240,0.6);">Productivity</div>
+              <div class="card-title" style="color:#fff;font-size:1rem;">The Best Tools for Remote Teams in 2026</div>
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <button class="btn btn-sm btn-round" style="background:rgba(255,255,255,0.2);color:#fff;border:none;"><i class="mdi mdi-text-box-outline"></i> Read</button>
+                <button class="btn btn-sm btn-round" style="background:rgba(255,255,255,0.2);color:#fff;border:none;"><i class="mdi mdi-bookmark-outline"></i></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="layout.cards.image-media-cards-material-kit-pro-style">
+
+      <!-- Horizontal card -->
+      <div class="subsection" data-template="layout.cards.horizontal-card">
+        <div class="subsection-label">Horizontal card</div>
+        <div style="max-width:560px;display:flex;flex-direction:column;gap:12px;">
+
+          <div class="card card-horizontal">
+            <div class="card-media" style="width:120px;flex-shrink:0;">
+              <div class="card-media-placeholder" style="height:100%;"><i class="mdi mdi-image-outline" style="font-size:2rem;"></i></div>
+            </div>
+            <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div class="card-label">Tutorial</div>
+                <div class="card-title" style="font-size:0.9rem;">Getting Started with SvelteKit</div>
+                <div class="card-text" style="font-size:0.78rem;">A practical intro to modern Svelte development with SvelteKit.</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                <span style="font-size:0.72rem;color:var(--muted);"><i class="mdi mdi-clock-outline"></i> 8 min</span>
+                <button class="btn btn-text btn-primary btn-sm">Read <i class="mdi mdi-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-horizontal">
+            <div class="card-media" style="width:120px;flex-shrink:0;">
+              <div class="card-media-placeholder" style="height:100%;background:linear-gradient(135deg,var(--info),var(--primary));"><i class="mdi mdi-code-tags" style="font-size:2rem;color:rgba(255,255,255,0.4);"></i></div>
+            </div>
+            <div style="flex:1;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div class="card-label">Case Study</div>
+                <div class="card-title" style="font-size:0.9rem;">Rebuilding a Dashboard in 48 Hours</div>
+                <div class="card-text" style="font-size:0.78rem;">How we cut load time by 60% with a full component overhaul.</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+                <span style="font-size:0.72rem;color:var(--muted);"><i class="mdi mdi-clock-outline"></i> 12 min</span>
+                <button class="btn btn-text btn-primary btn-sm">Read <i class="mdi mdi-arrow-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="layout.cards.horizontal-card">
+
+      <!-- Stats / KPI cards -->
+      <div class="subsection" data-template="layout.cards.stats-kpi-cards-dashboard">
+        <div class="subsection-label">Stats / KPI cards (dashboard)</div>
+        <div class="row">
+
+          <div class="card" style="width:200px;">
+            <div class="card-stat">
+              <div class="card-stat-icon" style="background:rgba(91,127,166,0.12);color:var(--info);">
+                <i class="mdi mdi-account-group-outline"></i>
+              </div>
+              <div class="card-stat-value">12,430</div>
+              <div class="card-stat-label">Total Users</div>
+              <div class="card-stat-delta" style="color:var(--success);">
+                <i class="mdi mdi-trending-up"></i> +8.2% this month
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="width:200px;">
+            <div class="card-stat">
+              <div class="card-stat-icon" style="background:rgba(92,122,82,0.12);color:var(--success);">
+                <i class="mdi mdi-currency-usd"></i>
+              </div>
+              <div class="card-stat-value">$48.2k</div>
+              <div class="card-stat-label">Revenue (MTD)</div>
+              <div class="card-stat-delta" style="color:var(--success);">
+                <i class="mdi mdi-trending-up"></i> +14.5% vs last month
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="width:200px;">
+            <div class="card-stat">
+              <div class="card-stat-icon" style="background:rgba(139,58,58,0.1);color:var(--danger);">
+                <i class="mdi mdi-cart-remove"></i>
+              </div>
+              <div class="card-stat-value">3.1%</div>
+              <div class="card-stat-label">Churn Rate</div>
+              <div class="card-stat-delta" style="color:var(--danger);">
+                <i class="mdi mdi-trending-down"></i> +0.4% vs last month
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="width:200px;">
+            <div class="card-stat">
+              <div class="card-stat-icon" style="background:rgba(184,134,11,0.1);color:var(--warning);">
+                <i class="mdi mdi-clock-outline"></i>
+              </div>
+              <div class="card-stat-value">2m 14s</div>
+              <div class="card-stat-label">Avg. Session</div>
+              <div class="card-stat-delta" style="color:var(--muted);">
+                <i class="mdi mdi-minus"></i> No change
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="layout.cards.stats-kpi-cards-dashboard">
+
+      <!-- Pricing cards -->
+      <div class="subsection" data-template="layout.cards.pricing-cards">
+        <div class="subsection-label">Pricing cards</div>
+        <div class="row">
+
+          <div class="card" style="width:220px;">
+            <div class="card-body" style="padding:24px;">
+              <div class="card-label">Starter</div>
+              <div style="font-size:2rem;font-weight:700;margin:10px 0 4px;">$0</div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-bottom:20px;">per month, free forever</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;font-size:0.82rem;">
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> 3 projects</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> 5 GB storage</div>
+                <div style="display:flex;gap:8px;color:var(--muted);"><i class="mdi mdi-close" style="color:var(--border);"></i> Priority support</div>
+                <div style="display:flex;gap:8px;color:var(--muted);"><i class="mdi mdi-close" style="color:var(--border);"></i> Team features</div>
+              </div>
+              <button class="btn btn-outlined btn-primary btn-round" style="width:100%;">Get Started</button>
+            </div>
+          </div>
+
+          <div class="card" style="width:220px;border:2px solid var(--primary);">
+            <div style="background:var(--primary);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Most Popular</span>
+              <span class="card-chip" style="background:rgba(253,248,240,0.15);color:var(--surface);font-size:0.62rem;">PRO</span>
+            </div>
+            <div class="card-body" style="padding:24px;">
+              <div class="card-label">Professional</div>
+              <div style="font-size:2rem;font-weight:700;margin:10px 0 4px;">$29</div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-bottom:20px;">per month, billed annually</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;font-size:0.82rem;">
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> Unlimited projects</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> 100 GB storage</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> Priority support</div>
+                <div style="display:flex;gap:8px;color:var(--muted);"><i class="mdi mdi-close" style="color:var(--border);"></i> Team features</div>
+              </div>
+              <button class="btn btn-raised btn-primary btn-round" style="width:100%;">Choose Pro</button>
+            </div>
+          </div>
+
+          <div class="card" style="width:220px;">
+            <div class="card-body" style="padding:24px;">
+              <div class="card-label">Enterprise</div>
+              <div style="font-size:2rem;font-weight:700;margin:10px 0 4px;">$89</div>
+              <div style="font-size:0.78rem;color:var(--muted);margin-bottom:20px;">per month, billed annually</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px;font-size:0.82rem;">
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> Unlimited projects</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> 1 TB storage</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> 24/7 support + SLA</div>
+                <div style="display:flex;gap:8px;"><i class="mdi mdi-check" style="color:var(--success);"></i> Team features + SSO</div>
+              </div>
+              <button class="btn btn-outlined btn-primary btn-round" style="width:100%;">Contact Sales</button>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="layout.cards.pricing-cards">
+    </section>
+
+    <!-- ========== NAVBAR ========== -->
+    <section class="component-section" id="navbar">
+      <div class="section-header">
+        <h2 class="section-title">Navbar</h2>
+        <span class="section-badge">@smui/top-app-bar</span>
+      </div>
+
+      <div class="subsection" data-template="layout.navbar.dark-primary">
+        <div class="subsection-label">Dark (primary)</div>
+        <div class="navbar navbar-dark">
+          <button class="icon-btn"><i class="mdi mdi-menu"></i></button>
+          <span class="navbar-brand" style="margin-left:8px;">AppName</span>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-links">
+            <a class="navbar-link active">Home</a>
+            <a class="navbar-link">Features</a>
+            <a class="navbar-link">Pricing</a>
+            <a class="navbar-link">Blog</a>
+          </div>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-actions">
+            <button class="icon-btn nav-badge-wrap">
+              <i class="mdi mdi-magnify"></i>
+            </button>
+            <button class="icon-btn nav-badge-wrap">
+              <i class="mdi mdi-bell-outline"></i>
+              <span class="nav-badge"></span>
+            </button>
+            <div class="nav-avatar" style="margin-left:4px;">EL</div>
+          </div>
+        </div>
+      </div data-template="layout.navbar.dark-primary">
+
+      <div class="subsection" data-template="layout.navbar.light-surface">
+        <div class="subsection-label">Light (surface)</div>
+        <div class="navbar navbar-light">
+          <span class="navbar-brand" style="color:var(--primary);">
+            <i class="mdi mdi-hexagon" style="color:var(--muted);margin-right:6px;font-size:1.2rem;"></i>
+            AppName
+          </span>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-links">
+            <a class="navbar-link">Home</a>
+            <a class="navbar-link active">Dashboard</a>
+            <a class="navbar-link">Analytics</a>
+            <a class="navbar-link">Settings</a>
+          </div>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-actions">
+            <button class="icon-btn"><i class="mdi mdi-magnify"></i></button>
+            <button class="icon-btn"><i class="mdi mdi-bell-outline"></i></button>
+            <button class="icon-btn"><i class="mdi mdi-help-circle-outline"></i></button>
+            <div class="nav-avatar" style="background:var(--primary);margin-left:4px;">EL</div>
+          </div>
+        </div>
+      </div data-template="layout.navbar.light-surface">
+
+      <div class="subsection" data-template="layout.navbar.transparent-for-heroimage-headers">
+        <div class="subsection-label">Transparent (for hero/image headers)</div>
+        <div style="background:linear-gradient(135deg,var(--muted),var(--primary));padding:2px;border-radius:8px;">
+          <div class="navbar navbar-transparent" style="border-radius:6px;">
+            <span class="navbar-brand" style="color:#fff;">AppName</span>
+            <div class="navbar-spacer"></div>
+            <div class="navbar-links">
+              <a class="navbar-link" style="color:rgba(255,255,255,0.8);">Facebook</a>
+              <a class="navbar-link" style="color:rgba(255,255,255,0.8);">Twitter</a>
+              <a class="navbar-link" style="color:rgba(255,255,255,0.8);">Instagram</a>
+            </div>
+            <div class="navbar-actions" style="margin-left:12px;">
+              <button class="btn btn-sm btn-round" style="background:rgba(255,255,255,0.2);color:#fff;border:none;font-size:0.75rem;">Login</button>
+              <button class="btn btn-sm btn-round" style="background:var(--surface);color:var(--primary);border:none;font-size:0.75rem;">Sign Up</button>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.navbar.transparent-for-heroimage-headers">
+
+      <div class="subsection" data-template="layout.navbar.with-search-bar-inline">
+        <div class="subsection-label">With search bar inline</div>
+        <div class="navbar navbar-dark">
+          <button class="icon-btn"><i class="mdi mdi-menu"></i></button>
+          <span class="navbar-brand" style="margin-left:8px;">AppName</span>
+          <div class="navbar-spacer"></div>
+          <div style="display:flex;align-items:center;background:rgba(255,255,255,0.12);border-radius:24px;padding:0 14px;height:36px;gap:8px;min-width:220px;">
+            <i class="mdi mdi-magnify" style="color:rgba(253,248,240,0.6);font-size:1.1rem;"></i>
+            <input placeholder="Search…" style="background:transparent;border:none;outline:none;color:var(--surface);font-family:Roboto,sans-serif;font-size:0.875rem;width:100%;" />
+          </div>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-actions">
+            <button class="icon-btn"><i class="mdi mdi-bell-outline"></i></button>
+            <div class="nav-avatar" style="margin-left:4px;">EL</div>
+          </div>
+        </div>
+      </div data-template="layout.navbar.with-search-bar-inline">
+
+      <div class="subsection" data-template="layout.navbar.dense-compact">
+        <div class="subsection-label">Dense (compact)</div>
+        <div class="navbar navbar-light" style="height:48px;">
+          <span class="navbar-brand" style="font-size:0.9rem;color:var(--primary);">AppName</span>
+          <div class="navbar-spacer"></div>
+          <div class="navbar-links">
+            <a class="navbar-link" style="font-size:0.75rem;padding:6px 10px;">Home</a>
+            <a class="navbar-link active" style="font-size:0.75rem;padding:6px 10px;">Docs</a>
+            <a class="navbar-link" style="font-size:0.75rem;padding:6px 10px;">GitHub</a>
+          </div>
+          <div class="navbar-actions">
+            <button class="icon-btn" style="width:32px;height:32px;font-size:1.1rem;"><i class="mdi mdi-magnify"></i></button>
+            <div class="nav-avatar" style="width:28px;height:28px;font-size:0.7rem;background:var(--primary);">EL</div>
+          </div>
+        </div>
+      </div data-template="layout.navbar.dense-compact">
+    </section>
+
+    <!-- ========== SIDEBAR/DRAWER ========== -->
+    <section class="component-section" id="sidebar">
+      <div class="section-header">
+        <h2 class="section-title">Sidebar / Drawer</h2>
+        <span class="section-badge">@smui/drawer</span>
+      </div>
+
+      <!-- Full drawer with header -->
+      <div class="subsection" data-template="layout.sidebar.permanent-full-with-header-amp-groups">
+        <div class="subsection-label">Permanent — full (with header &amp; groups)</div>
+        <div class="drawer-demo">
+          <nav class="drawer" style="width:240px;">
+            <div class="drawer-header">
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--surface);font-size:1.1rem;font-weight:700;flex-shrink:0;">A</div>
+                <div>
+                  <div class="drawer-header-title">AppName</div>
+                  <div class="drawer-header-sub">Pro workspace</div>
+                </div>
+              </div>
+            </div>
+            <div class="drawer-body">
+              <div class="drawer-group-label">Main</div>
+              <a class="drawer-item active"><i class="mdi mdi-view-grid-outline"></i> <span>Dashboard</span></a>
+              <a class="drawer-item"><i class="mdi mdi-chart-bar"></i> <span>Analytics</span></a>
+              <a class="drawer-item"><i class="mdi mdi-account-group-outline"></i> <span>Users</span> <span class="drawer-item-badge">24</span></a>
+              <a class="drawer-item"><i class="mdi mdi-bell-outline"></i> <span>Notifications</span> <span class="drawer-item-badge">5</span></a>
+              <div class="drawer-group-label">Content</div>
+              <a class="drawer-item"><i class="mdi mdi-newspaper-variant-outline"></i> <span>Posts</span></a>
+              <a class="drawer-item"><i class="mdi mdi-tag-multiple-outline"></i> <span>Categories</span></a>
+              <a class="drawer-item"><i class="mdi mdi-image-multiple-outline"></i> <span>Media</span></a>
+              <div class="drawer-group-label">Account</div>
+              <a class="drawer-item"><i class="mdi mdi-account-outline"></i> <span>Profile</span></a>
+              <a class="drawer-item"><i class="mdi mdi-cog-outline"></i> <span>Settings</span></a>
+              <a class="drawer-item" style="color:var(--danger);"><i class="mdi mdi-logout" style="color:var(--danger);"></i> <span>Sign Out</span></a>
+            </div>
+          </nav>
+          <div class="drawer-content">
+            <div class="drawer-content-placeholder">
+              <i class="mdi mdi-view-dashboard-outline"></i>
+              <p>Main content area</p>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.sidebar.permanent-full-with-header-amp-groups">
+
+      <!-- Mini drawer -->
+      <div class="subsection" data-template="layout.sidebar.mini-collapsed-icons-only">
+        <div class="subsection-label">Mini / collapsed (icons only)</div>
+        <div class="drawer-demo">
+          <nav class="drawer drawer-mini">
+            <div class="drawer-header" style="padding:12px;display:flex;justify-content:center;">
+              <div style="width:36px;height:36px;border-radius:8px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--surface);font-size:1.1rem;font-weight:700;">A</div>
+            </div>
+            <div class="drawer-body">
+              <a class="drawer-item active" title="Dashboard"><i class="mdi mdi-view-grid-outline"></i></a>
+              <a class="drawer-item" title="Analytics"><i class="mdi mdi-chart-bar"></i></a>
+              <a class="drawer-item" title="Users"><i class="mdi mdi-account-group-outline"></i></a>
+              <a class="drawer-item" title="Notifications"><i class="mdi mdi-bell-outline"></i></a>
+              <a class="drawer-item" title="Posts"><i class="mdi mdi-newspaper-variant-outline"></i></a>
+              <a class="drawer-item" title="Settings"><i class="mdi mdi-cog-outline"></i></a>
+              <a class="drawer-item" title="Sign Out" style="color:var(--danger);"><i class="mdi mdi-logout" style="color:var(--danger);"></i></a>
+            </div>
+          </nav>
+          <div class="drawer-content">
+            <div class="drawer-content-placeholder">
+              <i class="mdi mdi-page-layout-sidebar-left"></i>
+              <p>Mini drawer — hover icons for tooltips</p>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.sidebar.mini-collapsed-icons-only">
+
+      <!-- Modal / dismissible concept -->
+      <div class="subsection" data-template="layout.sidebar.modal-overlay-concept">
+        <div class="subsection-label">Modal overlay concept</div>
+        <div style="position:relative;border-radius:8px;overflow:hidden;height:320px;background:var(--bg);border:1px solid var(--border);">
+          <!-- Overlay scrim -->
+          <div style="position:absolute;inset:0;background:rgba(28,21,16,0.4);z-index:1;"></div>
+          <!-- Drawer panel -->
+          <div style="position:absolute;top:0;left:0;bottom:0;width:260px;background:var(--surface);z-index:2;box-shadow:4px 0 16px rgba(28,21,16,0.2);display:flex;flex-direction:column;">
+            <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-weight:700;">Navigation</span>
+              <i class="mdi mdi-close" style="cursor:pointer;color:var(--muted);font-size:1.2rem;"></i>
+            </div>
+            <div style="flex:1;padding:8px 0;overflow-y:auto;">
+              <a class="drawer-item active"><i class="mdi mdi-home-outline"></i><span>Home</span></a>
+              <a class="drawer-item"><i class="mdi mdi-account-outline"></i><span>Profile</span></a>
+              <a class="drawer-item"><i class="mdi mdi-cog-outline"></i><span>Settings</span></a>
+              <a class="drawer-item"><i class="mdi mdi-help-circle-outline"></i><span>Help</span></a>
+            </div>
+          </div>
+          <!-- Background content -->
+          <div style="position:absolute;right:0;top:0;bottom:0;left:260px;display:flex;align-items:center;justify-content:center;z-index:0;">
+            <div style="text-align:center;color:var(--muted);opacity:0.5;">
+              <i class="mdi mdi-blur" style="font-size:3rem;display:block;margin-bottom:8px;"></i>
+              <span style="font-size:0.85rem;">Page content (blurred behind scrim)</span>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.sidebar.modal-overlay-concept">
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <section class="component-section" id="footer">
+      <div class="section-header">
+        <h2 class="section-title">Footer</h2>
+        <span class="section-badge">custom · layout component</span>
+      </div>
+
+      <!-- Multi-column footer -->
+      <div class="subsection" data-template="layout.footer.multi-column-dark">
+        <div class="subsection-label">Multi-column (dark)</div>
+        <div class="footer">
+          <div class="footer-main">
+            <div class="footer-grid">
+              <div>
+                <div class="footer-brand-name">AppName</div>
+                <div class="footer-brand-desc">Building better digital products through thoughtful design and clean engineering. Made with care.</div>
+                <div class="footer-social">
+                  <a><i class="mdi mdi-twitter"></i></a>
+                  <a><i class="mdi mdi-github"></i></a>
+                  <a><i class="mdi mdi-linkedin"></i></a>
+                  <a><i class="mdi mdi-instagram"></i></a>
+                </div>
+              </div>
+              <div>
+                <div class="footer-col-title">Product</div>
+                <div class="footer-col-links">
+                  <a>Features</a>
+                  <a>Pricing</a>
+                  <a>Changelog</a>
+                  <a>Roadmap</a>
+                </div>
+              </div>
+              <div>
+                <div class="footer-col-title">Company</div>
+                <div class="footer-col-links">
+                  <a>About</a>
+                  <a>Blog</a>
+                  <a>Careers</a>
+                  <a>Contact</a>
+                </div>
+              </div>
+              <div>
+                <div class="footer-col-title">Legal</div>
+                <div class="footer-col-links">
+                  <a>Privacy Policy</a>
+                  <a>Terms of Service</a>
+                  <a>Cookie Policy</a>
+                  <a>Licenses</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>© 2026 AppName, Inc. All rights reserved.</span>
+            <div class="footer-bottom-links">
+              <a>Privacy</a>
+              <a>Terms</a>
+              <a>Cookies</a>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.footer.multi-column-dark">
+
+      <!-- With newsletter -->
+      <div class="subsection" data-template="layout.footer.with-newsletter-cta">
+        <div class="subsection-label">With newsletter CTA</div>
+        <div class="footer">
+          <div style="padding:36px 32px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+            <div>
+              <div style="font-size:1rem;font-weight:700;color:var(--surface);margin-bottom:4px;">Stay in the loop</div>
+              <div style="font-size:0.82rem;color:rgba(253,248,240,0.55);">Product updates, tutorials, and design tips — no spam.</div>
+            </div>
+            <div style="display:flex;gap:0;border-radius:4px;overflow:hidden;min-width:280px;">
+              <input placeholder="you@example.com" style="flex:1;padding:10px 14px;border:none;background:rgba(255,255,255,0.1);color:var(--surface);font-family:Roboto,sans-serif;font-size:0.875rem;outline:none;" />
+              <button class="btn btn-raised btn-primary btn-sm" style="border-radius:0;height:auto;padding:0 18px;white-space:nowrap;">Subscribe</button>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <span>© 2026 AppName. All rights reserved.</span>
+            <div class="footer-bottom-links"><a>Twitter</a><a>GitHub</a><a>Discord</a></div>
+          </div>
+        </div>
+      </div data-template="layout.footer.with-newsletter-cta">
+
+      <!-- Simple footer -->
+      <div class="subsection" data-template="layout.footer.simple-one-line">
+        <div class="subsection-label">Simple one-line</div>
+        <div class="footer-simple">
+          <span style="color:rgba(253,248,240,0.6);">© 2026 AppName, Inc. All rights reserved.</span>
+          <div>
+            <a>Privacy</a><a>Terms</a><a>Blog</a><a>About</a>
+          </div>
+        </div>
+      </div data-template="layout.footer.simple-one-line">
+    </section>
+
+    <!-- ========== PAGE SECTION ========== -->
+    <section class="component-section" id="pagesection">
+      <div class="section-header">
+        <h2 class="section-title">PageSection</h2>
+        <span class="section-badge">layout · compositional</span>
+      </div>
+
+      <!-- Hero -->
+      <div class="subsection" data-template="layout.pagesection.hero-section">
+        <div class="subsection-label">Hero section</div>
+        <div class="page-section hero" style="border-radius:8px;">
+          <div class="hero-bg-pattern"></div>
+          <div class="hero-content">
+            <div class="hero-label">Introducing v2.0</div>
+            <h1 class="hero-title">Build faster.<br>Ship with confidence.</h1>
+            <p class="hero-subtitle">A complete design system for modern Svelte apps. Reusable components, thoughtful defaults, and your brand built in from day one.</p>
+            <div class="hero-actions">
+              <button class="btn btn-raised btn-light btn-lg btn-round">
+                Get Started <i class="mdi mdi-arrow-right"></i>
+              </button>
+              <button class="btn btn-lg btn-round btn-outlined" style="color:rgba(253,248,240,0.8);border-color:rgba(253,248,240,0.4);">
+                <i class="mdi mdi-play-circle-outline"></i> Watch Demo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.pagesection.hero-section">
+
+      <!-- Features -->
+      <div class="subsection" data-template="layout.pagesection.features-grid-section">
+        <div class="subsection-label">Features grid section</div>
+        <div class="page-section features-section" style="border-radius:8px;border:1px solid var(--border);">
+          <div class="features-header">
+            <h2>Everything you need to ship</h2>
+            <p>Each component is designed to work together, giving you a consistent foundation without the design debt.</p>
+          </div>
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(91,127,166,0.12);color:var(--info);"><i class="mdi mdi-puzzle-outline"></i></div>
+              <div class="feature-title">Composable</div>
+              <div class="feature-text">Mix and match components. Every piece is designed to combine cleanly.</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(92,122,82,0.12);color:var(--success);"><i class="mdi mdi-palette-outline"></i></div>
+              <div class="feature-title">Themeable</div>
+              <div class="feature-text">CSS custom properties all the way down. Change your palette in one place.</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(184,134,11,0.1);color:var(--warning);"><i class="mdi mdi-lightning-bolt-outline"></i></div>
+              <div class="feature-title">Fast</div>
+              <div class="feature-text">Built on SMUI and vanilla CSS. No heavy runtime, no style recalculations.</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(155,90,106,0.1);color:var(--rose);"><i class="mdi mdi-heart-outline"></i></div>
+              <div class="feature-title">Accessible</div>
+              <div class="feature-text">ARIA patterns, keyboard nav, and focus management handled for you.</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(28,21,16,0.07);color:var(--muted);"><i class="mdi mdi-code-tags"></i></div>
+              <div class="feature-title">Clean Code</div>
+              <div class="feature-text">Readable, documented, and consistent. Easy to hand off to your whole team.</div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon" style="background:rgba(139,58,58,0.08);color:var(--danger);"><i class="mdi mdi-shield-check-outline"></i></div>
+              <div class="feature-title">Battle-tested</div>
+              <div class="feature-text">Based on Material Design — proven patterns refined over years of real usage.</div>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.pagesection.features-grid-section">
+
+      <!-- CTA -->
+      <div class="subsection" data-template="layout.pagesection.cta-banner-section">
+        <div class="subsection-label">CTA / banner section</div>
+        <div class="page-section cta-section" style="border-radius:8px;">
+          <h2>Ready to start building?</h2>
+          <p>Join thousands of teams shipping great products.<br>Get started free — no credit card required.</p>
+          <div class="cta-actions">
+            <button class="btn btn-raised btn-light btn-lg btn-round">
+              Start for Free <i class="mdi mdi-arrow-right"></i>
+            </button>
+            <button class="btn btn-lg btn-round btn-text" style="color:rgba(253,248,240,0.8);">
+              View Demo
+            </button>
+          </div>
+        </div>
+      </div data-template="layout.pagesection.cta-banner-section">
+
+      <!-- Split content -->
+      <div class="subsection" data-template="layout.pagesection.split-content-section-text-image">
+        <div class="subsection-label">Split content section (text + image)</div>
+        <div class="page-section content-section" style="border-radius:8px;border:1px solid var(--border);">
+          <div class="content-split">
+            <div class="content-split-text">
+              <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">How it works</div>
+              <h2>A system built for the way you actually work</h2>
+              <p>We've taken the best of Material Design and adapted it to a warm, neutral palette that feels professional without being sterile. Every decision was made with real product teams in mind.</p>
+              <p>Start with primitives. Compose into pages. Ship with confidence.</p>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-raised btn-primary btn-round">Get the kit <i class="mdi mdi-arrow-right"></i></button>
+                <button class="btn btn-text btn-muted">Read the docs</button>
+              </div>
+            </div>
+            <div class="content-image-placeholder">
+              <i class="mdi mdi-image-area"></i>
+            </div>
+          </div>
+        </div>
+      </div data-template="layout.pagesection.split-content-section-text-image">
+
+    </section>
+  </main>
+</body>
+</html>

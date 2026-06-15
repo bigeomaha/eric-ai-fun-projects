@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forms — UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================== TOKENS ===================== */
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+    }
+
+    /* ===================== RESET ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+    }
+
+    /* ===================== SIDEBAR ===================== */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--primary);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+      padding-bottom: 32px;
+    }
+    .sidebar-brand {
+      padding: 22px 20px 18px;
+      color: var(--surface);
+      font-size: 1rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 8px;
+    }
+    .sidebar-brand small {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--subtle);
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .nav-group-label {
+      padding: 16px 20px 4px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      color: rgba(253,248,240,0.65);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a:hover { background: rgba(255,255,255,0.07); color: var(--surface); }
+    .sidebar a.active { background: rgba(253,248,240,0.13); color: var(--surface); font-weight: 500; }
+    .sidebar a .mdi { font-size: 1.05rem; width: 20px; text-align: center; }
+    .anchor-links { padding: 4px 0 8px; border-top: 1px solid rgba(255,255,255,0.07); margin-top: 4px; }
+    .anchor-links a { padding: 6px 20px 6px 50px; font-size: 0.75rem; color: rgba(253,248,240,0.45); }
+    .anchor-links a:hover { color: rgba(253,248,240,0.75); }
+
+    /* ===================== LAYOUT ===================== */
+    .content { margin-left: 240px; flex: 1; padding: 40px 48px 60px; }
+    .page-header { margin-bottom: 36px; }
+    .page-title  { font-size: 1.875rem; font-weight: 700; margin-bottom: 6px; }
+    .page-subtitle { font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+
+    /* ===================== SECTIONS ===================== */
+    .component-section {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(28,21,16,0.06);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .section-title { font-size: 1.25rem; font-weight: 700; }
+    .section-badge {
+      font-size: 0.7rem;
+      font-family: monospace;
+      background: var(--bg);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+    .subsection { margin-bottom: 32px; }
+    .subsection:last-child { margin-bottom: 0; }
+    .subsection-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .row  { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+    .col  { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ===================== TEXT FIELDS ===================== */
+    /* Shared field wrapper */
+    .field { position: relative; width: 220px; }
+    .field-full { width: 100%; max-width: 560px; }
+
+    /* Helper text */
+    .helper {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 4px;
+      padding: 0 16px;
+    }
+    .helper-error   { color: var(--danger); }
+    .helper-success { color: var(--success); }
+
+    /* --- OUTLINED --- */
+    .field-outlined input,
+    .field-outlined textarea,
+    .field-outlined select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--primary);
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border-color 0.2s, border-width 0.1s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field-outlined input:focus,
+    .field-outlined textarea:focus {
+      border-color: var(--primary);
+      border-width: 2px;
+    }
+    .field-outlined label {
+      position: absolute;
+      top: 0;
+      left: 12px;
+      transform: translateY(-50%);
+      background: var(--surface);
+      padding: 0 4px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    /* Simulate focused label */
+    .field-outlined.is-focused label  { color: var(--primary); }
+    .field-outlined.is-focused input,
+    .field-outlined.is-focused textarea { border-color: var(--primary); border-width: 2px; }
+
+    /* States */
+    .field-outlined.is-error input,
+    .field-outlined.is-error textarea { border-color: var(--danger) !important; }
+    .field-outlined.is-error label     { color: var(--danger) !important; }
+
+    .field-outlined.is-success input,
+    .field-outlined.is-success textarea { border-color: var(--success) !important; }
+    .field-outlined.is-success label    { color: var(--success) !important; }
+
+    .field-outlined.is-disabled input,
+    .field-outlined.is-disabled textarea { opacity: 0.45; cursor: not-allowed; background: var(--bg); }
+    .field-outlined.is-disabled label    { opacity: 0.45; }
+
+    /* Icon slots */
+    .field-outlined.has-leading input  { padding-left: 44px; }
+    .field-outlined.has-trailing input { padding-right: 44px; }
+    .field-icon-lead {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+    .field-icon-trail {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    /* --- FILLED --- */
+    .field-filled input,
+    .field-filled textarea {
+      width: 100%;
+      padding: 20px 16px 6px;
+      border: none;
+      border-bottom: 1.5px solid var(--border);
+      border-radius: 4px 4px 0 0;
+      background: rgba(196,185,154,0.18);
+      color: var(--primary);
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.15s;
+    }
+    .field-filled input:focus,
+    .field-filled textarea:focus {
+      background: rgba(196,185,154,0.28);
+      border-bottom: 2px solid var(--primary);
+    }
+    .field-filled label {
+      position: absolute;
+      top: 8px;
+      left: 16px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      pointer-events: none;
+      letter-spacing: 0.01em;
+    }
+    .field-filled.is-focused input { border-bottom: 2px solid var(--primary); }
+    .field-filled.is-focused label { color: var(--primary); }
+    .field-filled.is-error input   { border-bottom: 2px solid var(--danger) !important; }
+    .field-filled.is-error label   { color: var(--danger) !important; }
+    .field-filled.is-disabled input { opacity: 0.45; cursor: not-allowed; }
+    .field-filled.is-disabled label { opacity: 0.45; }
+
+    /* --- SELECT WRAPPER --- */
+    .select-wrap { position: relative; }
+    .select-wrap select {
+      width: 100%;
+      cursor: pointer;
+    }
+    .select-arrow {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+
+    /* Textarea */
+    .field-outlined textarea {
+      min-height: 100px;
+      resize: vertical;
+      padding: 14px 16px;
+    }
+    .field-outlined.textarea-field label {
+      top: 0;
+    }
+
+    /* ===================== CHECKBOX ===================== */
+    .check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--primary);
+      user-select: none;
+    }
+    .check-label input[type="checkbox"] { display: none; }
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, border-color 0.15s;
+      position: relative;
+      background: transparent;
+    }
+    .check-label input:checked ~ .check-box {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .check-label input:checked ~ .check-box::after {
+      content: '';
+      width: 10px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+    /* Indeterminate */
+    .check-box.indeterminate {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    .check-box.indeterminate::after {
+      content: '';
+      width: 10px;
+      height: 2px;
+      background: #fff;
+      border-radius: 1px;
+    }
+    /* Disabled */
+    .check-label.disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+
+    /* ===================== RADIO ===================== */
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--primary);
+      user-select: none;
+    }
+    .radio-label input[type="radio"] { display: none; }
+    .radio-dot {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+    }
+    .radio-label input:checked ~ .radio-dot {
+      border-color: var(--primary);
+    }
+    .radio-label input:checked ~ .radio-dot::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .radio-label.disabled { opacity: 0.38; cursor: not-allowed; }
+
+    /* ===================== SWITCH ===================== */
+    .switch-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.9rem;
+    }
+    .switch-label input[type="checkbox"] { display: none; }
+    .switch-track {
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+      background: var(--border);
+      position: relative;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .switch-track::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .switch-label input:checked ~ .switch-track {
+      background: var(--primary);
+    }
+    .switch-label input:checked ~ .switch-track::after {
+      transform: translateX(16px);
+    }
+    .switch-label.disabled { opacity: 0.38; cursor: not-allowed; }
+
+    /* Colored switches */
+    .switch-success input:checked ~ .switch-track { background: var(--success); }
+    .switch-warning input:checked ~ .switch-track { background: var(--warning); }
+    .switch-info    input:checked ~ .switch-track { background: var(--info); }
+    .switch-danger  input:checked ~ .switch-track { background: var(--danger); }
+
+    /* ===================== SLIDER ===================== */
+    .slider-wrap { width: 100%; max-width: 340px; }
+    .slider-track {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      height: 20px;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+      transition: transform 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    input[type="range"]:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+    input[type="range"]:disabled::-webkit-slider-thumb { background: var(--muted); }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .slider-value {
+      text-align: right;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    /* ===================== FILE UPLOAD ===================== */
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 36px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--bg);
+    }
+    .dropzone:hover {
+      border-color: var(--muted);
+      background: rgba(196,185,154,0.2);
+    }
+    .dropzone.is-dragging {
+      border-color: var(--primary);
+      background: rgba(28,21,16,0.04);
+    }
+    .dropzone .mdi { font-size: 2.5rem; color: var(--muted); margin-bottom: 10px; display: block; }
+    .dropzone-title { font-size: 0.9rem; font-weight: 500; color: var(--primary); margin-bottom: 4px; }
+    .dropzone-sub   { font-size: 0.78rem; color: var(--muted); }
+    .dropzone-btn {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 8px 20px;
+      background: var(--primary);
+      color: var(--surface);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    /* Avatar file picker (Material Kit style) */
+    .avatar-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .avatar-upload-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--muted);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .avatar-upload-circle:hover { background: var(--subtle); }
+    .avatar-upload-actions {
+      display: flex;
+      gap: 8px;
+      font-size: 0.75rem;
+    }
+    .upload-link {
+      color: var(--info);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .upload-link.remove { color: var(--danger); }
+
+    /* ===================== UTILITY ===================== */
+    .form-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+    .form-col  { display: flex; flex-direction: column; gap: 8px; }
+    .label-note { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      UI/UX Templates
+      <small>SMUI · MDI · Material Kit Pro</small>
+    </div>
+
+    <div class="nav-group-label">Components</div>
+    <a href="primitives.html"><i class="mdi mdi-shape-outline"></i> Primitives</a>
+    <a href="forms.html" class="active"><i class="mdi mdi-form-textbox"></i> Forms</a>
+    <a href="layout.html"><i class="mdi mdi-view-dashboard-outline"></i> Layout</a>
+    <a href="feedback.html"><i class="mdi mdi-bell-outline"></i> Feedback</a>
+    <a href="navigation.html"><i class="mdi mdi-compass-outline"></i> Navigation</a>
+    <a href="data-display.html"><i class="mdi mdi-table-large"></i> Data Display</a>
+
+    <div class="anchor-links">
+      <a href="#textfield"><i class="mdi mdi-form-textbox"></i> TextField</a>
+      <a href="#select"><i class="mdi mdi-chevron-down-box-outline"></i> Select</a>
+      <a href="#checkbox"><i class="mdi mdi-checkbox-outline"></i> Checkbox</a>
+      <a href="#radio"><i class="mdi mdi-radiobox-marked"></i> RadioGroup</a>
+      <a href="#switch"><i class="mdi mdi-toggle-switch-outline"></i> Switch</a>
+      <a href="#slider"><i class="mdi mdi-tune-variant"></i> Slider</a>
+      <a href="#fileupload"><i class="mdi mdi-upload-outline"></i> FileUpload</a>
+    </div>
+
+    <div class="nav-group-label">Pages</div>
+    <a href="../pages/landing.html"><i class="mdi mdi-home-outline"></i> Landing</a>
+    <a href="../pages/login.html"><i class="mdi mdi-login"></i> Login</a>
+    <a href="../pages/dashboard.html"><i class="mdi mdi-view-grid-outline"></i> Dashboard</a>
+
+    <div class="nav-group-label">Ref</div>
+    <a href="../index.html"><i class="mdi mdi-format-list-checks"></i> All Templates</a>
+  </aside>
+
+  <!-- ===== CONTENT ===== -->
+  <main class="content">
+    <div class="page-header">
+      <h1 class="page-title">Forms</h1>
+      <p class="page-subtitle">TextField · Select · Checkbox · RadioGroup · Switch · Slider · FileUpload</p>
+    </div>
+
+    <!-- ========== TEXT FIELD ========== -->
+    <section class="component-section" id="textfield">
+      <div class="section-header">
+        <h2 class="section-title">TextField</h2>
+        <span class="section-badge">@smui/textfield</span>
+        <span class="section-badge">@smui/textfield/helper-text</span>
+      </div>
+
+      <!-- Variants -->
+      <div class="subsection" data-template="forms.textfield.variants">
+        <div class="subsection-label">Variants</div>
+        <div class="row">
+
+          <!-- Outlined -->
+          <div class="form-col">
+            <div class="field field-outlined">
+              <input type="text" placeholder=" " value="" />
+              <label>First Name</label>
+            </div>
+            <span class="label-note">Outlined (default)</span>
+          </div>
+
+          <!-- Outlined focused -->
+          <div class="form-col">
+            <div class="field field-outlined is-focused">
+              <input type="text" placeholder=" " value="Eric" />
+              <label>First Name</label>
+            </div>
+            <span class="label-note">Outlined — focused</span>
+          </div>
+
+          <!-- Filled -->
+          <div class="form-col">
+            <div class="field field-filled">
+              <label>First Name</label>
+              <input type="text" value="" placeholder="" />
+            </div>
+            <span class="label-note">Filled</span>
+          </div>
+
+          <!-- Filled focused -->
+          <div class="form-col">
+            <div class="field field-filled is-focused">
+              <label>First Name</label>
+              <input type="text" value="Eric" placeholder="" />
+            </div>
+            <span class="label-note">Filled — focused</span>
+          </div>
+
+        </div>
+      </div data-template="forms.textfield.variants">
+
+      <!-- States -->
+      <div class="subsection" data-template="forms.textfield.validation-states">
+        <div class="subsection-label">Validation states</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined">
+              <input type="email" value="eric@example.com" />
+              <label>Email</label>
+            </div>
+            <div class="helper">We'll never share this.</div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined is-success">
+              <input type="email" value="eric@example.com" />
+              <label>Email</label>
+            </div>
+            <div class="helper helper-success">
+              <i class="mdi mdi-check-circle-outline"></i> Looks good!
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined is-error">
+              <input type="email" value="not-an-email" />
+              <label>Email</label>
+            </div>
+            <div class="helper helper-error">
+              <i class="mdi mdi-alert-circle-outline"></i> Invalid email address.
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined is-disabled">
+              <input type="text" value="Disabled value" disabled />
+              <label>Full Name</label>
+            </div>
+            <div class="helper">Disabled</div>
+          </div>
+
+        </div>
+      </div data-template="forms.textfield.validation-states">
+
+      <!-- With Icons -->
+      <div class="subsection" data-template="forms.textfield.with-icons-mdi">
+        <div class="subsection-label">With icons (MDI)</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-magnify field-icon-lead"></i>
+              <input type="text" placeholder=" " value="" />
+              <label>Search</label>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-email-outline field-icon-lead"></i>
+              <input type="email" placeholder=" " value="eric@example.com" />
+              <label>Email Address</label>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading has-trailing">
+              <i class="mdi mdi-lock-outline field-icon-lead"></i>
+              <input type="password" placeholder=" " value="password123" />
+              <label>Password</label>
+              <i class="mdi mdi-eye-outline field-icon-trail"></i>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-trailing">
+              <input type="text" placeholder=" " value="" />
+              <label>Search users</label>
+              <i class="mdi mdi-close-circle-outline field-icon-trail" style="color:var(--muted);"></i>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="forms.textfield.with-icons-mdi">
+
+      <!-- Input types -->
+      <div class="subsection" data-template="forms.textfield.common-input-types">
+        <div class="subsection-label">Common input types</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-account-outline field-icon-lead"></i>
+              <input type="text" placeholder=" " value="" />
+              <label>Username</label>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-phone-outline field-icon-lead"></i>
+              <input type="tel" placeholder=" " value="" />
+              <label>Phone Number</label>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-calendar-outline field-icon-lead"></i>
+              <input type="date" value="2026-05-29" />
+              <label>Date</label>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading">
+              <i class="mdi mdi-currency-usd field-icon-lead"></i>
+              <input type="number" placeholder=" " value="99.00" />
+              <label>Amount</label>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="forms.textfield.common-input-types">
+
+      <!-- Textarea -->
+      <div class="subsection" data-template="forms.textfield.textarea">
+        <div class="subsection-label">Textarea</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined textarea-field field-full">
+              <textarea placeholder=" "></textarea>
+              <label>Message</label>
+            </div>
+            <div class="helper">Max 500 characters</div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined textarea-field field-full is-focused">
+              <textarea placeholder=" ">Tell us about yourself and what you're working on...</textarea>
+              <label>Bio</label>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 16px 0;">
+              <span class="helper">Shown on your public profile</span>
+              <span class="helper">43 / 160</span>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="forms.textfield.textarea">
+
+      <!-- Full width -->
+      <div class="subsection" data-template="forms.textfield.full-width-form-layout">
+        <div class="subsection-label">Full width — form layout</div>
+        <div style="max-width:560px;display:flex;flex-direction:column;gap:20px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div class="form-col">
+              <div class="field-outlined" style="position:relative;">
+                <input type="text" placeholder=" " style="width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:4px;background:transparent;color:var(--primary);font-family:Roboto,sans-serif;font-size:0.9375rem;outline:none;" />
+                <label style="position:absolute;top:0;left:12px;transform:translateY(-50%);background:var(--surface);padding:0 4px;font-size:0.75rem;color:var(--muted);">First Name</label>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="field-outlined" style="position:relative;">
+                <input type="text" placeholder=" " style="width:100%;padding:14px 16px;border:1.5px solid var(--border);border-radius:4px;background:transparent;color:var(--primary);font-family:Roboto,sans-serif;font-size:0.9375rem;outline:none;" />
+                <label style="position:absolute;top:0;left:12px;transform:translateY(-50%);background:var(--surface);padding:0 4px;font-size:0.75rem;color:var(--muted);">Last Name</label>
+              </div>
+            </div>
+          </div>
+          <div style="position:relative;" class="field-outlined">
+            <input type="email" placeholder=" " style="width:100%;padding:14px 16px 14px 44px;border:1.5px solid var(--border);border-radius:4px;background:transparent;color:var(--primary);font-family:Roboto,sans-serif;font-size:0.9375rem;outline:none;" />
+            <i class="mdi mdi-email-outline" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1.2rem;"></i>
+            <label style="position:absolute;top:0;left:12px;transform:translateY(-50%);background:var(--surface);padding:0 4px;font-size:0.75rem;color:var(--muted);">Email Address</label>
+          </div>
+          <div style="position:relative;" class="field-outlined">
+            <input type="password" placeholder=" " style="width:100%;padding:14px 16px 14px 44px;border:1.5px solid var(--border);border-radius:4px;background:transparent;color:var(--primary);font-family:Roboto,sans-serif;font-size:0.9375rem;outline:none;" value="••••••••••" />
+            <i class="mdi mdi-lock-outline" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:1.2rem;"></i>
+            <label style="position:absolute;top:0;left:12px;transform:translateY(-50%);background:var(--surface);padding:0 4px;font-size:0.75rem;color:var(--muted);">Password</label>
+          </div>
+        </div>
+      </div data-template="forms.textfield.full-width-form-layout">
+    </section>
+
+    <!-- ========== SELECT ========== -->
+    <section class="component-section" id="select">
+      <div class="section-header">
+        <h2 class="section-title">Select</h2>
+        <span class="section-badge">@smui/select</span>
+      </div>
+
+      <div class="subsection" data-template="forms.select.variants">
+        <div class="subsection-label">Variants</div>
+        <div class="row">
+
+          <!-- Outlined select -->
+          <div class="form-col">
+            <div class="field field-outlined select-wrap">
+              <label>City</label>
+              <select style="padding-right:40px;">
+                <option>New York</option>
+                <option>Los Angeles</option>
+                <option>Chicago</option>
+                <option>Houston</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+            <span class="label-note">Outlined</span>
+          </div>
+
+          <!-- Filled select -->
+          <div class="form-col">
+            <div class="field field-filled select-wrap">
+              <label>City</label>
+              <select style="padding-right:40px;padding-top:20px;padding-bottom:6px;border:none;border-bottom:1.5px solid var(--border);border-radius:4px 4px 0 0;background:rgba(196,185,154,0.18);width:100%;color:var(--primary);font-family:Roboto,sans-serif;font-size:0.9375rem;outline:none;appearance:none;">
+                <option>New York</option>
+                <option>Los Angeles</option>
+                <option>Chicago</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+            <span class="label-note">Filled</span>
+          </div>
+
+        </div>
+      </div data-template="forms.select.variants">
+
+      <div class="subsection" data-template="forms.select.states">
+        <div class="subsection-label">States</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined select-wrap">
+              <label>Category</label>
+              <select style="padding-right:40px;">
+                <option value="">— Choose —</option>
+                <option>Design</option>
+                <option>Development</option>
+                <option>Marketing</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+            <div class="helper">Required field</div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined is-error select-wrap">
+              <label>Category</label>
+              <select style="padding-right:40px;border-color:var(--danger);">
+                <option value="">— Choose —</option>
+                <option>Design</option>
+                <option>Development</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+            <div class="helper helper-error">Please select a category.</div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined is-disabled select-wrap">
+              <label>Category</label>
+              <select style="padding-right:40px;" disabled>
+                <option>Design</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+            <div class="helper">Disabled</div>
+          </div>
+
+        </div>
+      </div data-template="forms.select.states">
+
+      <div class="subsection" data-template="forms.select.with-leading-icon">
+        <div class="subsection-label">With leading icon</div>
+        <div class="row">
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading select-wrap">
+              <i class="mdi mdi-map-marker-outline field-icon-lead"></i>
+              <label style="left:44px;">Country</label>
+              <select style="padding-left:44px;padding-right:40px;">
+                <option>United States</option>
+                <option>Canada</option>
+                <option>United Kingdom</option>
+                <option>Australia</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+          </div>
+
+          <div class="form-col">
+            <div class="field field-outlined has-leading select-wrap">
+              <i class="mdi mdi-translate field-icon-lead"></i>
+              <label style="left:44px;">Language</label>
+              <select style="padding-left:44px;padding-right:40px;">
+                <option>English</option>
+                <option>Spanish</option>
+                <option>French</option>
+                <option>German</option>
+              </select>
+              <i class="mdi mdi-chevron-down select-arrow"></i>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="forms.select.with-leading-icon">
+    </section>
+
+    <!-- ========== CHECKBOX ========== -->
+    <section class="component-section" id="checkbox">
+      <div class="section-header">
+        <h2 class="section-title">Checkbox</h2>
+        <span class="section-badge">@smui/checkbox</span>
+        <span class="section-badge">@smui/form-field</span>
+      </div>
+
+      <div class="subsection" data-template="forms.checkbox.states">
+        <div class="subsection-label">States</div>
+        <div class="row">
+
+          <label class="check-label">
+            <input type="checkbox" />
+            <span class="check-box"></span>
+            Unchecked
+          </label>
+
+          <label class="check-label">
+            <input type="checkbox" checked />
+            <span class="check-box"></span>
+            Checked
+          </label>
+
+          <label class="check-label">
+            <input type="checkbox" />
+            <span class="check-box indeterminate"></span>
+            Indeterminate
+          </label>
+
+          <label class="check-label disabled">
+            <input type="checkbox" disabled />
+            <span class="check-box"></span>
+            Disabled
+          </label>
+
+          <label class="check-label disabled">
+            <input type="checkbox" checked disabled />
+            <span class="check-box"></span>
+            Disabled Checked
+          </label>
+
+        </div>
+      </div data-template="forms.checkbox.states">
+
+      <div class="subsection" data-template="forms.checkbox.checkbox-group">
+        <div class="subsection-label">Checkbox group</div>
+        <div style="display:flex;gap:40px;flex-wrap:wrap;">
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <label class="check-label">
+              <input type="checkbox" checked />
+              <span class="check-box"></span>
+              Design
+            </label>
+            <label class="check-label">
+              <input type="checkbox" checked />
+              <span class="check-box"></span>
+              Development
+            </label>
+            <label class="check-label">
+              <input type="checkbox" />
+              <span class="check-box"></span>
+              Marketing
+            </label>
+            <label class="check-label">
+              <input type="checkbox" />
+              <span class="check-box"></span>
+              Analytics
+            </label>
+            <label class="check-label disabled">
+              <input type="checkbox" disabled />
+              <span class="check-box"></span>
+              Admin (unavailable)
+            </label>
+          </div>
+
+          <!-- Select all pattern -->
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <label class="check-label" style="font-weight:500;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:2px;">
+              <input type="checkbox" />
+              <span class="check-box indeterminate"></span>
+              Select All
+            </label>
+            <label class="check-label" style="padding-left:20px;">
+              <input type="checkbox" checked />
+              <span class="check-box"></span>
+              Option A
+            </label>
+            <label class="check-label" style="padding-left:20px;">
+              <input type="checkbox" />
+              <span class="check-box"></span>
+              Option B
+            </label>
+            <label class="check-label" style="padding-left:20px;">
+              <input type="checkbox" />
+              <span class="check-box"></span>
+              Option C
+            </label>
+          </div>
+
+        </div>
+      </div data-template="forms.checkbox.checkbox-group">
+
+      <div class="subsection" data-template="forms.checkbox.in-a-form-context">
+        <div class="subsection-label">In a form context</div>
+        <div style="display:flex;flex-direction:column;gap:10px;max-width:400px;background:var(--bg);padding:20px;border-radius:6px;border:1px solid var(--border);">
+          <label class="check-label">
+            <input type="checkbox" checked />
+            <span class="check-box"></span>
+            I agree to the <span style="color:var(--info);text-decoration:underline;cursor:pointer;">Terms of Service</span>
+          </label>
+          <label class="check-label">
+            <input type="checkbox" />
+            <span class="check-box"></span>
+            Subscribe to newsletter
+          </label>
+          <label class="check-label">
+            <input type="checkbox" />
+            <span class="check-box"></span>
+            Remember this device for 30 days
+          </label>
+        </div>
+      </div data-template="forms.checkbox.in-a-form-context">
+    </section>
+
+    <!-- ========== RADIO ========== -->
+    <section class="component-section" id="radio">
+      <div class="section-header">
+        <h2 class="section-title">RadioGroup</h2>
+        <span class="section-badge">@smui/radio</span>
+        <span class="section-badge">@smui/form-field</span>
+      </div>
+
+      <div class="subsection" data-template="forms.radio.vertical-group">
+        <div class="subsection-label">Vertical group</div>
+        <div style="display:flex;gap:40px;flex-wrap:wrap;">
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <label class="radio-label">
+              <input type="radio" name="plan" />
+              <span class="radio-dot"></span>
+              Free — $0 / mo
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="plan" checked />
+              <span class="radio-dot"></span>
+              Pro — $29 / mo
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="plan" />
+              <span class="radio-dot"></span>
+              Enterprise — $89 / mo
+            </label>
+            <label class="radio-label disabled">
+              <input type="radio" name="plan" disabled />
+              <span class="radio-dot"></span>
+              Custom (contact sales)
+            </label>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <label class="radio-label">
+              <input type="radio" name="role" checked />
+              <span class="radio-dot"></span>
+              Designer
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="role" />
+              <span class="radio-dot"></span>
+              Developer
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="role" />
+              <span class="radio-dot"></span>
+              Manager
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="role" />
+              <span class="radio-dot"></span>
+              Other
+            </label>
+          </div>
+
+        </div>
+      </div data-template="forms.radio.vertical-group">
+
+      <div class="subsection" data-template="forms.radio.horizontal-group">
+        <div class="subsection-label">Horizontal group</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+          <label class="radio-label">
+            <input type="radio" name="size" />
+            <span class="radio-dot"></span>
+            Small
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="size" checked />
+            <span class="radio-dot"></span>
+            Medium
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="size" />
+            <span class="radio-dot"></span>
+            Large
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="size" />
+            <span class="radio-dot"></span>
+            X-Large
+          </label>
+        </div>
+      </div data-template="forms.radio.horizontal-group">
+
+      <div class="subsection" data-template="forms.radio.card-style-radio-custom-layout">
+        <div class="subsection-label">Card-style radio (custom layout)</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+
+          <label style="cursor:pointer;border:2px solid var(--border);border-radius:8px;padding:16px 20px;min-width:140px;display:flex;flex-direction:column;gap:6px;transition:border-color 0.15s;">
+            <input type="radio" name="tier" style="display:none;" />
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="radio-dot" style="border-color:var(--border);"></span>
+              <strong style="font-size:0.9rem;">Starter</strong>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--primary);">$0</div>
+            <div style="font-size:0.75rem;color:var(--muted);">Up to 3 projects</div>
+          </label>
+
+          <label style="cursor:pointer;border:2px solid var(--primary);border-radius:8px;padding:16px 20px;min-width:140px;display:flex;flex-direction:column;gap:6px;background:rgba(28,21,16,0.03);">
+            <input type="radio" name="tier" checked style="display:none;" />
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="radio-dot" style="border-color:var(--primary);"><span style="width:10px;height:10px;border-radius:50%;background:var(--primary);display:block;"></span></span>
+              <strong style="font-size:0.9rem;">Pro</strong>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--primary);">$29</div>
+            <div style="font-size:0.75rem;color:var(--muted);">Unlimited projects</div>
+          </label>
+
+          <label style="cursor:pointer;border:2px solid var(--border);border-radius:8px;padding:16px 20px;min-width:140px;display:flex;flex-direction:column;gap:6px;transition:border-color 0.15s;">
+            <input type="radio" name="tier" style="display:none;" />
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="radio-dot" style="border-color:var(--border);"></span>
+              <strong style="font-size:0.9rem;">Enterprise</strong>
+            </div>
+            <div style="font-size:1.25rem;font-weight:700;color:var(--primary);">$89</div>
+            <div style="font-size:0.75rem;color:var(--muted);">Teams + SSO</div>
+          </label>
+
+        </div>
+      </div data-template="forms.radio.card-style-radio-custom-layout">
+    </section>
+
+    <!-- ========== SWITCH ========== -->
+    <section class="component-section" id="switch">
+      <div class="section-header">
+        <h2 class="section-title">Switch</h2>
+        <span class="section-badge">@smui/switch</span>
+      </div>
+
+      <div class="subsection" data-template="forms.switch.states">
+        <div class="subsection-label">States</div>
+        <div class="row">
+
+          <label class="switch-label">
+            <input type="checkbox" />
+            <span class="switch-track"></span>
+            Off
+          </label>
+
+          <label class="switch-label">
+            <input type="checkbox" checked />
+            <span class="switch-track"></span>
+            On
+          </label>
+
+          <label class="switch-label disabled">
+            <input type="checkbox" disabled />
+            <span class="switch-track"></span>
+            Disabled Off
+          </label>
+
+          <label class="switch-label disabled">
+            <input type="checkbox" checked disabled />
+            <span class="switch-track"></span>
+            Disabled On
+          </label>
+
+        </div>
+      </div data-template="forms.switch.states">
+
+      <div class="subsection" data-template="forms.switch.settings-list-common-usage">
+        <div class="subsection-label">Settings list (common usage)</div>
+        <div style="max-width:440px;display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);">
+            <div>
+              <div style="font-size:0.9rem;font-weight:500;">Email notifications</div>
+              <div style="font-size:0.75rem;color:var(--muted);">Receive updates to your inbox</div>
+            </div>
+            <label class="switch-label">
+              <input type="checkbox" checked />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);">
+            <div>
+              <div style="font-size:0.9rem;font-weight:500;">Push notifications</div>
+              <div style="font-size:0.75rem;color:var(--muted);">Alerts on your device</div>
+            </div>
+            <label class="switch-label">
+              <input type="checkbox" />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);">
+            <div>
+              <div style="font-size:0.9rem;font-weight:500;">Dark mode</div>
+              <div style="font-size:0.75rem;color:var(--muted);">Use dark color scheme</div>
+            </div>
+            <label class="switch-label">
+              <input type="checkbox" />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;">
+            <div>
+              <div style="font-size:0.9rem;font-weight:500;">Two-factor auth</div>
+              <div style="font-size:0.75rem;color:var(--muted);">Adds extra security to your account</div>
+            </div>
+            <label class="switch-label switch-success">
+              <input type="checkbox" checked />
+              <span class="switch-track"></span>
+            </label>
+          </div>
+
+        </div>
+      </div data-template="forms.switch.settings-list-common-usage">
+
+      <div class="subsection" data-template="forms.switch.semantic-color-variants">
+        <div class="subsection-label">Semantic color variants</div>
+        <div class="row">
+          <label class="switch-label switch-success">
+            <input type="checkbox" checked />
+            <span class="switch-track"></span>
+            Success
+          </label>
+          <label class="switch-label switch-warning">
+            <input type="checkbox" checked />
+            <span class="switch-track"></span>
+            Warning
+          </label>
+          <label class="switch-label switch-info">
+            <input type="checkbox" checked />
+            <span class="switch-track"></span>
+            Info
+          </label>
+          <label class="switch-label switch-danger">
+            <input type="checkbox" checked />
+            <span class="switch-track"></span>
+            Danger
+          </label>
+        </div>
+      </div data-template="forms.switch.semantic-color-variants">
+    </section>
+
+    <!-- ========== SLIDER ========== -->
+    <section class="component-section" id="slider">
+      <div class="section-header">
+        <h2 class="section-title">Slider</h2>
+        <span class="section-badge">@smui/slider</span>
+      </div>
+
+      <div class="subsection" data-template="forms.slider.single-value">
+        <div class="subsection-label">Single value</div>
+        <div style="display:flex;flex-direction:column;gap:28px;max-width:400px;">
+
+          <div class="slider-wrap">
+            <div class="slider-value">60%</div>
+            <input type="range" min="0" max="100" value="60" />
+            <div class="slider-labels"><span>0</span><span>100</span></div>
+          </div>
+
+          <div class="slider-wrap">
+            <div class="slider-value">$1,200</div>
+            <input type="range" min="0" max="5000" value="1200" />
+            <div class="slider-labels"><span>$0</span><span>$5,000</span></div>
+          </div>
+
+          <div class="slider-wrap">
+            <div class="slider-value">Disabled — 35</div>
+            <input type="range" min="0" max="100" value="35" disabled />
+            <div class="slider-labels"><span>0</span><span>100</span></div>
+          </div>
+
+        </div>
+      </div data-template="forms.slider.single-value">
+
+      <div class="subsection" data-template="forms.slider.with-tick-marks-and-steps">
+        <div class="subsection-label">With tick marks and steps</div>
+        <div style="max-width:400px;">
+          <div class="slider-wrap">
+            <div class="slider-value">3 members</div>
+            <input type="range" min="1" max="10" value="3" step="1" style="background: linear-gradient(to right, var(--primary) 0%, var(--primary) 22%, var(--border) 22%, var(--border) 100%);" />
+            <div class="slider-labels">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+            </div>
+          </div>
+        </div>
+      </div data-template="forms.slider.with-tick-marks-and-steps">
+
+      <div class="subsection" data-template="forms.slider.in-a-card-setting-volume-brightness">
+        <div class="subsection-label">In a card setting (volume / brightness)</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
+
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;width:260px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i class="mdi mdi-volume-high" style="color:var(--muted);font-size:1.2rem;"></i>
+                <span style="font-size:0.85rem;font-weight:500;">Volume</span>
+              </div>
+              <span style="font-size:0.8rem;color:var(--muted);">75%</span>
+            </div>
+            <input type="range" min="0" max="100" value="75" style="width:100%;" />
+          </div>
+
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;width:260px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <i class="mdi mdi-brightness-6" style="color:var(--muted);font-size:1.2rem;"></i>
+                <span style="font-size:0.85rem;font-weight:500;">Brightness</span>
+              </div>
+              <span style="font-size:0.8rem;color:var(--muted);">40%</span>
+            </div>
+            <input type="range" min="0" max="100" value="40" style="width:100%;" />
+          </div>
+
+        </div>
+      </div data-template="forms.slider.in-a-card-setting-volume-brightness">
+    </section>
+
+    <!-- ========== FILE UPLOAD ========== -->
+    <section class="component-section" id="fileupload">
+      <div class="section-header">
+        <h2 class="section-title">FileUpload</h2>
+        <span class="section-badge">custom component</span>
+      </div>
+
+      <div class="subsection" data-template="forms.fileupload.drag-amp-drop-zone">
+        <div class="subsection-label">Drag &amp; drop zone</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;">
+
+          <!-- Default dropzone -->
+          <div style="flex:1;min-width:240px;max-width:360px;">
+            <div class="dropzone">
+              <i class="mdi mdi-cloud-upload-outline"></i>
+              <div class="dropzone-title">Drag &amp; drop files here</div>
+              <div class="dropzone-sub">or click to browse — PNG, JPG, PDF up to 10MB</div>
+              <div class="dropzone-btn">Choose File</div>
+            </div>
+          </div>
+
+          <!-- Drag-over state -->
+          <div style="flex:1;min-width:240px;max-width:360px;">
+            <div class="dropzone is-dragging">
+              <i class="mdi mdi-cloud-upload-outline" style="color:var(--primary);"></i>
+              <div class="dropzone-title" style="color:var(--primary);">Drop to upload</div>
+              <div class="dropzone-sub">Release to add your files</div>
+            </div>
+          </div>
+
+        </div>
+      </div data-template="forms.fileupload.drag-amp-drop-zone">
+
+      <div class="subsection" data-template="forms.fileupload.with-file-preview">
+        <div class="subsection-label">With file preview</div>
+        <div style="max-width:400px;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+
+          <!-- File list -->
+          <div style="padding:16px;display:flex;flex-direction:column;gap:10px;">
+
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:6px;border:1px solid var(--border);">
+              <i class="mdi mdi-file-image-outline" style="font-size:1.5rem;color:var(--info);"></i>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">hero-image.png</div>
+                <div style="font-size:0.7rem;color:var(--muted);">2.4 MB · Uploaded</div>
+              </div>
+              <i class="mdi mdi-check-circle" style="color:var(--success);font-size:1.2rem;"></i>
+              <i class="mdi mdi-close" style="color:var(--muted);font-size:1.1rem;cursor:pointer;"></i>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:6px;border:1px solid var(--border);">
+              <i class="mdi mdi-file-pdf-box" style="font-size:1.5rem;color:var(--danger);"></i>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">report-q1-2026.pdf</div>
+                <div style="font-size:0.7rem;color:var(--muted);">Uploading… 68%</div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:4px;">
+                  <div style="width:68%;height:100%;background:var(--primary);border-radius:2px;"></div>
+                </div>
+              </div>
+              <i class="mdi mdi-close" style="color:var(--muted);font-size:1.1rem;cursor:pointer;"></i>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--bg);border-radius:6px;border:1px solid var(--border);">
+              <i class="mdi mdi-file-excel-outline" style="font-size:1.5rem;color:var(--success);"></i>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.8rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">data-export.xlsx</div>
+                <div style="font-size:0.7rem;color:var(--danger);">
+                  <i class="mdi mdi-alert-outline"></i> File too large (24 MB, max 10 MB)
+                </div>
+              </div>
+              <i class="mdi mdi-close" style="color:var(--muted);font-size:1.1rem;cursor:pointer;"></i>
+            </div>
+
+          </div>
+
+          <div style="padding:12px 16px;border-top:1px solid var(--border);background:var(--bg);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:0.75rem;color:var(--muted);">2 of 3 files ready</span>
+            <button style="background:var(--primary);color:var(--surface);border:none;border-radius:4px;padding:8px 18px;font-size:0.8rem;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;cursor:pointer;">
+              <i class="mdi mdi-upload"></i> Upload
+            </button>
+          </div>
+
+        </div>
+      </div data-template="forms.fileupload.with-file-preview">
+
+      <div class="subsection" data-template="forms.fileupload.avatar-profile-photo-upload-material-kit-style">
+        <div class="subsection-label">Avatar / profile photo upload (Material Kit style)</div>
+        <div class="row">
+
+          <div class="avatar-upload">
+            <div class="avatar-upload-circle">
+              <i class="mdi mdi-account"></i>
+            </div>
+            <div class="avatar-upload-actions">
+              <span class="upload-link">Add Photo</span>
+            </div>
+          </div>
+
+          <div class="avatar-upload">
+            <div class="avatar-upload-circle" style="background:linear-gradient(135deg,var(--muted),var(--subtle));">
+              <i class="mdi mdi-account" style="color:var(--surface);"></i>
+            </div>
+            <div class="avatar-upload-actions">
+              <span class="upload-link">Change</span>
+              <span class="upload-link remove">Remove</span>
+            </div>
+          </div>
+
+          <div class="avatar-upload">
+            <div class="avatar-upload-circle" style="width:100px;height:100px;font-size:2.5rem;">
+              <i class="mdi mdi-account" style="color:var(--muted);"></i>
+            </div>
+            <div class="avatar-upload-actions">
+              <span class="upload-link">Select image</span>
+            </div>
+            <span style="font-size:0.7rem;color:var(--muted);">Square, min 200×200px</span>
+          </div>
+
+        </div>
+      </div data-template="forms.fileupload.avatar-profile-photo-upload-material-kit-style">
+    </section>
+
+  </main>
+</body>
+</html>

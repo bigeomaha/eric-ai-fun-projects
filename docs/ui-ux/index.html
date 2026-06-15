@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      min-height: 100vh;
+      padding: 48px;
+    }
+
+    .header {
+      max-width: 960px;
+      margin: 0 auto 48px;
+    }
+    .header h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .stack-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .stack-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+    }
+    .stack-pill:hover { border-color: var(--muted); color: var(--primary); }
+    .stack-pill .mdi { font-size: 1rem; }
+
+    .progress-bar-wrap {
+      max-width: 960px;
+      margin: 0 auto 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--primary);
+      width: 64.9%; /* 24/37 */
+      transition: width 0.4s ease;
+    }
+    .progress-label { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+    .progress-count { font-size: 1rem; font-weight: 700; white-space: nowrap; }
+
+    .grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--primary);
+      transition: box-shadow 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(28,21,16,0.12);
+      border-color: var(--muted);
+    }
+    .card-color-bar { height: 4px; }
+
+    .card-body { padding: 20px; flex: 1; }
+    .card-icon { font-size: 1.75rem; margin-bottom: 12px; color: var(--muted); }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .card-desc  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    .card-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-items { font-size: 0.75rem; color: var(--muted); }
+    .card-status {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .status-ready   { background: rgba(92,122,82,.14); color: var(--success); }
+    .status-pending { background: var(--border); color: var(--muted); }
+
+    .section-label {
+      max-width: 960px;
+      margin: 32px auto 16px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>UI/UX Templates</h1>
+    <p>Reusable component templates built with Svelte Material UI, Material Design Icons,<br>and Material Kit Pro design patterns — adapted to the project color scheme.</p>
+    <div class="stack-row">
+      <a class="stack-pill" href="https://sveltematerialui.com/" target="_blank">
+        <i class="mdi mdi-svelte"></i> Svelte Material UI
+      </a>
+      <a class="stack-pill" href="https://pictogrammers.com/library/mdi/" target="_blank">
+        <i class="mdi mdi-shape-outline"></i> Material Design Icons
+      </a>
+      <a class="stack-pill" href="https://demos.creative-tim.com/material-kit-pro-bs4/index.html" target="_blank">
+        <i class="mdi mdi-palette-outline"></i> Material Kit Pro (reference)
+      </a>
+    </div>
+  </div>
+
+  <div class="progress-bar-wrap">
+    <span class="progress-count">24 / 37</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill"></div>
+    </div>
+    <span class="progress-label">templates complete</span>
+  </div>
+
+  <div class="section-label">Components</div>
+  <div class="grid">
+
+    <a class="card" href="components/primitives.html">
+      <div class="card-color-bar" style="background:var(--primary);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-shape-outline"></i></div>
+        <div class="card-title">Primitives</div>
+        <div class="card-desc">Button · Icon · Avatar · Badge · Chip — the atomic building blocks.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">5 components</span>
+        <span class="card-status status-ready">Ready</span>
+      </div>
+    </a>
+
+    <a class="card" href="components/forms.html">
+      <div class="card-color-bar" style="background:var(--info);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-form-textbox"></i></div>
+        <div class="card-title">Forms</div>
+        <div class="card-desc">TextField · Select · Checkbox · Radio · Switch · Slider · FileUpload</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">7 components</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="components/layout.html">
+      <div class="card-color-bar" style="background:var(--muted);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-view-dashboard-outline"></i></div>
+        <div class="card-title">Layout</div>
+        <div class="card-desc">Card · Navbar · Sidebar · Footer · PageSection</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">5 components</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="components/feedback.html">
+      <div class="card-color-bar" style="background:var(--warning);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-bell-outline"></i></div>
+        <div class="card-title">Feedback & Overlays</div>
+        <div class="card-desc">Dialog · Snackbar · Alert · ProgressBar · Spinner · Skeleton</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">6 components</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="components/navigation.html">
+      <div class="card-color-bar" style="background:var(--success);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-compass-outline"></i></div>
+        <div class="card-title">Navigation</div>
+        <div class="card-desc">Tabs · Breadcrumbs · Pagination · Stepper · Accordion</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">5 components</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="components/data-display.html">
+      <div class="card-color-bar" style="background:var(--rose);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-table-large"></i></div>
+        <div class="card-title">Data Display</div>
+        <div class="card-desc">DataTable · List · Menu · Tooltip · Popover</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">5 components</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="section-label">Pages</div>
+  <div class="grid">
+
+    <a class="card" href="pages/landing.html">
+      <div class="card-color-bar" style="background:var(--primary);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-home-outline"></i></div>
+        <div class="card-title">Landing / Marketing</div>
+        <div class="card-desc">Hero, features, testimonials, CTA, footer.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/dashboard.html">
+      <div class="card-color-bar" style="background:var(--info);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-view-grid-outline"></i></div>
+        <div class="card-title">Dashboard</div>
+        <div class="card-desc">KPI cards, charts, recent activity table.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/login.html">
+      <div class="card-color-bar" style="background:var(--muted);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-login"></i></div>
+        <div class="card-title">Login</div>
+        <div class="card-desc">Centered card, social auth, forgot password.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/register.html">
+      <div class="card-color-bar" style="background:var(--muted);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-account-plus-outline"></i></div>
+        <div class="card-title">Register</div>
+        <div class="card-desc">Multi-field form with validation, terms agreement.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/profile.html">
+      <div class="card-color-bar" style="background:var(--rose);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-account-outline"></i></div>
+        <div class="card-title">Profile / Account</div>
+        <div class="card-desc">Avatar, bio, editable fields, tabbed sections.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/pricing.html">
+      <div class="card-color-bar" style="background:var(--success);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-tag-outline"></i></div>
+        <div class="card-title">Pricing</div>
+        <div class="card-desc">3-tier cards, feature comparison table, CTA.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/blog-index.html">
+      <div class="card-color-bar" style="background:var(--warning);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-newspaper-variant-outline"></i></div>
+        <div class="card-title">Blog Index</div>
+        <div class="card-desc">Card grid, category filters, pagination.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/article-detail.html">
+      <div class="card-color-bar" style="background:var(--warning);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-text-box-outline"></i></div>
+        <div class="card-title">Article Detail</div>
+        <div class="card-desc">Content, author card, related posts sidebar.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/settings.html">
+      <div class="card-color-bar" style="background:var(--muted);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-cog-outline"></i></div>
+        <div class="card-title">Settings</div>
+        <div class="card-desc">Accordion sections, switches, danger zone.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/error-404.html">
+      <div class="card-color-bar" style="background:var(--danger);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-alert-circle-outline"></i></div>
+        <div class="card-title">404 / Error</div>
+        <div class="card-desc">Illustration, message, navigate home.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+    <a class="card" href="pages/component-gallery.html">
+      <div class="card-color-bar" style="background:var(--primary);"></div>
+      <div class="card-body">
+        <div class="card-icon"><i class="mdi mdi-view-gallery-outline"></i></div>
+        <div class="card-title">Component Gallery</div>
+        <div class="card-desc">Live showcase of every component — the full system on one page.</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-items">Page template</span>
+        <span class="card-status status-pending">Pending</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ══ Template Reference ═══════════════════════════════════════
+       AI lookup table: data-template key → file path
+       Usage: find a key below, open the file, query [data-template="key"]
+       to get the container; the inner markup is the component template.
+  ══════════════════════════════════════════════════════════════ -->
+  <div style="max-width:960px;margin:48px auto 0;">
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">Template Reference</div>
+    <div style="font-size:0.82rem;color:var(--muted);margin-bottom:20px;">
+      Every tagged template across all component files. Query by
+      <code style="background:rgba(196,185,154,0.3);padding:1px 5px;border-radius:3px;font-size:0.8rem;">data-template</code>
+      attribute to extract component markup.
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--border);">
+          <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;">data-template key</th>
+          <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;">File</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- PRIMITIVES -->
+        <tr><td colspan="2" style="padding:10px 12px 4px;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Primitives</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.pick-your-style</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.pick-your-size</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.pick-your-color</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.outlined-colors</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.with-icons-mdi</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.round-pill</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.button-groups</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.text-simple</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.buttons.disabled</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.icons.common-icons</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.icons.sizes</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.icons.colors</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.avatars.types</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.avatars.sizes</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.avatars.with-status-indicator</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.avatars.stacked-group</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.badges.count-badges-on-icons</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.badges.dot-badges-on-icons</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.badges.badges-on-avatars</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.badges.standalone-all-colors</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.badges.on-buttons</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.filled-default</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.outlined</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.filter-chips-selected-state</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.input-chips-deletable</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.with-leading-icon</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.with-avatar</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">primitives.chips.semantic-status-chips</td><td style="padding:6px 12px;color:var(--muted);">components/primitives.html</td></tr>
+        <!-- FORMS -->
+        <tr><td colspan="2" style="padding:10px 12px 4px;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Forms</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.variants</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.validation-states</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.with-icons-mdi</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.common-input-types</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.textarea</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.textfield.full-width-form-layout</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.select.variants</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.select.states</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.select.with-leading-icon</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.checkbox.states</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.checkbox.checkbox-group</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.checkbox.in-a-form-context</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.radio.vertical-group</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.radio.horizontal-group</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.radio.card-style-radio-custom-layout</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.switch.states</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.switch.settings-list-common-usage</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.switch.semantic-color-variants</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.slider.single-value</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.slider.with-tick-marks-and-steps</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.slider.in-a-card-setting-volume-brightness</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.fileupload.drag-amp-drop-zone</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.fileupload.with-file-preview</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">forms.fileupload.avatar-profile-photo-upload-material-kit-style</td><td style="padding:6px 12px;color:var(--muted);">components/forms.html</td></tr>
+        <!-- LAYOUT -->
+        <tr><td colspan="2" style="padding:10px 12px 4px;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Layout</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.cards.basic-variants</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.cards.image-media-cards-material-kit-pro-style</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.cards.horizontal-card</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.cards.stats-kpi-cards-dashboard</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.cards.pricing-cards</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.navbar.dark-primary</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.navbar.light-surface</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.navbar.transparent-for-heroimage-headers</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.navbar.with-search-bar-inline</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.navbar.dense-compact</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.sidebar.permanent-full-with-header-amp-groups</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.sidebar.mini-collapsed-icons-only</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.sidebar.modal-overlay-concept</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.footer.multi-column-dark</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.footer.with-newsletter-cta</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.footer.simple-one-line</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.pagesection.hero-section</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.pagesection.features-grid-section</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.pagesection.cta-banner-section</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">layout.pagesection.split-content-section-text-image</td><td style="padding:6px 12px;color:var(--muted);">components/layout.html</td></tr>
+        <!-- FEEDBACK -->
+        <tr><td colspan="2" style="padding:10px 12px 4px;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Feedback &amp; Overlays</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.dialog.standard-confirmation</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.dialog.destructive-action</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.dialog.form-dialog</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.dialog.info-detail-dialog</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.snackbar.snackbar-dark-surface</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.snackbar.toast-light-surface-top-right-corner-style</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.alert.semantic-variants</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.alert.banner-alert-full-width-no-border-radius</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.progress.determinate-labeled</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.progress.thick-striped-animated</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.progress.indeterminate-loading</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.progress.multi-segment-stacked</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.progress.step-progress</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.sizes-border-spinner</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.semantic-colors</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.spinner-on-dark-background</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.dot-pulse</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.button-loading-state</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.spinner.content-overlay</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.skeleton.profile-rows</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.skeleton.card-grid</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.skeleton.blog-article-skeleton</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.skeleton.table-skeleton</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">feedback.skeleton.stat-kpi-card-skeleton</td><td style="padding:6px 12px;color:var(--muted);">components/feedback.html</td></tr>
+        <!-- NAVIGATION -->
+        <tr><td colspan="2" style="padding:10px 12px 4px;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--subtle);">Navigation</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.tabs.underline-tabs-default</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.tabs.pill-segmented-tabs</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.tabs.outlined-card-tabs</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.tabs.vertical-tabs</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.tabs.tabs-on-dark-background</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.default-slash-separator</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.icon-separator-home-icon</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.with-page-icons</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.pill-contained</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.collapsed-truncated-long-paths</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.breadcrumbs.on-dark-background</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.standard-with-ellipsis</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.mid-range-active-page</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.rounded-pill-buttons</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.ghost-style-no-borders</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.simple-prev-next-with-context</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.pagination.first-last-jump-to-page</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.stepper.horizontal-step-2-active-step-1-done</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.stepper.horizontal-step-3-error</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.stepper.vertical-stepper-with-content-panels</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.accordion.default-bordered</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.accordion.with-icon-per-item</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr style="border-bottom:1px solid rgba(196,185,154,0.3);"><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.accordion.separated-cards</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+        <tr><td style="padding:6px 12px;font-family:monospace;color:var(--primary);">navigation.accordion.flush-no-outer-border</td><td style="padding:6px 12px;color:var(--muted);">components/navigation.html</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

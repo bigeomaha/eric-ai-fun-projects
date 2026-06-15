@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timeline Reveal — Design Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0b0e;
+    color: #d4d4d8;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+  }
+
+  /* Sticky nav dots */
+  .sticky-nav {
+    position: fixed;
+    top: 50%;
+    right: 28px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid #333;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .nav-dot::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #555;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .nav-dot:hover::after { opacity: 1; }
+  .nav-dot.red { border-color: rgba(239,68,68,0.5); }
+  .nav-dot.red.active { background: #ef4444; border-color: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.4); }
+  .nav-dot.green { border-color: rgba(34,197,94,0.5); }
+  .nav-dot.green.active { background: #22c55e; border-color: #22c55e; box-shadow: 0 0 10px rgba(34,197,94,0.4); }
+  .nav-dot.amber { border-color: rgba(245,158,11,0.5); }
+  .nav-dot.amber.active { background: #f59e0b; border-color: #f59e0b; box-shadow: 0 0 10px rgba(245,158,11,0.4); }
+  .nav-dot.blue { border-color: rgba(59,130,246,0.5); }
+  .nav-dot.blue.active { background: #3b82f6; border-color: #3b82f6; box-shadow: 0 0 10px rgba(59,130,246,0.4); }
+  .nav-dot.purple { border-color: rgba(168,85,247,0.5); }
+  .nav-dot.purple.active { background: #a855f7; border-color: #a855f7; box-shadow: 0 0 10px rgba(168,85,247,0.4); }
+
+  /* Hero / Question */
+  .hero {
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(217,119,6,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero .chip {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #d97706;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: #fafafa;
+    font-weight: 700;
+    max-width: 700px;
+    margin: 0 auto 16px;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+  }
+  .hero .subtitle {
+    font-size: 14px;
+    color: #52525b;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+  }
+
+  /* The glowing line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg,
+      rgba(217,119,6,0.0) 0%,
+      rgba(217,119,6,0.3) 5%,
+      rgba(217,119,6,0.15) 50%,
+      rgba(217,119,6,0.3) 95%,
+      rgba(217,119,6,0.0) 100%
+    );
+    transform: translateX(-50%);
+  }
+
+  /* Timeline node */
+  .timeline-node {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+    align-items: start;
+  }
+
+  /* Pip on timeline */
+  .timeline-pip {
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    border: 3px solid #0a0b0e;
+  }
+  .timeline-pip.red { background: #ef4444; box-shadow: 0 0 12px rgba(239,68,68,0.4); }
+  .timeline-pip.green { background: #22c55e; box-shadow: 0 0 12px rgba(34,197,94,0.4); }
+  .timeline-pip.amber { background: #f59e0b; box-shadow: 0 0 12px rgba(245,158,11,0.4); }
+  .timeline-pip.blue { background: #3b82f6; box-shadow: 0 0 12px rgba(59,130,246,0.4); }
+  .timeline-pip.purple { background: #a855f7; box-shadow: 0 0 12px rgba(168,85,247,0.4); }
+
+  /* Card positioning: alternating */
+  .timeline-node .card { grid-column: 1; }
+  .timeline-node .spacer { grid-column: 2; }
+  .timeline-node.right .card { grid-column: 2; }
+  .timeline-node.right .spacer { grid-column: 1; grid-row: 1; }
+
+  /* Agent card */
+  .card {
+    background: #111318;
+    border: 1px solid #1c1e26;
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .card:hover {
+    border-color: #2a2d38;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 16px 16px 0 0;
+  }
+  .card.red::before { background: linear-gradient(90deg, #ef4444, transparent); }
+  .card.green::before { background: linear-gradient(90deg, transparent, #22c55e); }
+  .card.amber::before { background: linear-gradient(90deg, #f59e0b, transparent); }
+  .card.blue::before { background: linear-gradient(90deg, transparent, #3b82f6); }
+  .card.purple::before { background: linear-gradient(90deg, #a855f7, transparent); }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .card-agent-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-emoji { font-size: 24px; }
+  .card-name { font-weight: 700; font-size: 15px; }
+  .card.red .card-name { color: #ef4444; }
+  .card.green .card-name { color: #22c55e; }
+  .card.amber .card-name { color: #f59e0b; }
+  .card.blue .card-name { color: #3b82f6; }
+  .card.purple .card-name { color: #a855f7; }
+
+  .card-conf {
+    font-size: 20px;
+    font-weight: 900;
+    color: #fafafa;
+    line-height: 1;
+  }
+  .card-conf span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    vertical-align: super;
+  }
+
+  .card-angle {
+    font-size: 15px;
+    color: #a1a1aa;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    font-style: italic;
+  }
+
+  .card-points {
+    list-style: none;
+  }
+  .card-points li {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.7;
+    padding: 8px 0;
+    padding-left: 16px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .card-points li:last-child { border-bottom: none; }
+  .card-points li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0; top: 15px;
+  }
+  .card.red .card-points li::before { background: #ef4444; }
+  .card.green .card-points li::before { background: #22c55e; }
+  .card.amber .card-points li::before { background: #f59e0b; }
+  .card.blue .card-points li::before { background: #3b82f6; }
+  .card.purple .card-points li::before { background: #a855f7; }
+
+  .card-verdict {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #1c1e26;
+    font-size: 13px;
+    color: #a1a1aa;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .card-risk {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #52525b;
+    font-style: normal;
+  }
+  .card-risk strong { font-weight: 600; }
+  .card.red .card-risk strong { color: #ef4444; }
+  .card.green .card-risk strong { color: #22c55e; }
+  .card.amber .card-risk strong { color: #f59e0b; }
+  .card.blue .card-risk strong { color: #3b82f6; }
+  .card.purple .card-risk strong { color: #a855f7; }
+
+  /* Convergence node */
+  .convergence {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 0 40px;
+  }
+  .convergence-pip {
+    position: absolute;
+    left: 50%;
+    top: -20px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: #d97706;
+    border: 4px solid #0a0b0e;
+    transform: translateX(-50%);
+    box-shadow: 0 0 20px rgba(217,119,6,0.5), 0 0 40px rgba(217,119,6,0.2);
+    z-index: 2;
+  }
+  .convergence-card {
+    background: linear-gradient(135deg, #15171e 0%, #111318 100%);
+    border: 2px solid rgba(217,119,6,0.25);
+    border-radius: 20px;
+    padding: 36px;
+    position: relative;
+    box-shadow: 0 0 48px rgba(217,119,6,0.06);
+  }
+  .convergence-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px; right: -1px; bottom: -1px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(217,119,6,0.15), transparent, rgba(217,119,6,0.08));
+    z-index: -1;
+  }
+
+  .conv-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .conv-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d97706, #b45309);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 0 20px rgba(217,119,6,0.3);
+  }
+  .conv-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #d97706;
+    font-weight: 700;
+  }
+  .conv-sub {
+    font-size: 11px;
+    color: #52525b;
+    margin-top: 2px;
+  }
+
+  .conv-recommendation {
+    background: rgba(217,119,6,0.05);
+    border: 1px solid rgba(217,119,6,0.12);
+    border-radius: 12px;
+    padding: 18px 22px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fafafa;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .conv-rationale {
+    font-size: 14px;
+    color: #71717a;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .conv-confidence {
+    margin-bottom: 24px;
+  }
+  .conv-conf-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .conv-conf-label { font-size: 11px; color: #52525b; text-transform: uppercase; letter-spacing: 1px; }
+  .conv-conf-value { font-size: 13px; font-weight: 700; color: #d97706; }
+  .conv-conf-bar {
+    height: 6px;
+    background: #1c1e26;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .conv-conf-fill {
+    height: 100%;
+    width: 81%;
+    background: linear-gradient(90deg, #d97706, #f59e0b);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(217,119,6,0.3);
+  }
+
+  .conv-tradeoffs h4 {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #52525b;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .conv-tradeoffs ul {
+    list-style: none;
+    margin-bottom: 24px;
+  }
+  .conv-tradeoffs li {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.6;
+    padding: 6px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .conv-tradeoffs li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #d97706;
+    position: absolute;
+    left: 0; top: 12px;
+  }
+
+  .conv-flip {
+    background: rgba(239,68,68,0.05);
+    border: 1px solid rgba(239,68,68,0.12);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .conv-flip-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ef4444;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .conv-flip p {
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- Sticky nav dots -->
+<div class="sticky-nav">
+  <div class="nav-dot red active" data-label="Devil's Advocate"></div>
+  <div class="nav-dot green" data-label="Optimist"></div>
+  <div class="nav-dot amber" data-label="Pessimist"></div>
+  <div class="nav-dot blue" data-label="Pragmatist"></div>
+  <div class="nav-dot purple" data-label="Wildcard"></div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="chip">Decision Pressure Cooker</div>
+  <h1>"Should I leave my stable corporate job to start my own company?"</h1>
+  <div class="subtitle">Five specialist AI agents challenge your thinking from every angle. Scroll to hear each perspective, then read the final synthesis.</div>
+</div>
+
+<!-- Timeline -->
+<div class="timeline">
+
+  <!-- Agent 1: Devil's Advocate (left) -->
+  <div class="timeline-node">
+    <div class="card red">
+      <div class="card-header">
+        <div class="card-agent-info">
+          <span class="card-emoji">&#x1F608;</span>
+          <span class="card-name">Devil's Advocate</span>
+        </div>
+        <div class="card-conf">82<span>%</span></div>
+      </div>
+      <div class="card-angle">You're romanticizing entrepreneurship while underweighting the structural advantages you're about to permanently surrender.</div>
+      <ul class="card-points">
+        <li>The salary increase looks real on paper, but you haven't stress-tested it against cost-of-living delta</li>
+        <li>You're implicitly assuming this employer is stable and your leverage holds post-transition</li>
+        <li>Startup failure rates remain at 90% within 5 years — survivorship bias clouds judgment</li>
+        <li>Golden handcuffs exist because the alternatives genuinely are worse for most people</li>
+      </ul>
+      <div class="card-verdict">"The math you haven't done will cost you more than the raise pays."</div>
+      <div class="card-risk"><strong>Watch:</strong> Confirmation bias from consuming founder success stories</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="timeline-pip red"></div>
+  </div>
+
+  <!-- Agent 2: Optimist (right) -->
+  <div class="timeline-node right">
+    <div class="spacer"></div>
+    <div class="card green">
+      <div class="card-header">
+        <div class="card-agent-info">
+          <span class="card-emoji">&#x1F680;</span>
+          <span class="card-name">Optimist</span>
+        </div>
+        <div class="card-conf">74<span>%</span></div>
+      </div>
+      <div class="card-angle">Corporate stability is often a gilded cage — the real risk is spending 10 years building someone else's compounding returns.</div>
+      <ul class="card-points">
+        <li>Equity upside from founding can exceed a lifetime of salary increases</li>
+        <li>New environments create identity-level momentum — you shed limiting scripts</li>
+        <li>Asymmetric bet: worst case you return to employment with founder experience</li>
+        <li>The first-year discomfort is the tip of a much larger opportunity iceberg</li>
+      </ul>
+      <div class="card-verdict">"The visible tip of the salary bump is the smaller iceberg."</div>
+      <div class="card-risk"><strong>Watch:</strong> Overestimating your risk tolerance before it's been tested</div>
+    </div>
+    <div class="timeline-pip green"></div>
+  </div>
+
+  <!-- Agent 3: Pessimist (left) -->
+  <div class="timeline-node">
+    <div class="card amber">
+      <div class="card-header">
+        <div class="card-agent-info">
+          <span class="card-emoji">&#x26A0;&#xFE0F;</span>
+          <span class="card-name">Pessimist</span>
+        </div>
+        <div class="card-conf">78<span>%</span></div>
+      </div>
+      <div class="card-angle">The gap between your mental model of entrepreneurship and daily operational reality will be your primary adversary.</div>
+      <ul class="card-points">
+        <li>Loss of employer-backed insurance, retirement matching, and PTO compounds fast</li>
+        <li>Social isolation of solo founding is consistently underestimated by first-timers</li>
+        <li>Runway depletion creates decision-making under duress — the worst context for pivots</li>
+        <li>Your existing support network cannot simply be replicated in a new context</li>
+      </ul>
+      <div class="card-verdict">"Most founders don't fail from bad ideas — they fail from bad timing."</div>
+      <div class="card-risk"><strong>Watch:</strong> Underestimating the psychological toll of sustained uncertainty</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="timeline-pip amber"></div>
+  </div>
+
+  <!-- Agent 4: Pragmatist (right) -->
+  <div class="timeline-node right">
+    <div class="spacer"></div>
+    <div class="card blue">
+      <div class="card-header">
+        <div class="card-agent-info">
+          <span class="card-emoji">&#x2699;&#xFE0F;</span>
+          <span class="card-name">Pragmatist</span>
+        </div>
+        <div class="card-conf">82<span>%</span></div>
+      </div>
+      <div class="card-angle">This decision lives or dies on runway math and a validated customer, not passion or potential.</div>
+      <ul class="card-points">
+        <li>Calculate exact net gain: salary delta minus taxes, benefits replacement, and cost-of-living</li>
+        <li>Map upfront cash burn: moving costs, overlap period, security deposits</li>
+        <li>Do you have a paying customer or LOI? Without one, this is a hobby with consequences</li>
+        <li>Set a hard deadline: if X doesn't happen by Y date, revert to plan B</li>
+      </ul>
+      <div class="card-verdict">"Run the numbers before you run toward the dream."</div>
+      <div class="card-risk"><strong>Watch:</strong> Analysis paralysis masking a fear of commitment</div>
+    </div>
+    <div class="timeline-pip blue"></div>
+  </div>
+
+  <!-- Agent 5: Wildcard (left) -->
+  <div class="timeline-node">
+    <div class="card purple">
+      <div class="card-header">
+        <div class="card-agent-info">
+          <span class="card-emoji">&#x1F0CF;</span>
+          <span class="card-name">Wildcard</span>
+        </div>
+        <div class="card-conf">78<span>%</span></div>
+      </div>
+      <div class="card-angle">This isn't a career decision — it's a question about whether you've already mentally quit and are waiting for permission.</div>
+      <ul class="card-points">
+        <li>Evaluate in 'optionality units' — which path creates more future choices, not more current comfort?</li>
+        <li>From evolutionary biology: organisms that migrate successfully do so with their colony, not alone</li>
+        <li>The question you're really asking is about identity, not income</li>
+        <li>You're treating this as a spreadsheet problem when it's a mirror problem</li>
+      </ul>
+      <div class="card-verdict">"You're treating this as a geography problem when it's actually an identity liquidity problem."</div>
+      <div class="card-risk"><strong>Watch:</strong> Using philosophical reframing to avoid making a concrete decision</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="timeline-pip purple"></div>
+  </div>
+</div>
+
+<!-- Convergence Node -->
+<div class="convergence">
+  <div class="convergence-pip"></div>
+  <div class="convergence-card">
+    <div class="conv-header">
+      <div class="conv-icon">&#x1F9E0;</div>
+      <div>
+        <div class="conv-title">The Synthesis</div>
+        <div class="conv-sub">All five perspectives converge</div>
+      </div>
+    </div>
+
+    <div class="conv-recommendation">
+      Proceed — but only after completing a 90-day validation sprint while still employed. Build the first paying customer before you resign.
+    </div>
+
+    <div class="conv-rationale">
+      The entrepreneurial path has genuine merit, but every agent flagged unvalidated assumptions. De-risk by treating the next 90 days as a proof-of-concept sprint while keeping your salary as runway. If you can't find a single paying customer with part-time effort, that's your answer.
+    </div>
+
+    <div class="conv-confidence">
+      <div class="conv-conf-row">
+        <span class="conv-conf-label">Overall Confidence</span>
+        <span class="conv-conf-value">81% — Moderate Conviction</span>
+      </div>
+      <div class="conv-conf-bar">
+        <div class="conv-conf-fill"></div>
+      </div>
+    </div>
+
+    <div class="conv-tradeoffs">
+      <h4>Trade-offs to Accept</h4>
+      <ul>
+        <li>Accept a slower timeline for significantly lower risk</li>
+        <li>Moonlighting creates real dual cognitive load you must manage</li>
+        <li>Your current employer may notice reduced engagement during the sprint</li>
+      </ul>
+    </div>
+
+    <div class="conv-flip">
+      <div class="conv-flip-label">Flip Condition</div>
+      <p>If you cannot secure a single paying customer or letter of intent within 90 days of part-time effort, treat that as a strong signal that the market isn't ready — or the idea needs more work.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

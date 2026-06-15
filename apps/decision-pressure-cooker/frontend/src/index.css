@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 115%;
+  }
+  body {
+    @apply bg-[#0a0a0f] text-zinc-100 antialiased;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-zinc-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700 rounded-full;
+  }
+}
+
+@layer components {
+  /* ── Radar chart ──────────────────────────────────────────────────── */
+  .radar-container {
+    position: relative;
+    width: 460px;
+    height: 400px;
+  }
+
+  .radar-grid {
+    fill: none;
+    stroke: #1a1a1f;
+    stroke-width: 0.5;
+  }
+  .radar-grid-dashed {
+    fill: none;
+    stroke: #141418;
+    stroke-width: 0.5;
+    stroke-dasharray: 3 3;
+  }
+  .radar-axis {
+    stroke: #1a1a1f;
+    stroke-width: 0.5;
+  }
+  .radar-polygon {
+    fill: rgba(220, 38, 38, 0.06);
+    stroke: rgba(239, 68, 68, 0.35);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.12));
+    transition: all 0.4s ease;
+  }
+  .radar-point {
+    cursor: pointer;
+    transition: r 0.2s ease;
+  }
+  .radar-point:hover {
+    r: 7;
+  }
+
+  .radar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .radar-label-group:hover .radar-label {
+    text-decoration: underline;
+  }
+  .radar-label-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+  }
+
+  .radar-center-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    fill: #fafafa;
+    letter-spacing: -1px;
+    transition: fill 0.2s;
+  }
+  .radar-center-pct {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    fill: #52525b;
+    font-weight: 900;
+    transition: fill 0.2s;
+  }
+  .radar-center-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    fill: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+    transition: fill 0.2s;
+  }
+  .radar-center-group:hover .radar-center-number,
+  .radar-center-group:hover .radar-center-pct,
+  .radar-center-group:hover .radar-center-label {
+    fill: #f97316;
+  }
+
+  /* ── Agent card ───────────────────────────────────────────────────── */
+  .agent-card {
+    @apply rounded-xl transition-all duration-200;
+  }
+
+  .confidence-bar {
+    @apply h-[2px] rounded-full bg-zinc-800 overflow-hidden;
+  }
+  .confidence-fill {
+    @apply h-full rounded-full transition-all duration-1000 ease-out;
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primitives — UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===================== DESIGN TOKENS ===================== */
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+    }
+
+    /* ===================== RESET ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      display: flex;
+      min-height: 100vh;
+      font-size: 14px;
+    }
+
+    /* ===================== SIDEBAR ===================== */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--primary);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+      padding-bottom: 32px;
+    }
+    .sidebar-brand {
+      padding: 22px 20px 18px;
+      color: var(--surface);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 8px;
+    }
+    .sidebar-brand small {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--subtle);
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .nav-group-label {
+      padding: 16px 20px 4px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      color: rgba(253,248,240,0.65);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a:hover { background: rgba(255,255,255,0.07); color: var(--surface); }
+    .sidebar a.active { background: rgba(253,248,240,0.13); color: var(--surface); font-weight: 500; }
+    .sidebar a .mdi { font-size: 1.05rem; width: 20px; text-align: center; opacity: 0.85; }
+
+    /* Section anchors in sidebar */
+    .sidebar .anchor-links { padding: 4px 0 8px; border-top: 1px solid rgba(255,255,255,0.07); margin-top: 4px; }
+    .sidebar .anchor-links a { padding: 6px 20px 6px 50px; font-size: 0.75rem; color: rgba(253,248,240,0.45); }
+    .sidebar .anchor-links a:hover { color: rgba(253,248,240,0.75); }
+
+    /* ===================== LAYOUT ===================== */
+    .content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 40px 48px 60px;
+    }
+    .page-header { margin-bottom: 36px; }
+    .page-title { font-size: 1.875rem; font-weight: 700; margin-bottom: 6px; }
+    .page-subtitle { font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
+
+    /* ===================== COMPONENT SECTIONS ===================== */
+    .component-section {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(28,21,16,0.06);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+    .section-title { font-size: 1.25rem; font-weight: 700; }
+    .section-badge {
+      font-size: 0.7rem;
+      font-family: monospace;
+      background: var(--bg);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .subsection { margin-bottom: 28px; }
+    .subsection:last-child { margin-bottom: 0; }
+    .subsection-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 16px;
+      height: 36px;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.08929em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, opacity 0.15s;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      text-decoration: none;
+      white-space: nowrap;
+      background: transparent;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .btn:hover::after  { opacity: 0.08; }
+    .btn:active::after { opacity: 0.18; }
+
+    /* Variants */
+    .btn-raised {
+      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+    .btn-raised:hover {
+      box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+    }
+    .btn-unelevated { box-shadow: none; }
+    .btn-outlined   { background: transparent !important; border: 2px solid currentColor; }
+    .btn-text       { background: transparent !important; }
+
+    /* Sizes */
+    .btn-sm { height: 28px; font-size: 0.75rem; padding: 0 12px; }
+    .btn-lg { height: 48px; font-size: 0.9375rem; padding: 0 28px; }
+
+    /* Round */
+    .btn-round { border-radius: 50px; }
+
+    /* Colors — filled */
+    .btn-primary { background: var(--primary); color: var(--surface); }
+    .btn-muted   { background: var(--muted);   color: var(--surface); }
+    .btn-success { background: var(--success);  color: #fff; }
+    .btn-warning { background: var(--warning);  color: #fff; }
+    .btn-danger  { background: var(--danger);   color: #fff; }
+    .btn-info    { background: var(--info);     color: #fff; }
+    .btn-rose    { background: var(--rose);     color: #fff; }
+
+    /* Colors — outlined */
+    .btn-outlined.btn-primary { color: var(--primary); border-color: var(--primary); }
+    .btn-outlined.btn-muted   { color: var(--muted);   border-color: var(--muted); }
+    .btn-outlined.btn-success { color: var(--success);  border-color: var(--success); }
+    .btn-outlined.btn-danger  { color: var(--danger);   border-color: var(--danger); }
+    .btn-outlined.btn-info    { color: var(--info);     border-color: var(--info); }
+
+    /* Colors — text */
+    .btn-text.btn-primary { color: var(--primary); }
+    .btn-text.btn-muted   { color: var(--muted); }
+    .btn-text.btn-danger  { color: var(--danger); }
+    .btn-text.btn-info    { color: var(--info); }
+
+    /* Disabled */
+    .btn:disabled, .btn[disabled] { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+    /* Group */
+    .btn-group { display: inline-flex; border-radius: 4px; overflow: hidden; }
+    .btn-group .btn { border-radius: 0; border-right: 1px solid rgba(255,255,255,0.2); }
+    .btn-group .btn:last-child { border-right: none; }
+    .btn-group-outlined { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .btn-group-outlined .btn-outlined { border: none; border-right: 1px solid var(--border); border-radius: 0; }
+    .btn-group-outlined .btn-outlined:last-child { border-right: none; }
+
+    .btn .mdi { font-size: 1.125rem; line-height: 1; }
+
+    /* ===================== ICONS ===================== */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+      gap: 8px;
+    }
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      cursor: default;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .icon-item:hover { background: rgba(196,185,154,0.45); border-color: var(--muted); }
+    .icon-item .mdi  { font-size: 1.5rem; color: var(--primary); }
+    .icon-item span  { font-size: 0.58rem; color: var(--muted); text-align: center; font-family: monospace; line-height: 1.3; word-break: break-all; }
+
+    .icon-size-row { display: flex; gap: 28px; align-items: flex-end; }
+    .icon-size-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .icon-size-item span { font-size: 0.68rem; color: var(--muted); }
+
+    .icon-color-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .icon-color-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .icon-color-item span { font-size: 0.68rem; color: var(--muted); }
+
+    /* ===================== AVATARS ===================== */
+    .avatar {
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      overflow: hidden;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar-xs  { width: 24px; height: 24px; font-size: 0.6rem; }
+    .avatar-sm  { width: 32px; height: 32px; font-size: 0.75rem; }
+    .avatar-md  { width: 40px; height: 40px; font-size: 0.875rem; }
+    .avatar-lg  { width: 56px; height: 56px; font-size: 1.1rem; }
+    .avatar-xl  { width: 80px; height: 80px; font-size: 1.5rem; }
+
+    .avatar-primary  { background: var(--primary); color: var(--surface); }
+    .avatar-muted    { background: var(--muted);   color: var(--surface); }
+    .avatar-info     { background: var(--info);    color: #fff; }
+    .avatar-success  { background: var(--success); color: #fff; }
+    .avatar-rose     { background: var(--rose);    color: #fff; }
+    .avatar-warning  { background: var(--warning); color: #fff; }
+    .avatar-subtle   { background: var(--subtle);  color: var(--surface); }
+    .avatar-ghost    { background: var(--border);  color: var(--muted); }
+
+    .avatar-wrap { position: relative; display: inline-flex; }
+    .status-dot {
+      position: absolute;
+      bottom: 1px; right: 1px;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      border: 2px solid var(--surface);
+    }
+    .status-online  { background: #4caf50; }
+    .status-offline { background: #bdbdbd; }
+    .status-away    { background: var(--warning); }
+    .status-busy    { background: var(--danger); }
+
+    /* ===================== BADGES ===================== */
+    .badge-wrap { position: relative; display: inline-flex; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: 2px 6px;
+      min-width: 18px;
+      height: 18px;
+      letter-spacing: 0.02em;
+    }
+    .badge-overlay { position: absolute; top: -5px; right: -7px; border: 2px solid var(--surface); }
+    .badge-dot     { width: 10px; height: 10px; min-width: 0; padding: 0; border-radius: 50%; }
+
+    .badge-primary { background: var(--primary); color: var(--surface); }
+    .badge-muted   { background: var(--muted);   color: var(--surface); }
+    .badge-danger  { background: var(--danger);  color: #fff; }
+    .badge-success { background: var(--success); color: #fff; }
+    .badge-warning { background: var(--warning); color: #fff; }
+    .badge-info    { background: var(--info);    color: #fff; }
+    .badge-rose    { background: var(--rose);    color: #fff; }
+
+    /* ===================== CHIPS ===================== */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 16px;
+      font-size: 0.8125rem;
+      font-weight: 400;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s, box-shadow 0.15s;
+      border: none;
+      font-family: 'Roboto', sans-serif;
+      white-space: nowrap;
+    }
+    .chip-filled   { background: var(--border); color: var(--primary); }
+    .chip-filled:hover { background: var(--subtle); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+
+    .chip-outlined { background: transparent; border: 1px solid var(--border); color: var(--primary); }
+    .chip-outlined:hover { background: rgba(28,21,16,.04); }
+
+    .chip-selected { background: var(--primary); color: var(--surface); }
+    .chip-selected:hover { background: var(--muted); }
+
+    .chip .mdi { font-size: 1.1rem; margin-left: -2px; }
+
+    .chip-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(28,21,16,0.22);
+      color: var(--primary);
+      font-size: 0.7rem;
+      margin-right: -4px;
+      flex-shrink: 0;
+    }
+    .chip-selected .chip-close { background: rgba(253,248,240,0.28); color: var(--surface); }
+
+    .chip-avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      margin-left: -8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    /* Semantic chips */
+    .chip-success { background: rgba(92,122,82,.14); color: var(--success); border: 1px solid rgba(92,122,82,.3); }
+    .chip-warning { background: rgba(184,134,11,.11); color: var(--warning); border: 1px solid rgba(184,134,11,.3); }
+    .chip-danger  { background: rgba(139,58,58,.11); color: var(--danger);  border: 1px solid rgba(139,58,58,.3); }
+    .chip-info    { background: rgba(91,127,166,.11); color: var(--info);   border: 1px solid rgba(91,127,166,.3); }
+
+    /* ===================== UTILITY ===================== */
+    .label-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .label-item .caption { font-size: 0.68rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      UI/UX Templates
+      <small>SMUI · MDI · Material Kit Pro</small>
+    </div>
+
+    <div class="nav-group-label">Components</div>
+    <a href="primitives.html" class="active"><i class="mdi mdi-shape-outline"></i> Primitives</a>
+    <a href="forms.html"><i class="mdi mdi-form-textbox"></i> Forms</a>
+    <a href="layout.html"><i class="mdi mdi-view-dashboard-outline"></i> Layout</a>
+    <a href="feedback.html"><i class="mdi mdi-bell-outline"></i> Feedback</a>
+    <a href="navigation.html"><i class="mdi mdi-compass-outline"></i> Navigation</a>
+    <a href="data-display.html"><i class="mdi mdi-table-large"></i> Data Display</a>
+
+    <div class="anchor-links">
+      <a href="#buttons"><i class="mdi mdi-gesture-tap-button"></i> Buttons</a>
+      <a href="#icons"><i class="mdi mdi-star-four-points-outline"></i> Icons</a>
+      <a href="#avatars"><i class="mdi mdi-account-circle-outline"></i> Avatars</a>
+      <a href="#badges"><i class="mdi mdi-bell-badge-outline"></i> Badges</a>
+      <a href="#chips"><i class="mdi mdi-tag-outline"></i> Chips</a>
+    </div>
+
+    <div class="nav-group-label">Pages</div>
+    <a href="../pages/landing.html"><i class="mdi mdi-home-outline"></i> Landing</a>
+    <a href="../pages/dashboard.html"><i class="mdi mdi-view-grid-outline"></i> Dashboard</a>
+    <a href="../pages/login.html"><i class="mdi mdi-login"></i> Login</a>
+    <a href="../pages/pricing.html"><i class="mdi mdi-tag-outline"></i> Pricing</a>
+
+    <div class="nav-group-label">Ref</div>
+    <a href="../index.html"><i class="mdi mdi-format-list-checks"></i> All Templates</a>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="content">
+    <div class="page-header">
+      <h1 class="page-title">Primitives</h1>
+      <p class="page-subtitle">Atomic building blocks — Button · Icon · Avatar · Badge · Chip</p>
+    </div>
+
+    <!-- ========== BUTTONS ========== -->
+    <section class="component-section" id="buttons">
+      <div class="section-header">
+        <h2 class="section-title">Button</h2>
+        <span class="section-badge">@smui/button</span>
+        <span class="section-badge">mdi</span>
+      </div>
+
+      <div class="subsection" data-template="primitives.buttons.pick-your-style">
+        <div class="subsection-label">Pick your style</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary">Raised</button>
+          <button class="btn btn-unelevated btn-primary">Unelevated</button>
+          <button class="btn btn-outlined btn-primary">Outlined</button>
+          <button class="btn btn-text btn-primary">Text / Simple</button>
+        </div>
+      </div data-template="primitives.buttons.pick-your-style">
+
+      <div class="subsection" data-template="primitives.buttons.pick-your-size">
+        <div class="subsection-label">Pick your size</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary btn-sm">Small</button>
+          <button class="btn btn-raised btn-primary">Regular</button>
+          <button class="btn btn-raised btn-primary btn-lg">Large</button>
+        </div>
+      </div data-template="primitives.buttons.pick-your-size">
+
+      <div class="subsection" data-template="primitives.buttons.pick-your-color">
+        <div class="subsection-label">Pick your color</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary">Primary</button>
+          <button class="btn btn-raised btn-muted">Muted</button>
+          <button class="btn btn-raised btn-info">Info</button>
+          <button class="btn btn-raised btn-success">Success</button>
+          <button class="btn btn-raised btn-warning">Warning</button>
+          <button class="btn btn-raised btn-danger">Danger</button>
+          <button class="btn btn-raised btn-rose">Rose</button>
+        </div>
+      </div data-template="primitives.buttons.pick-your-color">
+
+      <div class="subsection" data-template="primitives.buttons.outlined-colors">
+        <div class="subsection-label">Outlined colors</div>
+        <div class="row">
+          <button class="btn btn-outlined btn-primary">Primary</button>
+          <button class="btn btn-outlined btn-muted">Muted</button>
+          <button class="btn btn-outlined btn-success">Success</button>
+          <button class="btn btn-outlined btn-danger">Danger</button>
+          <button class="btn btn-outlined btn-info">Info</button>
+        </div>
+      </div data-template="primitives.buttons.outlined-colors">
+
+      <div class="subsection" data-template="primitives.buttons.with-icons-mdi">
+        <div class="subsection-label">With icons (MDI)</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary">
+            <i class="mdi mdi-heart"></i> Like
+          </button>
+          <button class="btn btn-raised btn-primary">
+            Share <i class="mdi mdi-share-variant"></i>
+          </button>
+          <button class="btn btn-outlined btn-muted">
+            <i class="mdi mdi-download"></i> Download
+          </button>
+          <button class="btn btn-raised btn-success">
+            <i class="mdi mdi-check"></i> Confirm
+          </button>
+          <button class="btn btn-raised btn-danger">
+            <i class="mdi mdi-trash-can-outline"></i> Delete
+          </button>
+          <button class="btn btn-outlined btn-info">
+            <i class="mdi mdi-information-outline"></i> Details
+          </button>
+        </div>
+      </div data-template="primitives.buttons.with-icons-mdi">
+
+      <div class="subsection" data-template="primitives.buttons.round-pill">
+        <div class="subsection-label">Round (pill)</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary btn-round">Raised Round</button>
+          <button class="btn btn-unelevated btn-muted btn-round">Unelevated Round</button>
+          <button class="btn btn-outlined btn-primary btn-round">Outlined Round</button>
+          <button class="btn btn-raised btn-rose btn-round">
+            <i class="mdi mdi-heart"></i> With Icon
+          </button>
+        </div>
+      </div data-template="primitives.buttons.round-pill">
+
+      <div class="subsection" data-template="primitives.buttons.button-groups">
+        <div class="subsection-label">Button groups</div>
+        <div class="row">
+          <div class="btn-group">
+            <button class="btn btn-unelevated btn-primary">One</button>
+            <button class="btn btn-unelevated btn-primary">Two</button>
+            <button class="btn btn-unelevated btn-primary">Three</button>
+          </div>
+          <div class="btn-group-outlined">
+            <button class="btn btn-outlined btn-primary btn-sm">
+              <i class="mdi mdi-format-align-left"></i>
+            </button>
+            <button class="btn btn-outlined btn-primary btn-sm">
+              <i class="mdi mdi-format-align-center"></i>
+            </button>
+            <button class="btn btn-outlined btn-primary btn-sm">
+              <i class="mdi mdi-format-align-right"></i>
+            </button>
+          </div>
+        </div>
+      </div data-template="primitives.buttons.button-groups">
+
+      <div class="subsection" data-template="primitives.buttons.text-simple">
+        <div class="subsection-label">Text / simple</div>
+        <div class="row">
+          <button class="btn btn-text btn-primary">Primary</button>
+          <button class="btn btn-text btn-muted">Muted</button>
+          <button class="btn btn-text btn-danger">Danger</button>
+          <button class="btn btn-text btn-info">Info</button>
+        </div>
+      </div data-template="primitives.buttons.text-simple">
+
+      <div class="subsection" data-template="primitives.buttons.disabled">
+        <div class="subsection-label">Disabled</div>
+        <div class="row">
+          <button class="btn btn-raised btn-primary" disabled>Raised</button>
+          <button class="btn btn-outlined btn-primary" disabled>Outlined</button>
+          <button class="btn btn-text btn-primary" disabled>Text</button>
+        </div>
+      </div data-template="primitives.buttons.disabled">
+    </section>
+
+    <!-- ========== ICONS ========== -->
+    <section class="component-section" id="icons">
+      <div class="section-header">
+        <h2 class="section-title">Icon</h2>
+        <span class="section-badge">@mdi/font</span>
+        <span class="section-badge">pictogrammers.com/library/mdi</span>
+      </div>
+
+      <div class="subsection" data-template="primitives.icons.common-icons">
+        <div class="subsection-label">Common icons</div>
+        <div class="icon-grid">
+          <div class="icon-item"><i class="mdi mdi-home-outline"></i><span>home</span></div>
+          <div class="icon-item"><i class="mdi mdi-magnify"></i><span>magnify</span></div>
+          <div class="icon-item"><i class="mdi mdi-bell-outline"></i><span>bell</span></div>
+          <div class="icon-item"><i class="mdi mdi-account-circle-outline"></i><span>account</span></div>
+          <div class="icon-item"><i class="mdi mdi-cog-outline"></i><span>cog</span></div>
+          <div class="icon-item"><i class="mdi mdi-heart-outline"></i><span>heart</span></div>
+          <div class="icon-item"><i class="mdi mdi-star-outline"></i><span>star</span></div>
+          <div class="icon-item"><i class="mdi mdi-pencil-outline"></i><span>pencil</span></div>
+          <div class="icon-item"><i class="mdi mdi-trash-can-outline"></i><span>trash-can</span></div>
+          <div class="icon-item"><i class="mdi mdi-share-variant"></i><span>share-variant</span></div>
+          <div class="icon-item"><i class="mdi mdi-download"></i><span>download</span></div>
+          <div class="icon-item"><i class="mdi mdi-upload"></i><span>upload</span></div>
+          <div class="icon-item"><i class="mdi mdi-check-circle-outline"></i><span>check-circle</span></div>
+          <div class="icon-item"><i class="mdi mdi-close-circle-outline"></i><span>close-circle</span></div>
+          <div class="icon-item"><i class="mdi mdi-alert-outline"></i><span>alert</span></div>
+          <div class="icon-item"><i class="mdi mdi-information-outline"></i><span>information</span></div>
+          <div class="icon-item"><i class="mdi mdi-lock-outline"></i><span>lock</span></div>
+          <div class="icon-item"><i class="mdi mdi-email-outline"></i><span>email</span></div>
+          <div class="icon-item"><i class="mdi mdi-phone-outline"></i><span>phone</span></div>
+          <div class="icon-item"><i class="mdi mdi-map-marker-outline"></i><span>map-marker</span></div>
+          <div class="icon-item"><i class="mdi mdi-calendar-outline"></i><span>calendar</span></div>
+          <div class="icon-item"><i class="mdi mdi-clock-outline"></i><span>clock</span></div>
+          <div class="icon-item"><i class="mdi mdi-filter-outline"></i><span>filter</span></div>
+          <div class="icon-item"><i class="mdi mdi-menu"></i><span>menu</span></div>
+          <div class="icon-item"><i class="mdi mdi-dots-vertical"></i><span>dots-vertical</span></div>
+          <div class="icon-item"><i class="mdi mdi-dots-horizontal"></i><span>dots-horizontal</span></div>
+          <div class="icon-item"><i class="mdi mdi-plus"></i><span>plus</span></div>
+          <div class="icon-item"><i class="mdi mdi-minus"></i><span>minus</span></div>
+          <div class="icon-item"><i class="mdi mdi-arrow-left"></i><span>arrow-left</span></div>
+          <div class="icon-item"><i class="mdi mdi-arrow-right"></i><span>arrow-right</span></div>
+          <div class="icon-item"><i class="mdi mdi-chevron-up"></i><span>chevron-up</span></div>
+          <div class="icon-item"><i class="mdi mdi-chevron-down"></i><span>chevron-down</span></div>
+          <div class="icon-item"><i class="mdi mdi-refresh"></i><span>refresh</span></div>
+          <div class="icon-item"><i class="mdi mdi-content-save-outline"></i><span>content-save</span></div>
+          <div class="icon-item"><i class="mdi mdi-send"></i><span>send</span></div>
+          <div class="icon-item"><i class="mdi mdi-eye-outline"></i><span>eye</span></div>
+          <div class="icon-item"><i class="mdi mdi-eye-off-outline"></i><span>eye-off</span></div>
+          <div class="icon-item"><i class="mdi mdi-close"></i><span>close</span></div>
+          <div class="icon-item"><i class="mdi mdi-check"></i><span>check</span></div>
+          <div class="icon-item"><i class="mdi mdi-thumb-up-outline"></i><span>thumb-up</span></div>
+          <div class="icon-item"><i class="mdi mdi-thumb-down-outline"></i><span>thumb-down</span></div>
+          <div class="icon-item"><i class="mdi mdi-tag-outline"></i><span>tag</span></div>
+          <div class="icon-item"><i class="mdi mdi-bookmark-outline"></i><span>bookmark</span></div>
+          <div class="icon-item"><i class="mdi mdi-link-variant"></i><span>link-variant</span></div>
+          <div class="icon-item"><i class="mdi mdi-open-in-new"></i><span>open-in-new</span></div>
+          <div class="icon-item"><i class="mdi mdi-copy"></i><span>copy</span></div>
+          <div class="icon-item"><i class="mdi mdi-image-outline"></i><span>image</span></div>
+          <div class="icon-item"><i class="mdi mdi-file-outline"></i><span>file</span></div>
+          <div class="icon-item"><i class="mdi mdi-folder-outline"></i><span>folder</span></div>
+        </div>
+      </div data-template="primitives.icons.common-icons">
+
+      <div class="subsection" data-template="primitives.icons.sizes">
+        <div class="subsection-label">Sizes</div>
+        <div class="icon-size-row">
+          <div class="icon-size-item">
+            <i class="mdi mdi-star" style="font-size:16px;color:var(--primary);"></i>
+            <span>16px</span>
+          </div>
+          <div class="icon-size-item">
+            <i class="mdi mdi-star" style="font-size:24px;color:var(--primary);"></i>
+            <span>24px</span>
+          </div>
+          <div class="icon-size-item">
+            <i class="mdi mdi-star" style="font-size:32px;color:var(--primary);"></i>
+            <span>32px</span>
+          </div>
+          <div class="icon-size-item">
+            <i class="mdi mdi-star" style="font-size:48px;color:var(--primary);"></i>
+            <span>48px</span>
+          </div>
+          <div class="icon-size-item">
+            <i class="mdi mdi-star" style="font-size:64px;color:var(--primary);"></i>
+            <span>64px</span>
+          </div>
+        </div>
+      </div data-template="primitives.icons.sizes">
+
+      <div class="subsection" data-template="primitives.icons.colors">
+        <div class="subsection-label">Colors</div>
+        <div class="icon-color-row">
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--primary);"></i>
+            <span>Primary</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--muted);"></i>
+            <span>Muted</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--success);"></i>
+            <span>Success</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--warning);"></i>
+            <span>Warning</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--danger);"></i>
+            <span>Danger</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--info);"></i>
+            <span>Info</span>
+          </div>
+          <div class="icon-color-item">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--rose);"></i>
+            <span>Rose</span>
+          </div>
+          <div class="icon-color-item" style="background:var(--primary);padding:10px 12px;border-radius:6px;">
+            <i class="mdi mdi-circle" style="font-size:28px;color:var(--surface);"></i>
+            <span style="color:var(--surface);">On Dark</span>
+          </div>
+        </div>
+      </div data-template="primitives.icons.colors">
+    </section>
+
+    <!-- ========== AVATARS ========== -->
+    <section class="component-section" id="avatars">
+      <div class="section-header">
+        <h2 class="section-title">Avatar</h2>
+        <span class="section-badge">custom · reusable</span>
+      </div>
+
+      <div class="subsection" data-template="primitives.avatars.types">
+        <div class="subsection-label">Types</div>
+        <div class="row">
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-ghost">
+              <i class="mdi mdi-account" style="font-size:1.4rem;"></i>
+            </div>
+            <span class="caption">Image</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-primary">EL</div>
+            <span class="caption">Initials</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-info">JD</div>
+            <span class="caption">Initials</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-rose">SA</div>
+            <span class="caption">Initials</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-muted">
+              <i class="mdi mdi-account" style="font-size:1.3rem;"></i>
+            </div>
+            <span class="caption">Icon</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-success">
+              <i class="mdi mdi-robot-outline" style="font-size:1.3rem;"></i>
+            </div>
+            <span class="caption">Icon</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-warning">
+              <i class="mdi mdi-crown-outline" style="font-size:1.3rem;"></i>
+            </div>
+            <span class="caption">Icon</span>
+          </div>
+        </div>
+      </div data-template="primitives.avatars.types">
+
+      <div class="subsection" data-template="primitives.avatars.sizes">
+        <div class="subsection-label">Sizes</div>
+        <div class="row" style="align-items:flex-end;">
+          <div class="label-item">
+            <div class="avatar avatar-xs avatar-primary">E</div>
+            <span class="caption">24</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-sm avatar-primary">EL</div>
+            <span class="caption">32</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-md avatar-primary">EL</div>
+            <span class="caption">40</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-lg avatar-primary">EL</div>
+            <span class="caption">56</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar avatar-xl avatar-primary">EL</div>
+            <span class="caption">80</span>
+          </div>
+        </div>
+      </div data-template="primitives.avatars.sizes">
+
+      <div class="subsection" data-template="primitives.avatars.with-status-indicator">
+        <div class="subsection-label">With status indicator</div>
+        <div class="row">
+          <div class="label-item">
+            <div class="avatar-wrap">
+              <div class="avatar avatar-md avatar-primary">EL</div>
+              <span class="status-dot status-online"></span>
+            </div>
+            <span class="caption">Online</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar-wrap">
+              <div class="avatar avatar-md avatar-muted">JD</div>
+              <span class="status-dot status-offline"></span>
+            </div>
+            <span class="caption">Offline</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar-wrap">
+              <div class="avatar avatar-md avatar-info">SA</div>
+              <span class="status-dot status-away"></span>
+            </div>
+            <span class="caption">Away</span>
+          </div>
+          <div class="label-item">
+            <div class="avatar-wrap">
+              <div class="avatar avatar-md avatar-rose">KW</div>
+              <span class="status-dot status-busy"></span>
+            </div>
+            <span class="caption">Busy</span>
+          </div>
+        </div>
+      </div data-template="primitives.avatars.with-status-indicator">
+
+      <div class="subsection" data-template="primitives.avatars.stacked-group">
+        <div class="subsection-label">Stacked group</div>
+        <div class="row">
+          <div style="display:flex;">
+            <div class="avatar avatar-md avatar-primary" style="border:2px solid var(--surface);margin-right:-10px;z-index:6;">EL</div>
+            <div class="avatar avatar-md avatar-info"    style="border:2px solid var(--surface);margin-right:-10px;z-index:5;">JD</div>
+            <div class="avatar avatar-md avatar-rose"   style="border:2px solid var(--surface);margin-right:-10px;z-index:4;">SA</div>
+            <div class="avatar avatar-md avatar-success" style="border:2px solid var(--surface);margin-right:-10px;z-index:3;">KW</div>
+            <div class="avatar avatar-md avatar-muted"  style="border:2px solid var(--surface);font-size:0.7rem;z-index:2;">+3</div>
+          </div>
+        </div>
+      </div data-template="primitives.avatars.stacked-group">
+    </section>
+
+    <!-- ========== BADGES ========== -->
+    <section class="component-section" id="badges">
+      <div class="section-header">
+        <h2 class="section-title">Badge</h2>
+        <span class="section-badge">@smui/badge</span>
+      </div>
+
+      <div class="subsection" data-template="primitives.badges.count-badges-on-icons">
+        <div class="subsection-label">Count badges on icons</div>
+        <div class="row">
+          <div class="label-item">
+            <div class="badge-wrap">
+              <i class="mdi mdi-bell-outline" style="font-size:28px;color:var(--primary);"></i>
+              <span class="badge badge-danger badge-overlay">3</span>
+            </div>
+            <span class="caption">Alerts</span>
+          </div>
+          <div class="label-item">
+            <div class="badge-wrap">
+              <i class="mdi mdi-email-outline" style="font-size:28px;color:var(--primary);"></i>
+              <span class="badge badge-info badge-overlay">12</span>
+            </div>
+            <span class="caption">Messages</span>
+          </div>
+          <div class="label-item">
+            <div class="badge-wrap">
+              <i class="mdi mdi-cart-outline" style="font-size:28px;color:var(--primary);"></i>
+              <span class="badge badge-success badge-overlay">99+</span>
+            </div>
+            <span class="caption">Cart</span>
+          </div>
+          <div class="label-item">
+            <div class="badge-wrap">
+              <i class="mdi mdi-account-multiple-outline" style="font-size:28px;color:var(--primary);"></i>
+              <span class="badge badge-rose badge-overlay">7</span>
+            </div>
+            <span class="caption">Followers</span>
+          </div>
+        </div>
+      </div data-template="primitives.badges.count-badges-on-icons">
+
+      <div class="subsection" data-template="primitives.badges.dot-badges-on-icons">
+        <div class="subsection-label">Dot badges on icons</div>
+        <div class="row">
+          <div class="badge-wrap">
+            <i class="mdi mdi-bell-outline" style="font-size:28px;color:var(--primary);"></i>
+            <span class="badge badge-dot badge-danger badge-overlay"></span>
+          </div>
+          <div class="badge-wrap">
+            <i class="mdi mdi-account-circle-outline" style="font-size:28px;color:var(--primary);"></i>
+            <span class="badge badge-dot badge-success badge-overlay"></span>
+          </div>
+          <div class="badge-wrap">
+            <i class="mdi mdi-cog-outline" style="font-size:28px;color:var(--primary);"></i>
+            <span class="badge badge-dot badge-warning badge-overlay"></span>
+          </div>
+          <div class="badge-wrap">
+            <i class="mdi mdi-chat-outline" style="font-size:28px;color:var(--primary);"></i>
+            <span class="badge badge-dot badge-info badge-overlay"></span>
+          </div>
+        </div>
+      </div data-template="primitives.badges.dot-badges-on-icons">
+
+      <div class="subsection" data-template="primitives.badges.badges-on-avatars">
+        <div class="subsection-label">Badges on avatars</div>
+        <div class="row">
+          <div class="label-item">
+            <div class="badge-wrap">
+              <div class="avatar avatar-md avatar-primary">EL</div>
+              <span class="badge badge-danger badge-overlay">5</span>
+            </div>
+            <span class="caption">Count</span>
+          </div>
+          <div class="label-item">
+            <div class="badge-wrap">
+              <div class="avatar avatar-md avatar-info">JD</div>
+              <span class="badge badge-dot badge-success badge-overlay"></span>
+            </div>
+            <span class="caption">Dot</span>
+          </div>
+          <div class="label-item">
+            <div class="badge-wrap">
+              <div class="avatar avatar-md avatar-rose">SA</div>
+              <span class="badge badge-warning badge-overlay">2</span>
+            </div>
+            <span class="caption">Count</span>
+          </div>
+        </div>
+      </div data-template="primitives.badges.badges-on-avatars">
+
+      <div class="subsection" data-template="primitives.badges.standalone-all-colors">
+        <div class="subsection-label">Standalone — all colors</div>
+        <div class="row">
+          <span class="badge badge-primary">Primary</span>
+          <span class="badge badge-muted">Muted</span>
+          <span class="badge badge-info">Info</span>
+          <span class="badge badge-success">Success</span>
+          <span class="badge badge-warning">Warning</span>
+          <span class="badge badge-danger">Danger</span>
+          <span class="badge badge-rose">Rose</span>
+        </div>
+      </div data-template="primitives.badges.standalone-all-colors">
+
+      <div class="subsection" data-template="primitives.badges.on-buttons">
+        <div class="subsection-label">On buttons</div>
+        <div class="row">
+          <div class="badge-wrap">
+            <button class="btn btn-raised btn-primary">
+              <i class="mdi mdi-bell-outline"></i> Alerts
+            </button>
+            <span class="badge badge-danger badge-overlay">4</span>
+          </div>
+          <div class="badge-wrap">
+            <button class="btn btn-outlined btn-muted">
+              <i class="mdi mdi-email-outline"></i> Inbox
+            </button>
+            <span class="badge badge-info badge-overlay">12</span>
+          </div>
+        </div>
+      </div data-template="primitives.badges.on-buttons">
+    </section>
+
+    <!-- ========== CHIPS ========== -->
+    <section class="component-section" id="chips">
+      <div class="section-header">
+        <h2 class="section-title">Chip</h2>
+        <span class="section-badge">@smui/chips</span>
+      </div>
+
+      <div class="subsection" data-template="primitives.chips.filled-default">
+        <div class="subsection-label">Filled (default)</div>
+        <div class="row">
+          <button class="chip chip-filled">Design</button>
+          <button class="chip chip-filled">Development</button>
+          <button class="chip chip-filled">Marketing</button>
+          <button class="chip chip-filled">Analytics</button>
+          <button class="chip chip-filled">Research</button>
+        </div>
+      </div data-template="primitives.chips.filled-default">
+
+      <div class="subsection" data-template="primitives.chips.outlined">
+        <div class="subsection-label">Outlined</div>
+        <div class="row">
+          <button class="chip chip-outlined">Design</button>
+          <button class="chip chip-outlined">Development</button>
+          <button class="chip chip-outlined">Marketing</button>
+          <button class="chip chip-outlined">Analytics</button>
+        </div>
+      </div data-template="primitives.chips.outlined">
+
+      <div class="subsection" data-template="primitives.chips.filter-chips-selected-state">
+        <div class="subsection-label">Filter chips (selected state)</div>
+        <div class="row">
+          <button class="chip chip-selected">
+            <i class="mdi mdi-check" style="font-size:1rem;margin-left:-2px;"></i> All
+          </button>
+          <button class="chip chip-filled">Design</button>
+          <button class="chip chip-filled">Development</button>
+          <button class="chip chip-selected">
+            <i class="mdi mdi-check" style="font-size:1rem;margin-left:-2px;"></i> Marketing
+          </button>
+          <button class="chip chip-filled">Analytics</button>
+        </div>
+      </div data-template="primitives.chips.filter-chips-selected-state">
+
+      <div class="subsection" data-template="primitives.chips.input-chips-deletable">
+        <div class="subsection-label">Input chips (deletable)</div>
+        <div class="row">
+          <button class="chip chip-filled">
+            Design <span class="chip-close"><i class="mdi mdi-close" style="font-size:.75rem;"></i></span>
+          </button>
+          <button class="chip chip-selected">
+            Development <span class="chip-close"><i class="mdi mdi-close" style="font-size:.75rem;"></i></span>
+          </button>
+          <button class="chip chip-filled">
+            Marketing <span class="chip-close"><i class="mdi mdi-close" style="font-size:.75rem;"></i></span>
+          </button>
+        </div>
+      </div data-template="primitives.chips.input-chips-deletable">
+
+      <div class="subsection" data-template="primitives.chips.with-leading-icon">
+        <div class="subsection-label">With leading icon</div>
+        <div class="row">
+          <button class="chip chip-filled">
+            <i class="mdi mdi-map-marker-outline"></i> New York
+          </button>
+          <button class="chip chip-filled">
+            <i class="mdi mdi-calendar-outline"></i> This week
+          </button>
+          <button class="chip chip-selected">
+            <i class="mdi mdi-check"></i>
+            <i class="mdi mdi-star-outline"></i> Starred
+          </button>
+          <button class="chip chip-outlined">
+            <i class="mdi mdi-filter-outline"></i> Filter
+          </button>
+          <button class="chip chip-outlined">
+            <i class="mdi mdi-tag-outline"></i> Label
+          </button>
+        </div>
+      </div data-template="primitives.chips.with-leading-icon">
+
+      <div class="subsection" data-template="primitives.chips.with-avatar">
+        <div class="subsection-label">With avatar</div>
+        <div class="row">
+          <button class="chip chip-filled" style="padding-left:4px;">
+            <span class="chip-avatar">EL</span> Eric Lacks
+          </button>
+          <button class="chip chip-filled" style="padding-left:4px;">
+            <span class="chip-avatar" style="background:var(--info);">JD</span> John Doe
+          </button>
+          <button class="chip chip-selected" style="padding-left:4px;">
+            <span class="chip-avatar" style="background:var(--rose);">SA</span>
+            Sara A.
+            <span class="chip-close"><i class="mdi mdi-close" style="font-size:.75rem;"></i></span>
+          </button>
+        </div>
+      </div data-template="primitives.chips.with-avatar">
+
+      <div class="subsection" data-template="primitives.chips.semantic-status-chips">
+        <div class="subsection-label">Semantic status chips</div>
+        <div class="row">
+          <button class="chip chip-success">
+            <i class="mdi mdi-check-circle-outline"></i> Active
+          </button>
+          <button class="chip chip-warning">
+            <i class="mdi mdi-clock-outline"></i> Pending
+          </button>
+          <button class="chip chip-danger">
+            <i class="mdi mdi-close-circle-outline"></i> Inactive
+          </button>
+          <button class="chip chip-info">
+            <i class="mdi mdi-pencil-outline"></i> Draft
+          </button>
+        </div>
+      </div data-template="primitives.chips.semantic-status-chips">
+    </section>
+
+  </main>
+</body>
+</html>

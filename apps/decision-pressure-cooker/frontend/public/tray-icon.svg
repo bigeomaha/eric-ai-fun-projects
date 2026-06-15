@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <!-- Main flame gradient -->
+    <linearGradient id="flameGrad" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="45%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <!-- Inner core glow -->
+    <radialGradient id="coreGlow" cx="50%" cy="55%" r="35%">
+      <stop offset="0%" stop-color="#fde68a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Outer ambient glow -->
+    <filter id="ambientGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Dark circle background -->
+  <circle cx="60" cy="60" r="56" fill="#0f0f14" stroke="#1a1a22" stroke-width="1.5"/>
+
+  <!-- Subtle ambient ring -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#ea580c" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- Outer flame body -->
+  <path d="
+    M 60 16
+    C 66 26, 86 38, 88 56
+    C 90 70, 82 86, 70 94
+    C 66 97, 54 97, 50 94
+    C 38 86, 30 70, 32 56
+    C 34 38, 54 26, 60 16
+    Z
+  " fill="url(#flameGrad)" filter="url(#ambientGlow)"/>
+
+  <!-- Inner flame highlight -->
+  <path d="
+    M 60 36
+    C 63 42, 74 50, 74 61
+    C 74 70, 69 78, 63 82
+    C 62 83, 58 83, 57 82
+    C 51 78, 46 70, 46 61
+    C 46 50, 57 42, 60 36
+    Z
+  " fill="url(#coreGlow)"/>
+
+  <!-- Question mark — the decision symbol -->
+  <text x="60" y="66" text-anchor="middle" dominant-baseline="central"
+        font-family="Inter, system-ui, sans-serif" font-size="30" font-weight="900"
+        fill="#fef3c7" opacity="0.92"
+        style="filter: drop-shadow(0 0 6px rgba(254,243,199,0.4))">?</text>
+
+  <!-- Two tiny sparks flying off — whimsy -->
+  <circle cx="82" cy="32" r="2" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="40" cy="28" r="1.5" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="86" cy="44" r="1.2" fill="#fde68a" opacity="0.4"/>
+</svg>

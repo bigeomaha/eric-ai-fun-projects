@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Pressure Cooker — Final Layout</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0f;
+    color: #e4e4e7;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero Header (from original app) ────────────────────────────────── */
+  .hero {
+    text-align: center;
+    padding: 48px 24px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(234,88,12,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #f97316;
+    border: 1px solid rgba(249,115,22,0.25);
+    background: rgba(249,115,22,0.06);
+    border-radius: 20px;
+    padding: 6px 16px;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .hero h1 {
+    font-size: 44px;
+    font-weight: 900;
+    color: #fafafa;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero .subtitle {
+    font-size: 15px;
+    color: #71717a;
+    max-width: 480px;
+    margin: 16px auto 0;
+    line-height: 1.6;
+  }
+
+  /* Question bar */
+  .question-section {
+    text-align: center;
+    padding: 0 24px 36px;
+  }
+  .question-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #52525b;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .question-text {
+    font-size: 16px;
+    color: #d4d4d8;
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ── Verdict Section (prominent) ────────────────────────────────────── */
+  .verdict-section {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+    min-height: 420px;
+  }
+
+  /* Radar (left) */
+  .radar-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .radar-container {
+    position: relative;
+    width: 400px;
+    height: 380px;
+  }
+  .radar-svg { width: 100%; height: 100%; }
+  .radar-grid {
+    fill: none;
+    stroke: #1a1a1f;
+    stroke-width: 0.5;
+  }
+  .radar-grid-mid {
+    fill: none;
+    stroke: #141418;
+    stroke-width: 0.5;
+    stroke-dasharray: 3 3;
+  }
+  .radar-axis {
+    stroke: #1a1a1f;
+    stroke-width: 0.5;
+  }
+  .radar-polygon {
+    fill: rgba(220, 38, 38, 0.06);
+    stroke: rgba(239, 68, 68, 0.35);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.12));
+  }
+  .radar-point {
+    r: 5;
+    stroke-width: 2;
+    stroke: #0a0a0f;
+    cursor: pointer;
+    transition: r 0.2s ease;
+  }
+  .radar-point:hover { r: 7; }
+  .radar-point.red { fill: #ef4444; filter: drop-shadow(0 0 4px rgba(239,68,68,0.5)); }
+  .radar-point.green { fill: #22c55e; filter: drop-shadow(0 0 4px rgba(34,197,94,0.5)); }
+  .radar-point.amber { fill: #f59e0b; filter: drop-shadow(0 0 4px rgba(245,158,11,0.5)); }
+  .radar-point.blue { fill: #3b82f6; filter: drop-shadow(0 0 4px rgba(59,130,246,0.5)); }
+  .radar-point.purple { fill: #a855f7; filter: drop-shadow(0 0 4px rgba(168,85,247,0.5)); }
+  .radar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s;
+  }
+  .radar-label-group:hover .radar-label { opacity: 0.8; text-decoration: underline; }
+  .radar-label-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+  }
+  #radarCenter:hover .radar-center-label { fill: #f97316; }
+  #radarCenter:hover .radar-center-number { fill: #f97316; }
+  #radarCenter:hover .radar-center-pct { fill: #f97316; }
+  .radar-center-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 38px;
+    font-weight: 900;
+    fill: #fafafa;
+    letter-spacing: -1px;
+  }
+  .radar-center-pct {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    fill: #52525b;
+    font-weight: 900;
+  }
+  .radar-center-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    fill: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  /* Verdict panel (right) */
+  .verdict-panel {
+    background: #111114;
+    border: 1px solid #1c1c20;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .verdict-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, #ef4444, #f97316, #f59e0b);
+  }
+
+  .verdict-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .verdict-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .verdict-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 20px rgba(220,38,38,0.2);
+  }
+  .verdict-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #dc2626;
+    font-weight: 700;
+  }
+  .verdict-subtitle {
+    font-size: 11px;
+    color: #3f3f46;
+    margin-top: 2px;
+  }
+
+  /* Semicircle gauge */
+  .verdict-gauge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .verdict-gauge svg { width: 80px; height: 46px; }
+  .vg-track { fill: none; stroke: #1c1c20; stroke-width: 7; stroke-linecap: round; }
+  .vg-fill { fill: none; stroke: url(#vgGrad); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 126; stroke-dashoffset: 24; }
+  .verdict-gauge-text .pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fafafa;
+  }
+  .verdict-gauge-text .pct span { font-size: 11px; color: #52525b; }
+  .verdict-gauge-text .conv {
+    font-size: 9px;
+    color: #f59e0b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  .verdict-recommendation {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fafafa;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1c1c20;
+  }
+  .verdict-rationale {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .verdict-tradeoffs h4,
+  .verdict-watchout h4 {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #3f3f46;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .verdict-tradeoffs ul {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .verdict-tradeoffs li {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+    padding: 5px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .verdict-tradeoffs li::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #f97316;
+    position: absolute;
+    left: 0; top: 12px;
+  }
+
+  .verdict-flip {
+    background: rgba(239,68,68,0.04);
+    border: 1px solid rgba(239,68,68,0.12);
+    border-radius: 10px;
+    padding: 12px 16px;
+  }
+  .verdict-flip .flip-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ef4444;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .verdict-flip p {
+    font-size: 12px;
+    color: #a1a1aa;
+    line-height: 1.6;
+  }
+
+  .verdict-dominant {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #3f3f46;
+    padding-top: 14px;
+    border-top: 1px solid #18181b;
+  }
+  .verdict-dominant .dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; }
+  .verdict-dominant strong { color: #52525b; font-weight: 600; }
+
+  /* ── Agent Cards Row ────────────────────────────────────────────────── */
+  .agents-section {
+    max-width: 1200px;
+    margin: 28px auto 0;
+    padding: 0 32px;
+  }
+  .agents-section-header {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #3f3f46;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .agents-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+
+  /* Individual agent card */
+  .agent-card {
+    background: #111114;
+    border: 1px solid #1c1c20;
+    border-radius: 12px;
+    padding: 18px 16px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .agent-card:hover {
+    border-color: #27272a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .agent-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+  .agent-card.red::before { background: #ef4444; }
+  .agent-card.green::before { background: #22c55e; }
+  .agent-card.amber::before { background: #f59e0b; }
+  .agent-card.blue::before { background: #3b82f6; }
+  .agent-card.purple::before { background: #a855f7; }
+
+  .agent-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .agent-card-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .agent-card-emoji { font-size: 18px; }
+  .agent-card-name { font-weight: 700; font-size: 12px; }
+  .agent-card.red .agent-card-name { color: #ef4444; }
+  .agent-card.green .agent-card-name { color: #22c55e; }
+  .agent-card.amber .agent-card-name { color: #f59e0b; }
+  .agent-card.blue .agent-card-name { color: #3b82f6; }
+  .agent-card.purple .agent-card-name { color: #a855f7; }
+
+  .agent-card-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 1px solid;
+  }
+  .agent-card.red .agent-card-badge { color: #ef4444; border-color: rgba(239,68,68,0.2); background: rgba(239,68,68,0.06); }
+  .agent-card.green .agent-card-badge { color: #22c55e; border-color: rgba(34,197,94,0.2); background: rgba(34,197,94,0.06); }
+  .agent-card.amber .agent-card-badge { color: #f59e0b; border-color: rgba(245,158,11,0.2); background: rgba(245,158,11,0.06); }
+  .agent-card.blue .agent-card-badge { color: #3b82f6; border-color: rgba(59,130,246,0.2); background: rgba(59,130,246,0.06); }
+  .agent-card.purple .agent-card-badge { color: #a855f7; border-color: rgba(168,85,247,0.2); background: rgba(168,85,247,0.06); }
+
+  /* Confidence bar */
+  .agent-conf-bar {
+    height: 2px;
+    background: #1c1c20;
+    border-radius: 1px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .agent-conf-fill { height: 100%; border-radius: 1px; }
+  .agent-card.red .agent-conf-fill { background: #ef4444; }
+  .agent-card.green .agent-conf-fill { background: #22c55e; }
+  .agent-card.amber .agent-conf-fill { background: #f59e0b; }
+  .agent-card.blue .agent-conf-fill { background: #3b82f6; }
+  .agent-card.purple .agent-conf-fill { background: #a855f7; }
+
+  .agent-card-angle {
+    font-size: 11px;
+    color: #a1a1aa;
+    line-height: 1.55;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .agent-card-verdict {
+    padding-top: 10px;
+    border-top: 1px solid #18181b;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #52525b;
+    font-style: italic;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ── Selected card state ─────────────────────────────────────────────── */
+  .agent-card.selected {
+    border-color: #3f3f46;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .agent-card.selected.red { border-color: rgba(239,68,68,0.4); box-shadow: 0 0 16px rgba(239,68,68,0.1); }
+  .agent-card.selected.green { border-color: rgba(34,197,94,0.4); box-shadow: 0 0 16px rgba(34,197,94,0.1); }
+  .agent-card.selected.amber { border-color: rgba(245,158,11,0.4); box-shadow: 0 0 16px rgba(245,158,11,0.1); }
+  .agent-card.selected.blue { border-color: rgba(59,130,246,0.4); box-shadow: 0 0 16px rgba(59,130,246,0.1); }
+  .agent-card.selected.purple { border-color: rgba(168,85,247,0.4); box-shadow: 0 0 16px rgba(168,85,247,0.1); }
+
+  /* ── Agent detail panel (replaces verdict) ──────────────────────────── */
+  .agent-detail-panel {
+    background: #111114;
+    border: 1px solid #1c1c20;
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: none;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent-detail-panel.active { display: flex; }
+  .agent-detail-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+  .agent-detail-panel[data-color="red"]::before { background: #ef4444; }
+  .agent-detail-panel[data-color="green"]::before { background: #22c55e; }
+  .agent-detail-panel[data-color="amber"]::before { background: #f59e0b; }
+  .agent-detail-panel[data-color="blue"]::before { background: #3b82f6; }
+  .agent-detail-panel[data-color="purple"]::before { background: #a855f7; }
+
+  .agent-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #52525b;
+    cursor: pointer;
+    margin-bottom: 16px;
+    padding: 4px 0;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    font-family: 'Inter', sans-serif;
+  }
+  .agent-detail-back:hover { color: #a1a1aa; }
+  .agent-detail-back svg { width: 14px; height: 14px; }
+
+  .agent-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .agent-detail-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .agent-detail-emoji {
+    font-size: 24px;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .agent-detail-panel[data-color="red"] .agent-detail-emoji { background: rgba(239,68,68,0.1); }
+  .agent-detail-panel[data-color="green"] .agent-detail-emoji { background: rgba(34,197,94,0.1); }
+  .agent-detail-panel[data-color="amber"] .agent-detail-emoji { background: rgba(245,158,11,0.1); }
+  .agent-detail-panel[data-color="blue"] .agent-detail-emoji { background: rgba(59,130,246,0.1); }
+  .agent-detail-panel[data-color="purple"] .agent-detail-emoji { background: rgba(168,85,247,0.1); }
+
+  .agent-detail-name { font-weight: 700; font-size: 16px; }
+  .agent-detail-panel[data-color="red"] .agent-detail-name { color: #ef4444; }
+  .agent-detail-panel[data-color="green"] .agent-detail-name { color: #22c55e; }
+  .agent-detail-panel[data-color="amber"] .agent-detail-name { color: #f59e0b; }
+  .agent-detail-panel[data-color="blue"] .agent-detail-name { color: #3b82f6; }
+  .agent-detail-panel[data-color="purple"] .agent-detail-name { color: #a855f7; }
+
+  .agent-detail-conf { font-size: 11px; color: #52525b; margin-top: 2px; }
+
+  .agent-detail-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+  .agent-detail-panel[data-color="red"] .agent-detail-badge { color: #ef4444; border-color: rgba(239,68,68,0.25); background: rgba(239,68,68,0.06); }
+  .agent-detail-panel[data-color="green"] .agent-detail-badge { color: #22c55e; border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.06); }
+  .agent-detail-panel[data-color="amber"] .agent-detail-badge { color: #f59e0b; border-color: rgba(245,158,11,0.25); background: rgba(245,158,11,0.06); }
+  .agent-detail-panel[data-color="blue"] .agent-detail-badge { color: #3b82f6; border-color: rgba(59,130,246,0.25); background: rgba(59,130,246,0.06); }
+  .agent-detail-panel[data-color="purple"] .agent-detail-badge { color: #a855f7; border-color: rgba(168,85,247,0.25); background: rgba(168,85,247,0.06); }
+
+  .agent-detail-angle {
+    font-size: 14px;
+    color: #a1a1aa;
+    line-height: 1.65;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  .agent-detail-conf-bar {
+    height: 3px;
+    background: #1c1c20;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .agent-detail-conf-fill { height: 100%; border-radius: 2px; }
+  .agent-detail-panel[data-color="red"] .agent-detail-conf-fill { background: #ef4444; }
+  .agent-detail-panel[data-color="green"] .agent-detail-conf-fill { background: #22c55e; }
+  .agent-detail-panel[data-color="amber"] .agent-detail-conf-fill { background: #f59e0b; }
+  .agent-detail-panel[data-color="blue"] .agent-detail-conf-fill { background: #3b82f6; }
+  .agent-detail-panel[data-color="purple"] .agent-detail-conf-fill { background: #a855f7; }
+
+  .agent-detail-points {
+    list-style: none;
+    margin-bottom: 16px;
+  }
+  .agent-detail-points li {
+    font-size: 13px;
+    color: #a1a1aa;
+    line-height: 1.6;
+    padding: 8px 0;
+    padding-left: 16px;
+    position: relative;
+    border-bottom: 1px solid #18181b;
+  }
+  .agent-detail-points li:last-child { border-bottom: none; }
+  .agent-detail-points li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    position: absolute;
+    left: 0; top: 14px;
+  }
+  .agent-detail-panel[data-color="red"] .agent-detail-points li::before { background: #ef4444; }
+  .agent-detail-panel[data-color="green"] .agent-detail-points li::before { background: #22c55e; }
+  .agent-detail-panel[data-color="amber"] .agent-detail-points li::before { background: #f59e0b; }
+  .agent-detail-panel[data-color="blue"] .agent-detail-points li::before { background: #3b82f6; }
+  .agent-detail-panel[data-color="purple"] .agent-detail-points li::before { background: #a855f7; }
+
+  .agent-detail-verdict-section {
+    border-top: 1px solid #1c1c20;
+    padding-top: 14px;
+  }
+  .agent-detail-verdict-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #71717a;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .agent-detail-risk {
+    display: flex;
+    gap: 6px;
+    font-size: 12px;
+    color: #52525b;
+  }
+  .agent-detail-risk-label { font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+  .agent-detail-panel[data-color="red"] .agent-detail-risk-label { color: #ef4444; }
+  .agent-detail-panel[data-color="green"] .agent-detail-risk-label { color: #22c55e; }
+  .agent-detail-panel[data-color="amber"] .agent-detail-risk-label { color: #f59e0b; }
+  .agent-detail-panel[data-color="blue"] .agent-detail-risk-label { color: #3b82f6; }
+  .agent-detail-panel[data-color="purple"] .agent-detail-risk-label { color: #a855f7; }
+
+  /* Hide verdict when agent is shown */
+  .verdict-panel.hidden { display: none; }
+
+  /* ── Footer ─────────────────────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 32px 0;
+    font-size: 11px;
+    color: #27272a;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Hero Header ──────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="chip">Multi-Agent AI &bull; 5 Perspectives &bull; 1 Verdict</div>
+  <h1>Decision <span>Pressure Cooker</span> &#x1F525;</h1>
+  <p class="subtitle">
+    Five specialist AI agents attack your decision from every angle.
+    Then a Synthesizer weighs them all and gives you a final verdict.
+  </p>
+</div>
+
+<!-- ── Question ─────────────────────────────────────────────────────── -->
+<div class="question-section">
+  <div class="question-label">Analyzing</div>
+  <div class="question-text">"Should I leave my stable corporate job to start my own company?"</div>
+</div>
+
+<!-- ── Verdict + Radar ──────────────────────────────────────────────── -->
+<div class="verdict-section">
+  <!-- Radar chart -->
+  <div class="radar-area">
+    <div class="radar-container">
+      <svg class="radar-svg" viewBox="-20 0 440 400">
+        <!-- Grid pentagons -->
+        <polygon class="radar-grid" points="200,162.5 235.7,188.4 222.1,230.3 177.9,230.3 164.3,188.4" />
+        <polygon class="radar-grid-mid" points="200,125 271.3,176.8 244.1,260.7 155.9,260.7 128.7,176.8" />
+        <polygon class="radar-grid" points="200,87.5 307,165.2 266.1,291 133.9,291 93,165.2" />
+        <polygon class="radar-grid" points="200,50 342.7,153.6 288.2,321.4 111.8,321.4 57.3,153.6" />
+
+        <!-- Axis lines -->
+        <line class="radar-axis" x1="200" y1="200" x2="200" y2="50" />
+        <line class="radar-axis" x1="200" y1="200" x2="342.7" y2="153.6" />
+        <line class="radar-axis" x1="200" y1="200" x2="288.2" y2="321.4" />
+        <line class="radar-axis" x1="200" y1="200" x2="111.8" y2="321.4" />
+        <line class="radar-axis" x1="200" y1="200" x2="57.3" y2="153.6" />
+
+        <!-- Confidence polygon -->
+        <polygon class="radar-polygon"
+                 points="200,77 305.6,165.7 268.8,294.7 127.7,299.5 88.7,163.8" />
+
+        <!-- Data points -->
+        <circle class="radar-point red" cx="200" cy="77" />
+        <circle class="radar-point green" cx="305.6" cy="165.7" />
+        <circle class="radar-point amber" cx="268.8" cy="294.7" />
+        <circle class="radar-point blue" cx="127.7" cy="299.5" />
+        <circle class="radar-point purple" cx="88.7" cy="163.8" />
+
+        <!-- Labels (clickable) -->
+        <g class="radar-label-group" data-agent="0" style="cursor:pointer">
+          <text class="radar-label" x="200" y="30" text-anchor="middle" fill="#ef4444">Devil's Advocate</text>
+          <text class="radar-label-pct" x="200" y="42" text-anchor="middle" fill="#52525b">82%</text>
+        </g>
+
+        <g class="radar-label-group" data-agent="1" style="cursor:pointer">
+          <text class="radar-label" x="362" y="150" text-anchor="start" fill="#22c55e">Optimist</text>
+          <text class="radar-label-pct" x="362" y="162" text-anchor="start" fill="#52525b">74%</text>
+        </g>
+
+        <g class="radar-label-group" data-agent="2" style="cursor:pointer">
+          <text class="radar-label" x="300" y="345" text-anchor="start" fill="#f59e0b">Pessimist</text>
+          <text class="radar-label-pct" x="300" y="357" text-anchor="start" fill="#52525b">78%</text>
+        </g>
+
+        <g class="radar-label-group" data-agent="3" style="cursor:pointer">
+          <text class="radar-label" x="100" y="345" text-anchor="end" fill="#3b82f6">Pragmatist</text>
+          <text class="radar-label-pct" x="100" y="357" text-anchor="end" fill="#52525b">82%</text>
+        </g>
+
+        <g class="radar-label-group" data-agent="4" style="cursor:pointer">
+          <text class="radar-label" x="38" y="150" text-anchor="end" fill="#a855f7">Wildcard</text>
+          <text class="radar-label-pct" x="38" y="162" text-anchor="end" fill="#52525b">78%</text>
+        </g>
+
+        <!-- Center (clickable — returns to verdict) -->
+        <g id="radarCenter" style="cursor:pointer">
+          <circle cx="200" cy="200" r="42" fill="transparent" />
+          <text class="radar-center-number" x="193" y="205" text-anchor="middle">81</text>
+          <text class="radar-center-pct" x="218" y="205" text-anchor="start">%</text>
+          <text class="radar-center-label" x="200" y="222" text-anchor="middle">Final Verdict</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Verdict panel (default view) -->
+  <div class="verdict-panel" id="verdictPanel">
+    <div class="verdict-header">
+      <div class="verdict-header-left">
+        <div class="verdict-icon">&#x1F9E0;</div>
+        <div>
+          <div class="verdict-title">Final Verdict</div>
+          <div class="verdict-subtitle">Synthesized from all 5 perspectives</div>
+        </div>
+      </div>
+      <div class="verdict-gauge">
+        <svg viewBox="0 0 100 56">
+          <defs>
+            <linearGradient id="vgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#991b1b" />
+              <stop offset="60%" stop-color="#dc2626" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+          </defs>
+          <path class="vg-track" d="M 10 50 A 40 40 0 0 1 90 50" />
+          <path class="vg-fill" d="M 10 50 A 40 40 0 0 1 90 50" />
+        </svg>
+        <div class="verdict-gauge-text">
+          <div class="pct">81<span>%</span></div>
+          <div class="conv">Moderate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verdict-recommendation">
+      Proceed — but only after completing a 90-day validation sprint while still employed. Build the first paying customer before you resign.
+    </div>
+
+    <div class="verdict-rationale">
+      The entrepreneurial path has genuine merit, but every agent flagged unvalidated assumptions. De-risk by treating the next 90 days as a proof-of-concept while keeping your salary as runway.
+    </div>
+
+    <div class="verdict-tradeoffs">
+      <h4>Trade-offs to Accept</h4>
+      <ul>
+        <li>Accept a slower timeline for significantly lower financial risk</li>
+        <li>Moonlighting creates real dual cognitive load you must actively manage</li>
+        <li>Your current employer may notice reduced engagement during the sprint</li>
+      </ul>
+    </div>
+
+    <div class="verdict-watchout">
+      <div class="verdict-flip">
+        <div class="flip-label">Flip Condition</div>
+        <p>If you cannot secure a single paying customer or LOI within 90 days of part-time effort, treat that as a strong signal to stay.</p>
+      </div>
+    </div>
+
+    <div class="verdict-dominant">
+      <span class="dot"></span>
+      Dominant voice: <strong>&nbsp;Devil's Advocate</strong>
+    </div>
+  </div>
+
+  <!-- Agent detail panel (hidden by default, swaps with verdict) -->
+  <div class="agent-detail-panel" id="agentDetailPanel">
+    <button class="agent-detail-back" id="backToVerdict">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Final Verdict
+    </button>
+    <div class="agent-detail-header">
+      <div class="agent-detail-info">
+        <div class="agent-detail-emoji" id="adEmoji"></div>
+        <div>
+          <div class="agent-detail-name" id="adName"></div>
+          <div class="agent-detail-conf" id="adConf"></div>
+        </div>
+      </div>
+      <span class="agent-detail-badge" id="adBadge"></span>
+    </div>
+    <div class="agent-detail-angle" id="adAngle"></div>
+    <div class="agent-detail-conf-bar">
+      <div class="agent-detail-conf-fill" id="adConfFill"></div>
+    </div>
+    <ul class="agent-detail-points" id="adPoints"></ul>
+    <div class="agent-detail-verdict-section">
+      <div class="agent-detail-verdict-text" id="adVerdict"></div>
+      <div class="agent-detail-risk">
+        <span class="agent-detail-risk-label">Key Risk:</span>
+        <span id="adRisk"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 5 Agent Cards ────────────────────────────────────────────────── -->
+<div class="agents-section">
+  <div class="agents-section-header">The 5 Perspectives</div>
+  <div class="agents-row">
+
+    <!-- Devil's Advocate -->
+    <div class="agent-card red">
+      <div class="agent-card-header">
+        <div class="agent-card-info">
+          <span class="agent-card-emoji">&#x1F608;</span>
+          <span class="agent-card-name">Devil's Advocate</span>
+        </div>
+        <span class="agent-card-badge">82%</span>
+      </div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:82%"></div></div>
+      <div class="agent-card-angle">You're romanticizing entrepreneurship while underweighting the structural advantages you're about to permanently surrender.</div>
+      <div class="agent-card-verdict">"The math you haven't done will cost you more than the raise pays."</div>
+    </div>
+
+    <!-- Optimist -->
+    <div class="agent-card green">
+      <div class="agent-card-header">
+        <div class="agent-card-info">
+          <span class="agent-card-emoji">&#x1F680;</span>
+          <span class="agent-card-name">Optimist</span>
+        </div>
+        <span class="agent-card-badge">74%</span>
+      </div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:74%"></div></div>
+      <div class="agent-card-angle">Corporate stability is often a gilded cage — the real risk is spending 10 years building someone else's compounding returns.</div>
+      <div class="agent-card-verdict">"The visible tip of the salary bump is the smaller iceberg."</div>
+    </div>
+
+    <!-- Pessimist -->
+    <div class="agent-card amber">
+      <div class="agent-card-header">
+        <div class="agent-card-info">
+          <span class="agent-card-emoji">&#x26A0;&#xFE0F;</span>
+          <span class="agent-card-name">Pessimist</span>
+        </div>
+        <span class="agent-card-badge">78%</span>
+      </div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:78%"></div></div>
+      <div class="agent-card-angle">The gap between your mental model of entrepreneurship and daily operational reality will be your primary adversary.</div>
+      <div class="agent-card-verdict">"Most founders don't fail from bad ideas — they fail from bad timing."</div>
+    </div>
+
+    <!-- Pragmatist -->
+    <div class="agent-card blue">
+      <div class="agent-card-header">
+        <div class="agent-card-info">
+          <span class="agent-card-emoji">&#x2699;&#xFE0F;</span>
+          <span class="agent-card-name">Pragmatist</span>
+        </div>
+        <span class="agent-card-badge">82%</span>
+      </div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:82%"></div></div>
+      <div class="agent-card-angle">This decision lives or dies on runway math and a validated customer, not passion or potential.</div>
+      <div class="agent-card-verdict">"Run the numbers before you run toward the dream."</div>
+    </div>
+
+    <!-- Wildcard -->
+    <div class="agent-card purple">
+      <div class="agent-card-header">
+        <div class="agent-card-info">
+          <span class="agent-card-emoji">&#x1F0CF;</span>
+          <span class="agent-card-name">Wildcard</span>
+        </div>
+        <span class="agent-card-badge">78%</span>
+      </div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:78%"></div></div>
+      <div class="agent-card-angle">This isn't a career decision — it's a question about whether you've already mentally quit and are waiting for permission.</div>
+      <div class="agent-card-verdict">"You're treating this as a spreadsheet problem when it's a mirror problem."</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">Decision Pressure Cooker &bull; Multi-Agent AI &bull; Provider-Agnostic</div>
+
+<script>
+const AGENTS = [
+  {
+    id: 'devils-advocate', color: 'red', emoji: '\u{1F608}', name: "Devil's Advocate",
+    confidence: 82,
+    angle: "You're romanticizing entrepreneurship while underweighting the structural advantages you're about to permanently surrender.",
+    points: [
+      "The salary increase looks real on paper, but you haven't stress-tested it against cost-of-living delta — a 20% raise in a city with 35% higher housing costs is a pay cut disguised as a promotion.",
+      "You are implicitly assuming this employer is stable, the role is as described, and your leverage holds post-relocation — once you've signed a lease in a new city, you have none.",
+      "Startup failure rates remain at 90% within 5 years — survivorship bias from consuming founder success stories is distorting your risk model.",
+      "Golden handcuffs exist because the alternatives genuinely are worse for most people — that's not cynicism, it's base rates."
+    ],
+    verdict: '"The math you haven\'t done will cost you more than the raise pays."',
+    keyRisk: "Confirmation bias from consuming founder success stories without studying the 90% who failed silently."
+  },
+  {
+    id: 'optimist', color: 'green', emoji: '\u{1F680}', name: "Optimist",
+    confidence: 74,
+    angle: "Corporate stability is often a gilded cage — the real risk is spending 10 years building someone else's compounding returns instead of your own.",
+    points: [
+      "Higher pay in a new role triggers a cascade: better savings rate, stronger professional network, faster promotions — the first-year salary bump is just the visible tip of a much larger iceberg.",
+      "New environments create identity-level momentum — you shed limiting social scripts from your current context and enter a market where no one has pre-categorized your ceiling.",
+      "Asymmetric bet: worst case you return to employment with founder experience on your resume, which is increasingly valued even by traditional employers.",
+      "The compounding value of equity ownership — even small amounts — dwarfs salary increases over a 10-year horizon."
+    ],
+    verdict: '"The visible tip of the salary bump is the smaller iceberg."',
+    keyRisk: "Overestimating your risk tolerance before it has actually been tested under real financial pressure."
+  },
+  {
+    id: 'pessimist', color: 'amber', emoji: '\u{26A0}\u{FE0F}', name: "Pessimist",
+    confidence: 78,
+    angle: "The gap between your mental model of entrepreneurship and the daily operational reality will be your primary adversary, not competition or funding.",
+    points: [
+      "Loss of employer-backed health insurance, retirement matching, and paid leave compounds faster than most people calculate — the true cost of independence is 30-40% above your raw salary loss.",
+      "Social isolation of solo founding is consistently underestimated by first-time founders — your existing support network cannot simply be replicated.",
+      "Runway depletion creates decision-making under duress — the worst possible context for making pivots, which are the most consequential decisions a founder makes.",
+      "Your existing social infrastructure — the friends you call when things go wrong, the doctor who knows your history — all of that resets."
+    ],
+    verdict: '"Most founders don\'t fail from bad ideas — they fail from bad timing."',
+    keyRisk: "Underestimating the psychological toll of sustained uncertainty on both you and your relationships."
+  },
+  {
+    id: 'pragmatist', color: 'blue', emoji: '\u{2699}\u{FE0F}', name: "Pragmatist",
+    confidence: 82,
+    angle: "This decision lives or dies on runway math and a validated customer, not passion or potential.",
+    points: [
+      "Calculate exact net gain: take the salary delta, subtract federal/state tax difference, subtract realistic cost-of-living delta — many relocations yield under $8,000 real annual gain after adjustments.",
+      "Map the upfront cash burn: moving costs ($3,000–$10,000), security deposit + first/last month rent, 30–90 day overlap period where you're paying two rents or hotels.",
+      "Do you have a paying customer or LOI? Without one, this is a hobby with consequences — not a business.",
+      "Set a hard deadline: if X doesn't happen by Y date, revert to plan B. Without a tripwire you'll boil slowly."
+    ],
+    verdict: '"Run the numbers before you run toward the dream."',
+    keyRisk: "Analysis paralysis masking a fear of commitment — running numbers forever is also a decision (to stay)."
+  },
+  {
+    id: 'wildcard', color: 'purple', emoji: '\u{1F0CF}', name: "Wildcard",
+    confidence: 78,
+    angle: "This isn't a career decision — it's a question about whether you've already mentally quit and are just waiting for permission.",
+    points: [
+      "Evaluate in 'optionality units' — which path creates more future choices, not more current comfort? Relocating collapses your social capital network, which took years to compound.",
+      "From evolutionary biology: organisms that migrate successfully do so with their colony, not alone. The lone migration is high-risk, high-mortality behavior. Who exactly is moving with you?",
+      "The question you're really asking is about identity, not income — no spreadsheet resolves an identity crisis.",
+      "You're treating this as a geography problem when it's actually an identity liquidity problem — you can't arbitrage your way to self-knowledge."
+    ],
+    verdict: '"You\'re treating this as a spreadsheet problem when it\'s a mirror problem."',
+    keyRisk: "Using philosophical reframing to avoid making a concrete, time-bound decision."
+  }
+];
+
+const verdictPanel = document.getElementById('verdictPanel');
+const agentDetailPanel = document.getElementById('agentDetailPanel');
+const backBtn = document.getElementById('backToVerdict');
+const cards = document.querySelectorAll('.agent-card');
+
+function showAgent(agent) {
+  agentDetailPanel.setAttribute('data-color', agent.color);
+  document.getElementById('adEmoji').textContent = agent.emoji;
+  document.getElementById('adName').textContent = agent.name;
+  document.getElementById('adConf').textContent = `Confidence: ${agent.confidence}%`;
+  document.getElementById('adBadge').textContent = `${agent.confidence}%`;
+  document.getElementById('adAngle').textContent = agent.angle;
+  document.getElementById('adConfFill').style.width = `${agent.confidence}%`;
+  document.getElementById('adVerdict').textContent = agent.verdict;
+  document.getElementById('adRisk').textContent = agent.keyRisk;
+
+  const pointsList = document.getElementById('adPoints');
+  pointsList.innerHTML = '';
+  agent.points.forEach(p => {
+    const li = document.createElement('li');
+    li.textContent = p;
+    pointsList.appendChild(li);
+  });
+
+  verdictPanel.classList.add('hidden');
+  agentDetailPanel.classList.add('active');
+
+  cards.forEach(c => c.classList.remove('selected'));
+}
+
+function showVerdict() {
+  verdictPanel.classList.remove('hidden');
+  agentDetailPanel.classList.remove('active');
+  cards.forEach(c => c.classList.remove('selected'));
+}
+
+cards.forEach((card, i) => {
+  card.addEventListener('click', () => {
+    cards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    showAgent(AGENTS[i]);
+  });
+});
+
+backBtn.addEventListener('click', showVerdict);
+
+// Radar points select agents
+document.querySelectorAll('.radar-point').forEach((point, i) => {
+  point.addEventListener('click', () => {
+    cards.forEach(c => c.classList.remove('selected'));
+    cards[i].classList.add('selected');
+    showAgent(AGENTS[i]);
+  });
+});
+
+// Radar labels select agents
+document.querySelectorAll('.radar-label-group').forEach(g => {
+  g.addEventListener('click', () => {
+    const i = parseInt(g.getAttribute('data-agent'));
+    cards.forEach(c => c.classList.remove('selected'));
+    cards[i].classList.add('selected');
+    showAgent(AGENTS[i]);
+  });
+});
+
+// Radar center returns to verdict
+document.getElementById('radarCenter').addEventListener('click', showVerdict);
+</script>
+
+</body>
+</html>

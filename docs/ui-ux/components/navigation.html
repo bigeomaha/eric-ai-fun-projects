@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigation — UI/UX Templates</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────────────────────── */
+    :root {
+      --primary:  #1C1510;
+      --muted:    #7A6A52;
+      --subtle:   #A8957A;
+      --border:   #C4B99A;
+      --surface:  #FDF8F0;
+      --bg:       #EDE8DC;
+      --success:  #5C7A52;
+      --warning:  #B8860B;
+      --danger:   #8B3A3A;
+      --info:     #5B7FA6;
+      --rose:     #9B5A6A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg);
+      color: var(--primary);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar nav ───────────────────────────────────────────── */
+    .sidebar {
+      width: 220px;
+      min-height: 100vh;
+      background: var(--primary);
+      color: var(--surface);
+      position: sticky;
+      top: 0;
+      padding: 32px 0;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .sidebar-section {
+      padding: 16px 20px 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      font-size: 0.85rem;
+      color: rgba(253,248,240,0.72);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar a:hover { background: rgba(255,255,255,0.07); color: var(--surface); }
+    .sidebar a.active { color: var(--surface); background: rgba(255,255,255,0.12); }
+    .sidebar a i { font-size: 1.1rem; }
+
+    /* ── Main content ──────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      padding: 48px;
+      max-width: 900px;
+    }
+
+    .page-title   { font-size: 2rem; font-weight: 700; margin-bottom: 6px; }
+    .page-subtitle { font-size: 0.95rem; color: var(--muted); margin-bottom: 48px; }
+
+    .section { margin-bottom: 56px; scroll-margin-top: 32px; }
+    .section-title {
+      font-size: 1.25rem; font-weight: 700;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 4px;
+    }
+    .section-desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; }
+
+    .variant-label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--subtle); margin: 20px 0 10px;
+    }
+
+    .demo-stage {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 24px;
+    }
+    .demo-stage.dark-bg { background: var(--primary); }
+    .demo-stage.no-pad  { padding: 0; overflow: hidden; }
+
+    .col { display: flex; flex-direction: column; gap: 12px; }
+
+    /* ════════════════════════════════════════════════════════════
+       TABS
+    ════════════════════════════════════════════════════════════ */
+
+    /* — Underline tabs — */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      gap: 0;
+      position: relative;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      position: relative;
+      transition: color 0.15s;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: var(--primary);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+    }
+    .tab:hover { color: var(--primary); }
+    .tab.active { color: var(--primary); }
+    .tab.active::after { transform: scaleX(1); }
+    .tab i { font-size: 1rem; }
+
+    /* badge inside tab */
+    .tab-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 99px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--border);
+      color: var(--muted);
+      line-height: 1;
+    }
+    .tab.active .tab-badge { background: var(--primary); color: var(--surface); }
+
+    /* Tab panel */
+    .tab-panel {
+      padding: 20px 0 4px;
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* — Pill / filled tabs — */
+    .tabs-pill {
+      display: flex;
+      gap: 4px;
+      background: rgba(196,185,154,0.25);
+      padding: 4px;
+      border-radius: 8px;
+      width: fit-content;
+    }
+    .tab-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .tab-pill:hover { color: var(--primary); background: rgba(196,185,154,0.3); }
+    .tab-pill.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 4px rgba(28,21,16,0.12);
+    }
+    .tab-pill i { font-size: 1rem; }
+
+    /* — Outlined card tabs — */
+    .tabs-card {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      width: fit-content;
+    }
+    .tab-card {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 18px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      border-right: 1.5px solid var(--border);
+      background: none;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .tab-card:last-child { border-right: none; }
+    .tab-card:hover { background: rgba(196,185,154,0.2); color: var(--primary); }
+    .tab-card.active { background: var(--primary); color: var(--surface); }
+
+    /* — Vertical tabs — */
+    .tabs-vertical {
+      display: flex;
+      gap: 0;
+    }
+    .tabs-vertical-list {
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid var(--border);
+      min-width: 140px;
+      gap: 2px;
+      padding: 4px 0;
+    }
+    .tab-v {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      text-align: left;
+      border-radius: 6px 0 0 6px;
+      position: relative;
+      transition: color 0.15s, background 0.15s;
+    }
+    .tab-v::after {
+      content: '';
+      position: absolute;
+      right: -2px; top: 0; bottom: 0;
+      width: 2px;
+      background: var(--primary);
+      transform: scaleY(0);
+      transition: transform 0.2s;
+    }
+    .tab-v:hover { color: var(--primary); background: rgba(196,185,154,0.2); }
+    .tab-v.active { color: var(--primary); }
+    .tab-v.active::after { transform: scaleY(1); }
+    .tab-v i { font-size: 1rem; }
+    .tabs-vertical-panel {
+      flex: 1;
+      padding: 12px 24px;
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       BREADCRUMBS
+    ════════════════════════════════════════════════════════════ */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      list-style: none;
+      font-size: 0.84rem;
+    }
+    .breadcrumb-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .breadcrumb-link {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 3px 4px;
+      border-radius: 3px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .breadcrumb-link:hover { color: var(--primary); background: rgba(196,185,154,0.25); }
+    .breadcrumb-sep {
+      color: var(--border);
+      padding: 0 2px;
+      font-size: 1rem;
+      user-select: none;
+    }
+    .breadcrumb-current {
+      color: var(--primary);
+      font-weight: 500;
+      padding: 3px 4px;
+    }
+
+    /* With icons */
+    .breadcrumb-icon {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .breadcrumb-icon i { font-size: 0.95rem; }
+
+    /* Contained / chip style */
+    .breadcrumb-contained {
+      background: rgba(196,185,154,0.2);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 4px 12px;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      list-style: none;
+      font-size: 0.82rem;
+    }
+
+    /* Dark surface breadcrumb */
+    .breadcrumb-dark .breadcrumb-link { color: rgba(253,248,240,0.55); }
+    .breadcrumb-dark .breadcrumb-link:hover { color: var(--surface); background: rgba(255,255,255,0.1); }
+    .breadcrumb-dark .breadcrumb-sep { color: rgba(253,248,240,0.25); }
+    .breadcrumb-dark .breadcrumb-current { color: var(--surface); }
+
+    /* ════════════════════════════════════════════════════════════
+       PAGINATION
+    ════════════════════════════════════════════════════════════ */
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      padding: 0 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .page-btn:hover { background: rgba(196,185,154,0.25); color: var(--primary); border-color: var(--muted); }
+    .page-btn.active { background: var(--primary); color: var(--surface); border-color: var(--primary); }
+    .page-btn.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .page-btn i { font-size: 1.1rem; }
+
+    /* Ellipsis */
+    .page-ellipsis {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    /* Simple prev/next only */
+    .pagination-simple {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+    .pagination-simple .page-btn { min-width: auto; padding: 0 14px; gap: 6px; }
+
+    /* Rounded pill pagination */
+    .page-btn-pill {
+      border-radius: 99px;
+    }
+
+    /* Outlined pill */
+    .page-btn-ghost {
+      border: none;
+      background: none;
+    }
+    .page-btn-ghost:hover { background: rgba(196,185,154,0.25); }
+    .page-btn-ghost.active { background: var(--primary); color: var(--surface); }
+
+    /* ════════════════════════════════════════════════════════════
+       STEPPER
+    ════════════════════════════════════════════════════════════ */
+
+    /* — Horizontal stepper — */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+    }
+    .stepper-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .stepper-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: calc(50% + 18px);
+      right: calc(-50% + 18px);
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+    .stepper-step.done:not(:last-child)::after { background: var(--primary); }
+
+    .stepper-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--muted);
+      z-index: 1;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .stepper-step.done .stepper-circle {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--surface);
+    }
+    .stepper-step.current .stepper-circle {
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(28,21,16,0.08);
+    }
+    .stepper-step.error .stepper-circle {
+      border-color: var(--danger);
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .stepper-label {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+    }
+    .stepper-step.done    .stepper-label { color: var(--primary); }
+    .stepper-step.current .stepper-label { color: var(--primary); font-weight: 700; }
+    .stepper-step.error   .stepper-label { color: var(--danger); }
+
+    .stepper-sublabel {
+      font-size: 0.70rem;
+      color: var(--subtle);
+      text-align: center;
+    }
+
+    /* — Vertical stepper — */
+    .stepper-v {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .stepper-v-step {
+      display: flex;
+      gap: 16px;
+      position: relative;
+    }
+    .stepper-v-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stepper-v-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .stepper-v-step.done    .stepper-v-circle { background: var(--primary); border-color: var(--primary); color: var(--surface); }
+    .stepper-v-step.current .stepper-v-circle { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 4px rgba(28,21,16,0.08); }
+
+    .stepper-v-line {
+      flex: 1;
+      width: 2px;
+      background: var(--border);
+      margin: 4px 0;
+      min-height: 24px;
+    }
+    .stepper-v-step.done .stepper-v-line { background: var(--primary); }
+
+    .stepper-v-content {
+      padding-bottom: 28px;
+      padding-top: 4px;
+      flex: 1;
+    }
+    .stepper-v-step:last-child .stepper-v-content { padding-bottom: 0; }
+    .stepper-v-title { font-size: 0.88rem; font-weight: 600; color: var(--muted); }
+    .stepper-v-step.done    .stepper-v-title { color: var(--primary); }
+    .stepper-v-step.current .stepper-v-title { color: var(--primary); font-weight: 700; }
+    .stepper-v-desc { font-size: 0.80rem; color: var(--subtle); margin-top: 3px; line-height: 1.5; }
+
+    /* Stepper with inline action (content panel) */
+    .stepper-panel {
+      background: rgba(196,185,154,0.12);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .stepper-panel-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 4px;
+      font-family: inherit; font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.04em; cursor: pointer; border: none;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+    .btn-filled  { background: var(--primary); color: var(--surface); }
+    .btn-filled:hover { background: #2e2318; box-shadow: 0 2px 8px rgba(28,21,16,0.25); }
+    .btn-outlined { background: transparent; color: var(--primary); border: 1.5px solid var(--border); }
+    .btn-outlined:hover { background: rgba(28,21,16,0.05); }
+    .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+
+    /* ════════════════════════════════════════════════════════════
+       ACCORDION
+    ════════════════════════════════════════════════════════════ */
+    .accordion { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; }
+
+    .accordion-item { border-bottom: 1px solid var(--border); }
+    .accordion-item:last-child { border-bottom: none; }
+
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: none;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--primary);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .accordion-header:hover { background: rgba(196,185,154,0.15); }
+    .accordion-header.open  { background: rgba(196,185,154,0.18); }
+
+    .accordion-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+    .accordion-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .accordion-chevron {
+      font-size: 1.1rem;
+      color: var(--muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .accordion-header.open .accordion-chevron { transform: rotate(180deg); }
+
+    .accordion-body {
+      padding: 0 20px 18px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.7;
+      background: var(--surface);
+    }
+    .accordion-body.hidden { display: none; }
+
+    /* Flush (no outer border) */
+    .accordion-flush { border: none; border-radius: 0; }
+    .accordion-flush .accordion-item { border-bottom: 1px solid var(--border); border-radius: 0; }
+    .accordion-flush .accordion-header { background: none; padding-left: 0; padding-right: 0; }
+    .accordion-flush .accordion-header:hover { background: none; }
+    .accordion-flush .accordion-body { background: none; padding-left: 0; }
+
+    /* Separated */
+    .accordion-separated {
+      border: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accordion-separated .accordion-item {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .accordion-separated .accordion-item .accordion-header { border-radius: 8px; }
+    .accordion-separated .accordion-item .accordion-header.open { border-radius: 8px 8px 0 0; }
+
+    /* With badge / tag in header */
+    .accordion-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 0.70rem;
+      font-weight: 600;
+      background: rgba(92,122,82,0.12);
+      color: var(--success);
+      flex-shrink: 0;
+    }
+
+    /* FAQ style */
+    .faq-question { font-size: 0.88rem; font-weight: 500; color: var(--primary); }
+    .faq-answer { padding: 12px 20px 16px; font-size: 0.84rem; color: var(--muted); line-height: 1.7; }
+
+  </style>
+</head>
+<body>
+
+  <!-- ══ Sidebar ══════════════════════════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">UI/UX Templates</div>
+
+    <div class="sidebar-section">Categories</div>
+    <a href="primitives.html"><i class="mdi mdi-shape-outline"></i> Primitives</a>
+    <a href="forms.html"><i class="mdi mdi-form-textbox"></i> Form Controls</a>
+    <a href="layout.html"><i class="mdi mdi-view-dashboard-outline"></i> Layout</a>
+    <a href="feedback.html"><i class="mdi mdi-bell-outline"></i> Feedback</a>
+    <a href="navigation.html" class="active"><i class="mdi mdi-compass-outline"></i> Navigation</a>
+    <a href="data-display.html"><i class="mdi mdi-table-large"></i> Data Display</a>
+
+    <div class="sidebar-section">On This Page</div>
+    <a href="#tabs"><i class="mdi mdi-tab"></i> Tabs</a>
+    <a href="#breadcrumbs"><i class="mdi mdi-chevron-right"></i> Breadcrumbs</a>
+    <a href="#pagination"><i class="mdi mdi-dots-horizontal"></i> Pagination</a>
+    <a href="#stepper"><i class="mdi mdi-stairs"></i> Stepper</a>
+    <a href="#accordion"><i class="mdi mdi-chevron-down-box-outline"></i> Accordion</a>
+
+    <div class="sidebar-section">Pages</div>
+    <a href="../pages/landing.html"><i class="mdi mdi-home-outline"></i> Landing</a>
+    <a href="../pages/dashboard.html"><i class="mdi mdi-view-grid-outline"></i> Dashboard</a>
+    <a href="../pages/login.html"><i class="mdi mdi-login"></i> Login</a>
+  </nav>
+
+  <!-- ══ Main ═════════════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="page-title">Navigation</div>
+    <div class="page-subtitle">Tabs · Breadcrumbs · Pagination · Stepper · Accordion</div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         TABS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="tabs">
+      <div class="section-title">Tabs</div>
+      <div class="section-desc">Switch between related views without a full page navigation.</div>
+
+      <div class="variant-label">Underline tabs (default)</div>
+      <div class="demo-stage" data-template="navigation.tabs.underline-tabs-default">
+        <div class="tabs">
+          <button class="tab active"><i class="mdi mdi-view-list-outline"></i> Overview</button>
+          <button class="tab">
+            <i class="mdi mdi-clock-outline"></i> Activity
+            <span class="tab-badge">4</span>
+          </button>
+          <button class="tab"><i class="mdi mdi-account-group-outline"></i> Team</button>
+          <button class="tab"><i class="mdi mdi-cog-outline"></i> Settings</button>
+        </div>
+        <div class="tab-panel">
+          Project overview content would render here. This tab is active and its indicator slides into place via a CSS pseudo-element.
+        </div>
+      </div data-template="navigation.tabs.underline-tabs-default">
+
+      <div class="variant-label">Pill / segmented tabs</div>
+      <div class="demo-stage" style="background:var(--bg);" data-template="navigation.tabs.pill-segmented-tabs">
+        <div class="col" style="gap:16px;align-items:flex-start;">
+          <div class="tabs-pill">
+            <button class="tab-pill active"><i class="mdi mdi-apps"></i> All</button>
+            <button class="tab-pill"><i class="mdi mdi-play-circle-outline"></i> Active</button>
+            <button class="tab-pill"><i class="mdi mdi-check-circle-outline"></i> Done</button>
+            <button class="tab-pill"><i class="mdi mdi-archive-outline"></i> Archived</button>
+          </div>
+          <!-- smaller variant -->
+          <div class="tabs-pill" style="padding:3px;">
+            <button class="tab-pill active" style="padding:5px 14px;font-size:0.78rem;">Monthly</button>
+            <button class="tab-pill" style="padding:5px 14px;font-size:0.78rem;">Quarterly</button>
+            <button class="tab-pill" style="padding:5px 14px;font-size:0.78rem;">Yearly</button>
+          </div>
+        </div>
+      </div data-template="navigation.tabs.pill-segmented-tabs">
+
+      <div class="variant-label">Outlined card tabs</div>
+      <div class="demo-stage" data-template="navigation.tabs.outlined-card-tabs">
+        <div class="tabs-card">
+          <button class="tab-card active"><i class="mdi mdi-code-tags"></i> Code</button>
+          <button class="tab-card"><i class="mdi mdi-eye-outline"></i> Preview</button>
+          <button class="tab-card"><i class="mdi mdi-file-document-outline"></i> Docs</button>
+        </div>
+      </div data-template="navigation.tabs.outlined-card-tabs">
+
+      <div class="variant-label">Vertical tabs</div>
+      <div class="demo-stage" data-template="navigation.tabs.vertical-tabs">
+        <div class="tabs-vertical">
+          <div class="tabs-vertical-list">
+            <button class="tab-v active"><i class="mdi mdi-account-outline"></i> Profile</button>
+            <button class="tab-v"><i class="mdi mdi-lock-outline"></i> Security</button>
+            <button class="tab-v"><i class="mdi mdi-bell-outline"></i> Notifications</button>
+            <button class="tab-v"><i class="mdi mdi-credit-card-outline"></i> Billing</button>
+            <button class="tab-v"><i class="mdi mdi-api"></i> API Keys</button>
+          </div>
+          <div class="tabs-vertical-panel">
+            Manage your name, photo, bio, and contact details here. Changes are saved automatically.
+          </div>
+        </div>
+      </div data-template="navigation.tabs.vertical-tabs">
+
+      <div class="variant-label">Tabs on dark background</div>
+      <div class="demo-stage dark-bg" data-template="navigation.tabs.tabs-on-dark-background">
+        <div class="tabs" style="border-color:rgba(255,255,255,0.12);">
+          <button class="tab active" style="color:var(--surface);">
+            <i class="mdi mdi-chart-line"></i> Analytics
+          </button>
+          <button class="tab" style="color:rgba(253,248,240,0.5);">
+            <i class="mdi mdi-chart-bar"></i> Reports
+          </button>
+          <button class="tab" style="color:rgba(253,248,240,0.5);">
+            <i class="mdi mdi-export-variant"></i> Export
+          </button>
+        </div>
+      </div data-template="navigation.tabs.tabs-on-dark-background">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         BREADCRUMBS
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="breadcrumbs">
+      <div class="section-title">Breadcrumbs</div>
+      <div class="section-desc">Show hierarchy and provide quick navigation back up the path.</div>
+
+      <div class="variant-label">Default — slash separator</div>
+      <div class="demo-stage" data-template="navigation.breadcrumbs.default-slash-separator">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Home</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Projects</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Q4 Campaign</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current">Brief</span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.default-slash-separator">
+
+      <div class="variant-label">Icon separator + home icon</div>
+      <div class="demo-stage" data-template="navigation.breadcrumbs.icon-separator-home-icon">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link breadcrumb-icon" href="#">
+              <i class="mdi mdi-home-outline"></i>
+            </a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:1rem;color:var(--border);"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Settings</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:1rem;color:var(--border);"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Team</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:1rem;color:var(--border);"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current">Permissions</span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.icon-separator-home-icon">
+
+      <div class="variant-label">With page icons</div>
+      <div class="demo-stage" data-template="navigation.breadcrumbs.with-page-icons">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link breadcrumb-icon" href="#"><i class="mdi mdi-folder-outline"></i> Workspace</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:1rem;color:var(--border);"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link breadcrumb-icon" href="#"><i class="mdi mdi-folder-open-outline"></i> Reports</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:1rem;color:var(--border);"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current breadcrumb-icon" style="display:flex;align-items:center;gap:5px;padding:3px 4px;">
+              <i class="mdi mdi-file-chart-outline"></i> Q3 Summary
+            </span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.with-page-icons">
+
+      <div class="variant-label">Pill / contained</div>
+      <div class="demo-stage" style="background:var(--bg);" data-template="navigation.breadcrumbs.pill-contained">
+        <ol class="breadcrumb-contained">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Home</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:0.95rem;"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Blog</a>
+            <span class="breadcrumb-sep"><i class="mdi mdi-chevron-right" style="font-size:0.95rem;"></i></span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current">AI in the Workplace</span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.pill-contained">
+
+      <div class="variant-label">Collapsed (truncated long paths)</div>
+      <div class="demo-stage" data-template="navigation.breadcrumbs.collapsed-truncated-long-paths">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Home</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#" title="Content / Marketing / Campaigns / 2026">
+              <i class="mdi mdi-dots-horizontal" style="font-size:1.1rem;color:var(--muted);"></i>
+            </a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">2026</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current">Summer Push</span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.collapsed-truncated-long-paths">
+
+      <div class="variant-label">On dark background</div>
+      <div class="demo-stage dark-bg" data-template="navigation.breadcrumbs.on-dark-background">
+        <ol class="breadcrumb breadcrumb-dark">
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Dashboard</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <a class="breadcrumb-link" href="#">Users</a>
+            <span class="breadcrumb-sep">/</span>
+          </li>
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-current">Jordan Lee</span>
+          </li>
+        </ol>
+      </div data-template="navigation.breadcrumbs.on-dark-background">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         PAGINATION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="pagination">
+      <div class="section-title">Pagination</div>
+      <div class="section-desc">Navigate between pages of results or content.</div>
+
+      <div class="variant-label">Standard with ellipsis</div>
+      <div class="demo-stage" data-template="navigation.pagination.standard-with-ellipsis">
+        <div class="pagination">
+          <button class="page-btn disabled"><i class="mdi mdi-chevron-left"></i></button>
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <div class="page-ellipsis">…</div>
+          <button class="page-btn">8</button>
+          <button class="page-btn">9</button>
+          <button class="page-btn"><i class="mdi mdi-chevron-right"></i></button>
+        </div>
+      </div data-template="navigation.pagination.standard-with-ellipsis">
+
+      <div class="variant-label">Mid-range active page</div>
+      <div class="demo-stage" data-template="navigation.pagination.mid-range-active-page">
+        <div class="pagination">
+          <button class="page-btn"><i class="mdi mdi-chevron-left"></i></button>
+          <button class="page-btn">1</button>
+          <div class="page-ellipsis">…</div>
+          <button class="page-btn">4</button>
+          <button class="page-btn active">5</button>
+          <button class="page-btn">6</button>
+          <div class="page-ellipsis">…</div>
+          <button class="page-btn">12</button>
+          <button class="page-btn"><i class="mdi mdi-chevron-right"></i></button>
+        </div>
+      </div data-template="navigation.pagination.mid-range-active-page">
+
+      <div class="variant-label">Rounded pill buttons</div>
+      <div class="demo-stage" data-template="navigation.pagination.rounded-pill-buttons">
+        <div class="pagination">
+          <button class="page-btn page-btn-pill"><i class="mdi mdi-chevron-left"></i></button>
+          <button class="page-btn page-btn-pill">1</button>
+          <button class="page-btn page-btn-pill">2</button>
+          <button class="page-btn page-btn-pill active">3</button>
+          <button class="page-btn page-btn-pill">4</button>
+          <button class="page-btn page-btn-pill">5</button>
+          <button class="page-btn page-btn-pill"><i class="mdi mdi-chevron-right"></i></button>
+        </div>
+      </div data-template="navigation.pagination.rounded-pill-buttons">
+
+      <div class="variant-label">Ghost style (no borders)</div>
+      <div class="demo-stage" style="background:var(--bg);" data-template="navigation.pagination.ghost-style-no-borders">
+        <div class="pagination">
+          <button class="page-btn page-btn-ghost page-btn-pill"><i class="mdi mdi-chevron-left"></i></button>
+          <button class="page-btn page-btn-ghost page-btn-pill">1</button>
+          <button class="page-btn page-btn-ghost page-btn-pill active">2</button>
+          <button class="page-btn page-btn-ghost page-btn-pill">3</button>
+          <button class="page-btn page-btn-ghost page-btn-pill">4</button>
+          <button class="page-btn page-btn-ghost page-btn-pill">5</button>
+          <button class="page-btn page-btn-ghost page-btn-pill"><i class="mdi mdi-chevron-right"></i></button>
+        </div>
+      </div data-template="navigation.pagination.ghost-style-no-borders">
+
+      <div class="variant-label">Simple prev / next with context</div>
+      <div class="demo-stage" data-template="navigation.pagination.simple-prev-next-with-context">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <span style="font-size:0.82rem;color:var(--muted);">Showing <strong style="color:var(--primary);">1–20</strong> of 143 results</span>
+          <div class="pagination-simple">
+            <button class="page-btn disabled" style="gap:6px;padding:0 12px;">
+              <i class="mdi mdi-chevron-left"></i> Previous
+            </button>
+            <span>Page 1 of 8</span>
+            <button class="page-btn" style="gap:6px;padding:0 12px;">
+              Next <i class="mdi mdi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div data-template="navigation.pagination.simple-prev-next-with-context">
+
+      <div class="variant-label">First / last + jump to page</div>
+      <div class="demo-stage" data-template="navigation.pagination.first-last-jump-to-page">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <button class="page-btn"><i class="mdi mdi-page-first"></i></button>
+          <button class="page-btn"><i class="mdi mdi-chevron-left"></i></button>
+          <button class="page-btn">4</button>
+          <button class="page-btn active">5</button>
+          <button class="page-btn">6</button>
+          <button class="page-btn"><i class="mdi mdi-chevron-right"></i></button>
+          <button class="page-btn"><i class="mdi mdi-page-last"></i></button>
+          <span style="font-size:0.82rem;color:var(--muted);margin-left:8px;">Go to</span>
+          <input type="number" value="5" min="1" max="20"
+            style="width:56px;height:36px;border:1.5px solid var(--border);border-radius:4px;
+                   text-align:center;font-family:inherit;font-size:0.84rem;background:var(--surface);color:var(--primary);outline:none;">
+        </div>
+      </div data-template="navigation.pagination.first-last-jump-to-page">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         STEPPER
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="stepper">
+      <div class="section-title">Stepper</div>
+      <div class="section-desc">Guide users through multi-step flows — onboarding, checkout, forms.</div>
+
+      <div class="variant-label">Horizontal — step 2 active, step 1 done</div>
+      <div class="demo-stage" data-template="navigation.stepper.horizontal-step-2-active-step-1-done">
+        <div class="stepper">
+          <div class="stepper-step done">
+            <div class="stepper-circle"><i class="mdi mdi-check" style="font-size:1rem;"></i></div>
+            <div class="stepper-label">Account</div>
+            <div class="stepper-sublabel">Completed</div>
+          </div>
+          <div class="stepper-step current">
+            <div class="stepper-circle">2</div>
+            <div class="stepper-label">Profile</div>
+            <div class="stepper-sublabel">In progress</div>
+          </div>
+          <div class="stepper-step">
+            <div class="stepper-circle">3</div>
+            <div class="stepper-label">Billing</div>
+            <div class="stepper-sublabel">Pending</div>
+          </div>
+          <div class="stepper-step">
+            <div class="stepper-circle">4</div>
+            <div class="stepper-label">Confirm</div>
+            <div class="stepper-sublabel">Pending</div>
+          </div>
+        </div>
+      </div data-template="navigation.stepper.horizontal-step-2-active-step-1-done">
+
+      <div class="variant-label">Horizontal — step 3 error</div>
+      <div class="demo-stage" data-template="navigation.stepper.horizontal-step-3-error">
+        <div class="stepper">
+          <div class="stepper-step done">
+            <div class="stepper-circle"><i class="mdi mdi-check" style="font-size:1rem;"></i></div>
+            <div class="stepper-label">Details</div>
+          </div>
+          <div class="stepper-step done">
+            <div class="stepper-circle"><i class="mdi mdi-check" style="font-size:1rem;"></i></div>
+            <div class="stepper-label">Review</div>
+          </div>
+          <div class="stepper-step error">
+            <div class="stepper-circle"><i class="mdi mdi-alert" style="font-size:1rem;"></i></div>
+            <div class="stepper-label">Payment</div>
+            <div class="stepper-sublabel" style="color:var(--danger);">Card declined</div>
+          </div>
+          <div class="stepper-step">
+            <div class="stepper-circle">4</div>
+            <div class="stepper-label">Done</div>
+          </div>
+        </div>
+      </div data-template="navigation.stepper.horizontal-step-3-error">
+
+      <div class="variant-label">Vertical stepper with content panels</div>
+      <div class="demo-stage" data-template="navigation.stepper.vertical-stepper-with-content-panels">
+        <div class="stepper-v">
+          <!-- Step 1 — done -->
+          <div class="stepper-v-step done">
+            <div class="stepper-v-left">
+              <div class="stepper-v-circle"><i class="mdi mdi-check" style="font-size:0.9rem;"></i></div>
+              <div class="stepper-v-line"></div>
+            </div>
+            <div class="stepper-v-content">
+              <div class="stepper-v-title">Create account</div>
+              <div class="stepper-v-desc">Signed in as eric@example.com</div>
+            </div>
+          </div>
+          <!-- Step 2 — current -->
+          <div class="stepper-v-step current">
+            <div class="stepper-v-left">
+              <div class="stepper-v-circle">2</div>
+              <div class="stepper-v-line" style="background:var(--border);"></div>
+            </div>
+            <div class="stepper-v-content">
+              <div class="stepper-v-title">Set up your profile</div>
+              <div class="stepper-v-desc">Add your name, role, and avatar so teammates can recognise you.</div>
+              <div class="stepper-panel">
+                Fill in your display name and choose an avatar — you can change these any time in Settings.
+                <div class="stepper-panel-actions">
+                  <button class="btn btn-filled btn-sm">Continue</button>
+                  <button class="btn btn-outlined btn-sm">Skip for now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Step 3 — pending -->
+          <div class="stepper-v-step">
+            <div class="stepper-v-left">
+              <div class="stepper-v-circle">3</div>
+              <div class="stepper-v-line"></div>
+            </div>
+            <div class="stepper-v-content">
+              <div class="stepper-v-title">Add billing details</div>
+              <div class="stepper-v-desc">Choose a plan and add a payment method.</div>
+            </div>
+          </div>
+          <!-- Step 4 — pending, last -->
+          <div class="stepper-v-step">
+            <div class="stepper-v-left">
+              <div class="stepper-v-circle">4</div>
+            </div>
+            <div class="stepper-v-content">
+              <div class="stepper-v-title">Invite your team</div>
+              <div class="stepper-v-desc">Your workspace is ready — bring the team in.</div>
+            </div>
+          </div>
+        </div>
+      </div data-template="navigation.stepper.vertical-stepper-with-content-panels">
+    </section>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACCORDION
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section" id="accordion">
+      <div class="section-title">Accordion</div>
+      <div class="section-desc">Expand and collapse content panels to reduce visual noise.</div>
+
+      <div class="variant-label">Default — bordered</div>
+      <div class="demo-stage" style="padding:0;overflow:hidden;" data-template="navigation.accordion.default-bordered">
+        <div class="accordion">
+          <!-- Open item -->
+          <div class="accordion-item">
+            <button class="accordion-header open">
+              <div class="accordion-header-left">
+                <span>What is Svelte Material UI?</span>
+              </div>
+              <i class="mdi mdi-chevron-up accordion-chevron" style="transform:rotate(0deg);"></i>
+            </button>
+            <div class="accordion-body">
+              Svelte Material UI (SMUI) is a collection of Svelte components that implement Google's Material Design specification. It wraps the official Material Web Components and adapts them for Svelte's reactivity model, giving you production-ready UI building blocks without writing custom CSS.
+            </div>
+          </div>
+          <!-- Closed items -->
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <div class="accordion-header-left">
+                <span>Do I need to install each package separately?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Yes — SMUI is split into individual npm packages (e.g. @smui/button, @smui/textfield) so your bundle only includes what you use. Install the ones you need and import them directly into your Svelte components.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <div class="accordion-header-left">
+                <span>How does theming work?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Theming is handled through Sass variables and CSS custom properties. You override Material Design tokens at the root of your app, and SMUI picks them up — no runtime theming engine required.
+            </div>
+          </div>
+        </div>
+      </div data-template="navigation.accordion.default-bordered">
+
+      <div class="variant-label">With icon per item</div>
+      <div class="demo-stage" style="padding:0;overflow:hidden;" data-template="navigation.accordion.with-icon-per-item">
+        <div class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-header open">
+              <div class="accordion-header-left">
+                <div class="accordion-icon" style="background:rgba(91,127,166,0.12);color:var(--info);">
+                  <i class="mdi mdi-shield-lock-outline"></i>
+                </div>
+                <span>Security &amp; Privacy</span>
+              </div>
+              <i class="mdi mdi-chevron-up accordion-chevron" style="transform:rotate(0deg);"></i>
+            </button>
+            <div class="accordion-body">
+              All data is encrypted in transit (TLS 1.3) and at rest (AES-256). We perform quarterly penetration tests and maintain SOC 2 Type II certification. You control data residency — choose US, EU, or APAC.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <div class="accordion-header-left">
+                <div class="accordion-icon" style="background:rgba(92,122,82,0.12);color:var(--success);">
+                  <i class="mdi mdi-cash-multiple"></i>
+                </div>
+                <span>Billing &amp; Plans</span>
+                <span class="accordion-badge">Pro</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Plans are billed monthly or annually. Annual billing saves 20%. You can upgrade, downgrade, or cancel at any time — changes take effect at the start of your next billing cycle.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header">
+              <div class="accordion-header-left">
+                <div class="accordion-icon" style="background:rgba(184,134,11,0.10);color:var(--warning);">
+                  <i class="mdi mdi-lifebuoy"></i>
+                </div>
+                <span>Support</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Free plan: community forum and documentation. Pro: email support with a 24-hour SLA. Enterprise: dedicated Slack channel and a named CSM with a 4-hour SLA.
+            </div>
+          </div>
+        </div>
+      </div data-template="navigation.accordion.with-icon-per-item">
+
+      <div class="variant-label">Separated cards</div>
+      <div class="demo-stage" style="background:var(--bg);" data-template="navigation.accordion.separated-cards">
+        <div class="accordion-separated">
+          <div class="accordion-item">
+            <button class="accordion-header open" style="border-radius:8px 8px 0 0;">
+              <div class="accordion-header-left">
+                <span>Can I export my data?</span>
+              </div>
+              <i class="mdi mdi-chevron-up accordion-chevron" style="transform:rotate(0deg);"></i>
+            </button>
+            <div class="accordion-body" style="border-radius:0 0 8px 8px;padding-bottom:16px;">
+              Yes. Go to Settings → Export and choose JSON, CSV, or PDF. Exports are available within 5 minutes for datasets under 100k records.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header" style="border-radius:8px;">
+              <div class="accordion-header-left">
+                <span>Is there a self-hosted version?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Self-hosted is available on Enterprise plans. You get a Docker image and Helm chart for Kubernetes deployment.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header" style="border-radius:8px;">
+              <div class="accordion-header-left">
+                <span>What integrations are supported?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden">
+              Native integrations include Slack, GitHub, Jira, Notion, HubSpot, Salesforce, and Zapier. Anything Zapier doesn't cover can be connected via our REST API.
+            </div>
+          </div>
+        </div>
+      </div data-template="navigation.accordion.separated-cards">
+
+      <div class="variant-label">Flush — no outer border</div>
+      <div class="demo-stage" data-template="navigation.accordion.flush-no-outer-border">
+        <div class="accordion accordion-flush">
+          <div class="accordion-item">
+            <button class="accordion-header open accordion-flush">
+              <div class="accordion-header-left">
+                <span>How long does setup take?</span>
+              </div>
+              <i class="mdi mdi-chevron-up accordion-chevron" style="transform:rotate(0deg);"></i>
+            </button>
+            <div class="accordion-body accordion-flush" style="padding-left:0;">
+              Most teams are up and running in under 10 minutes. The onboarding wizard walks you through the required steps — no engineer needed.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header accordion-flush">
+              <div class="accordion-header-left">
+                <span>Do you offer a free trial?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden accordion-flush"></div>
+          </div>
+          <div class="accordion-item" style="border-bottom:none;">
+            <button class="accordion-header accordion-flush">
+              <div class="accordion-header-left">
+                <span>What payment methods do you accept?</span>
+              </div>
+              <i class="mdi mdi-chevron-down accordion-chevron"></i>
+            </button>
+            <div class="accordion-body hidden accordion-flush"></div>
+          </div>
+        </div>
+      </div data-template="navigation.accordion.flush-no-outer-border">
+    </section>
+
+  </main>
+</body>
+</html>

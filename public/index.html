@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Projects</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f0f;
+      color: #e5e5e5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: #888;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+    }
+    .cards {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 960px;
+    }
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 1rem;
+      padding: 2rem;
+      width: 280px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #6366f1;
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+    }
+    .card .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      color: #888;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+    .card .tag {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    .tag-dpc { background: #1e1b4b; color: #a5b4fc; }
+    .tag-debate { background: #1c1917; color: #fdba74; }
+    .tag-hwtsi { background: #1b1b1b; color: #86efac; }
+    .footer {
+      margin-top: 3rem;
+      color: #555;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI Projects</h1>
+  <p class="subtitle">Multi-agent AI experiments — pick a project</p>
+
+  <div class="cards">
+    <a href="/decision-pressure-cooker/" class="card">
+      <div class="emoji">🔥</div>
+      <h2>Decision Pressure Cooker</h2>
+      <p>Five specialist AI agents attack your decision from every angle. One Synthesizer delivers the final verdict with a confidence score.</p>
+      <span class="tag tag-dpc">multi-agent &bull; analysis</span>
+    </a>
+
+    <a href="/debate-engine/" class="card">
+      <div class="emoji">⚖️</div>
+      <h2>The Debate Engine</h2>
+      <p>Two AI debaters go head-to-head in a structured 3-round debate. An arbiter weighs the arguments and declares a winner.</p>
+      <span class="tag tag-debate">sequential &bull; debate</span>
+    </a>
+
+    <a href="/how-would-they-say-it/" class="card">
+      <div class="emoji">🎭</div>
+      <h2>How Would They Say It?</h2>
+      <p>Eight distinct personas rewrite any phrase in their unique voice — from the Diplomatic CEO to the Ragequit COO.</p>
+      <span class="tag tag-hwtsi">personas &bull; rewrite</span>
+    </a>
+  </div>
+
+  <p class="footer">ai-projects.lackore.me</p>
+</body>
+</html>

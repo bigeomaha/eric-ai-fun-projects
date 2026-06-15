@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  /*
+   * Color theory: app accents are orange (#c87830) and blue (#3a8fc8) — a
+   * complementary pair. The tertiary color between red and orange is red-orange,
+   * which desaturated and darkened yields burnt sienna / deep brown. This creates
+   * a warm triad: red-orange page → amber FOR cards → blue AGAINST cards.
+   *
+   * Three layers:
+   *   1. Burnt-orange radial glow (upper-right) — echoes FOR side warmth
+   *   2. Deep sienna radial glow (lower-left)   — grounds the composition
+   *   3. Dark burnt-brown linear base            — the tertiary foundation
+   */
+  background:
+    radial-gradient(ellipse at 72% 18%, rgba(200, 90, 20, 0.28) 0%, transparent 52%),
+    radial-gradient(ellipse at 16% 82%, rgba(150, 55, 10, 0.22) 0%, transparent 48%),
+    linear-gradient(148deg, #0e0503 0%, #1e0c06 32%, #2e1509 58%, #1a0a04 82%, #0a0302 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #1a2a3a;
+}
+
+/* ── Ticker — scrolls continuously ────────────────────────────────────────── */
+@keyframes ticker-scroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.ticker-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 28s linear infinite;
+}
+
+/* ── Card entrance ─────────────────────────────────────────────────────────── */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-enter {
+  animation: card-in 0.35s ease-out forwards;
+}
+
+/* ── Thinking / streaming dots ─────────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50%       { opacity: 1;   transform: scale(1); }
+}
+
+.thinking-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse-dot 1.2s ease-in-out infinite both;
+}
+.thinking-dot:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* ── Score bar fill ─────────────────────────────────────────────────────────── */
+@keyframes fillBar {
+  from { width: 0; }
+}
+.score-bar { animation: fillBar 1.2s ease-out forwards; }
+
+/* ── Status dot blink (live) ───────────────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+.dot-live { animation: blink 1.4s ease-in-out infinite; }
